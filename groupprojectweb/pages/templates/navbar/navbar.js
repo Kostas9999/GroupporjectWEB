@@ -32,21 +32,18 @@ export default function App({data}) {
     event.preventDefault();
 
     const name_Reg = document.querySelector('#username_Reg').value
-    const mail_Reg = document.querySelector('#email_Reg').value
-    const address_Reg = document.querySelector('#address_Reg').value
+    const mail_Reg = document.querySelector('#email_Reg').value   
     const pass_Reg = document.querySelector('#password_Reg').value
 
     const data_Reg = {
       username_Reg: event.target.username_Reg.value,
-      email_Reg: event.target.email_Reg.value,
-      address_Reg: event.target.address_Reg.value,
+      email_Reg: event.target.email_Reg.value,      
       password_Reg: event.target.password_Reg.value,
     }
 
     const JSONdata = JSON.stringify(data_Reg)
 
-    const endpoint = '/api/db_Register'
-   
+    const endpoint = '/api/db_Register'   
 
     const options = {
       method: 'POST',        // The method is POST because we are sending data.
@@ -55,9 +52,19 @@ export default function App({data}) {
     }
 
     const response = await fetch(endpoint, options);
+
+  
+   
  
     // Get the response data from server as JSON.
     const result = await response.json();
+
+  
+
+    if(result != null && result > 0){ 
+      router.push("/devices");
+    }
+   
 
   }
 
@@ -78,7 +85,7 @@ export default function App({data}) {
      
      const JSONdata = JSON.stringify(data)
 
-     const endpoint = '/api/db_Login'
+     const endpoint = '/api/login'
 
 
      const options = {
@@ -86,23 +93,19 @@ export default function App({data}) {
        headers: { 'Content-Type': 'application/json'  },// Tell the server we're sending JSON.
        body: JSONdata, // Body of the request is the JSON data we created above.
      }
-
+    
 
      const response = await fetch(endpoint, options);
  
      // Get the response data from server as JSON.
      const result = await response.json();
+     console.log(result)
 
+  if(result != null && result > 0){ 
 
-
-     // redirect based on the result
-  if(result == "admin"){ 
-
-   
-
-    router.push("/manager");
+    router.push("/devices");
   }
-  if(result == "user"){ router.push("/customer");}
+ 
  
 }
 
@@ -156,7 +159,7 @@ export default function App({data}) {
         </Navbar.Content>
         </Navbar.Brand>
         <Navbar.Content hideIn="xs">
-          <Navbar.Link block  href="./">My devices</Navbar.Link>
+          <Navbar.Link block  href="./devices">My devices</Navbar.Link>
           
         </Navbar.Content>
         <Navbar.Content>
@@ -302,18 +305,7 @@ export default function App({data}) {
             contentLeft={<Mail fill="currentColor" />}
           />
 
-<Input
-          aria-label="address_Reg"
-          id="address_Reg"
-          name="address_Reg"
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="sm"
-            placeholder="Address"
-            contentLeft={<Mail fill="currentColor" />}
-          />
+
  
           <Input
           aria-label="password_Reg"
