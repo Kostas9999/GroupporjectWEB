@@ -11,6 +11,7 @@ import {useRouter} from 'next/router'
 
 
 export default  function Checkout({devices,devicesTitle}) {
+ 
     const router = useRouter()
 
   return (
@@ -21,7 +22,7 @@ export default  function Checkout({devices,devicesTitle}) {
 
     <Grid.Container gap={2} justify="flex-start">
     {devicesTitle.map((item, index) => (
-      
+     
       <Grid xs={60} sm={30}>
       <Card
       isPressable
@@ -31,7 +32,8 @@ export default  function Checkout({devices,devicesTitle}) {
 
       onPress={event => {  router.push({
         pathname: '/device',
-        query: { devID: item.OS.id },
+        query: { devID: item.OS.id }
+             
       })}}
    
     >
