@@ -6,7 +6,7 @@ export default withIronSessionApiRoute(loginRoute, ironOptions);
 
  async function loginRoute(req, res) {
 
-
+ 
   
     // Get just the username and password and put them into variables.
     const username = req.body.username;
@@ -31,6 +31,7 @@ export default withIronSessionApiRoute(loginRoute, ironOptions);
     "SELECT * FROM users WHERE username = '"+username+"' AND pass = '"+pass+"' LIMIT 1;",    
    async function(err, results_user, fields) {
 
+    console.log(results_user)
     if(results_user[0].id > 0){
     id = results_user[0].id 
     req.session.user = {
@@ -39,29 +40,23 @@ export default withIronSessionApiRoute(loginRoute, ironOptions);
       user_email: results_user[0].email,
       
     };
-  }
     await req.session.save();
+    id = req.session.user.user_id;
+  }
+   
   })
 
-if(req.session.user.user_id != null){
 
-  id = req.session.user.user_id;
-}
 
-   
 
-    connection.query(
-      "SELECT * FROM devices WHERE userID = '"+id+"' ;",    
+   connection.query(
+      "SELECT * FROM devices WHERE userID = '"+req.session.user.user_id+"' ;",    
      async function(err, results_devices, fields) {
-
+    
 if(results_devices == undefined){ results_devices=[]}
 results_devices.map((item, index) => { 
 
-console.log(item)
 })
-
-
-
 
       if(id > 0){
         req.session.devices = {
@@ -69,7 +64,7 @@ console.log(item)
         };
 
         await req.session.save();
-        res.status(200).json(id);
+      await res.status(200).json(req.session.user.user_id);
       }
 
 
