@@ -96,10 +96,9 @@ export default function App({data}) {
     
 
      const response = await fetch(endpoint, options);
- 
-     // Get the response data from server as JSON.
+
      const result = await response.json();
-     console.log(result)
+console.log(result)
 
   if(result != null && result > 0){ 
 

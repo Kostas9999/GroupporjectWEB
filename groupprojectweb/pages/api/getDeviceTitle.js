@@ -14,25 +14,29 @@ export default function handler(req, res) {
       port: 3306,
       database: 'groupproject'
     });
-  
+
   
     // simple query
   connection.query(
     `SELECT * FROM ${device_Id}.os;`,
     function(err, results, fields) {
    
-       
+
+
+      
+
+if(typeof results !== 'undefined'){
        
       res.status(200).json({"OS" :
         {
+            "id": device_Id,
             "hostname" : results[0].hostname,
-            "version" : results[0].version
+            "version" : results[0].version,
+            "build" : results[0].build
         }
             
-        }
-            
-            );
-  
+        });
+      }
      
     }
   );

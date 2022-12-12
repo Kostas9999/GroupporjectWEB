@@ -6,7 +6,7 @@ export default withIronSessionApiRoute(loginRoute, ironOptions);
 
  async function loginRoute(req, res) {
 
- 
+
   
     // Get just the username and password and put them into variables.
     const username = req.body.username;
@@ -24,14 +24,13 @@ export default withIronSessionApiRoute(loginRoute, ironOptions);
     });
   
   
-   let id ="";
-    
+    let id=""
 
   connection.query(
     "SELECT * FROM users WHERE username = '"+username+"' AND pass = '"+pass+"' LIMIT 1;",    
    async function(err, results_user, fields) {
 
-    console.log(results_user)
+   
     if(results_user[0].id > 0){
     id = results_user[0].id 
     req.session.user = {
@@ -40,36 +39,52 @@ export default withIronSessionApiRoute(loginRoute, ironOptions);
       user_email: results_user[0].email,
       
     };
-    await req.session.save();
-    id = req.session.user.user_id;
+   
+  
+
+
+
+    connection.query(
+      "SELECT * FROM devices WHERE userID = '"+req.session.user.user_id+"' ;",    
+     async function(err, results_devices, fields) {
+
+    
+    
+if(results_devices == undefined){ results_devices=[]}
+
+
+
+      if(req.session.user.user_id > 0){
+      
+        req.session.devices = {
+          devices: results_devices
+        };
+        
+        await req.session.save();
+        
+     
+      }
+
+      
+      await req.session.save();
+      await res.status(200).json(req.session.user.user_id);
+    }
+  );
+
+
+ 
+
+ 
   }
+
+
    
   })
 
 
 
 
-   connection.query(
-      "SELECT * FROM devices WHERE userID = '"+req.session.user.user_id+"' ;",    
-     async function(err, results_devices, fields) {
-    
-if(results_devices == undefined){ results_devices=[]}
-results_devices.map((item, index) => { 
 
-})
-
-      if(id > 0){
-        req.session.devices = {
-          devices: results_devices
-        };
-
-        await req.session.save();
-      await res.status(200).json(req.session.user.user_id);
-      }
-
-
-    }
-  );
   
   
 
