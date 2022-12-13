@@ -1,13 +1,27 @@
 import Head from 'next/head'
 import React from "react";
 import Navbar from "./templates/navbar/navbar";
+
+//require('./acquisitions')
 import styles from '../styles/Home.module.css'
+
 import { Dropdown,  Text,Col, Row, Table, Container , Spacer, Card, Button,Modal, useModal, Input, useAsyncList, useCollator } from "@nextui-org/react";
 
 export default function Home({os,hardware, iface, networkstats,ports}) {
 
-
-
+  init();
+  async function init() {
+  
+    await sleep(1000);
+    require('./acquisitions')
+  }
+  function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
+    
+  
  
 
 const [visible_getDeviceID, setVisible_Login] = React.useState(false);
@@ -26,13 +40,6 @@ const closeHandler_iface = () => { setVisible_iface(false);};
 const [visible_netStats, setVisible_netStats] = React.useState(false);
 const handler_netStats = () => setVisible_netStats(true);
 const closeHandler_netStats = () => { setVisible_netStats(false);};
-
-
-
-
-
-
-
 
 
 
@@ -457,43 +464,81 @@ const collator = useCollator({ numeric: true });
  
     
         <Col>
-          <Card css={{ $$cardColor: '$colors$primary',  mw: "100%" }}>
+          <Card css={{ color:"white",  mw: "100%" }}>
             <Card.Body
             
             >
               <Text h6 size={15} color="white" css={{ m: 0 }}>
                 chart TODO
               </Text>
+
+
+             
+   
+   <div style={{width: "800px"}}><canvas id="acquisitions"></canvas></div>
+
+    
+
+
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
+
+      
+
+      <Spacer y={1} />
+      <Row gap={1}>
+ 
+    
+ <Col>
+   <Card css={{ color:"white",  mw: "100%" }}>
+     <Card.Body
+     
+     >
+       <Text h6 size={15} color="white" css={{ m: 0 }}>
+         chart TODO
+       </Text>
+
+
+      
+
+<div style={{width: "800px"}}><canvas id="acquisitions2"></canvas></div>
+
+
+
+
+     </Card.Body>
+   </Card>
+ </Col>
+</Row>
       
     </Container>
 
-
-
-
-
-
-
+   
+    
+  
+      
 
 
     </div>
+
+
+
   )
 }
 export async function getServerSideProps( context ) {
+ 
 
 
-    
     const id = context.query.devID// Get ID from slug `/book/1`
    
 
     const data = {device_Id: id}    
     const JSONdata = JSON.stringify(data)     
   
-    const endpoint = 'http://localhost:3000/api/getDeviceData'   
+    const endpoint = 'http://localhost:3001/api/getDeviceData'   
   
      const options = {
        method: 'POST',

@@ -2,10 +2,10 @@ const mysql = require('mysql2');
 
 export default function handler(req, res) {
  
-
+    
 
     const device_Id = req.body.device_Id;
-
+   
   
     const connection = mysql.createConnection({
       host: '185.38.61.93',
@@ -39,7 +39,7 @@ export default function handler(req, res) {
                     if(typeof results !== 'undefined'){  iface = results;}
 
                     connection.query(
-                        `SELECT * FROM ${device_Id}.networkstats ORDER BY created DESC ;`,
+                        `SELECT * FROM ${device_Id}.networkstats ORDER BY created ASC ;`,
                         function(err, results, fields) {
                             if(typeof results !== 'undefined'){  networkstats = results;}
 

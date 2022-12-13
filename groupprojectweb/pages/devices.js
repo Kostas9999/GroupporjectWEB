@@ -128,7 +128,7 @@ let devicesTitle =[];
     const data = {device_Id: item.id}    
     const JSONdata = JSON.stringify(data)     
   
-    const endpoint = 'http://localhost:3000/api/getDeviceTitle'   
+    const endpoint = 'http://localhost:3001/api/getDeviceTitle'   
   
      const options = {
        method: 'POST',
