@@ -1,5 +1,5 @@
 import React from "react";
-
+import { withIronSessionSsr } from "iron-session/next";
 import { Navbar, Button,  Text,Modal, Input, Grid, styled , Spacer } from "@nextui-org/react";
 import { Layout } from "./Layout.js";
 
@@ -12,7 +12,7 @@ import {useRouter} from 'next/router'
 
 
 
-export default function App({data}) {
+export default function App({props}) {
 
   const StyledButton = styled("button", {
     background: "transparent",
@@ -22,6 +22,9 @@ export default function App({data}) {
       opacity: 0.8,
     }
   });
+
+
+console.log(props)
 
 
   const router = useRouter()
@@ -357,3 +360,4 @@ export default function App({data}) {
     </Layout>
   )
 }
+

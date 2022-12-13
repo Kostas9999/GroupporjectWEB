@@ -159,16 +159,11 @@ const collator = useCollator({ numeric: true });
       <Text h6 
       size={14}  
       color="white" 
-      css={{ m: 0 , "line-height": "1rem"}}
-      
-      >
-        
-        {os.hostname}   <br></br>
-      
+      css={{ m: 0 , "line-height": "1rem"}}      
+      >        
+        {os.hostname}   <br></br>      
       {os.version} ({os.build})    <br></br> 
-
-      CPU: {hardware.Title}   <br></br>  
-  
+      CPU: {hardware.Title}   <br></br>    
       RAM: {Math.round(((hardware.TotalMemory/1024)/1024)/1024)}GB 
 
       </Text>     

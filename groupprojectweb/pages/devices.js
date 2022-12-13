@@ -3,7 +3,7 @@ import { withIronSessionSsr } from "iron-session/next";
 import Navbar from '../pages/templates/navbar/navbar';
 import styles from '../styles/Home.module.css'
 
-import {  Card,  Button , Text, Loading, Grid, Modal, Input} from "@nextui-org/react";
+import {  Card,  Button , Text, Loading, Grid, Modal, Input, Spacer} from "@nextui-org/react";
 import React from "react";
 import { Router } from "next/router";
 
@@ -14,55 +14,66 @@ export default  function Checkout({devices,devicesTitle}) {
  
     const router = useRouter()
 
+
+    const [visible_getDeviceID, setVisible_Login] = React.useState(false);
+const handler_getDeviceID = () => setVisible_Login(true);
+const closeHandler_getDeviceID = () => { setVisible_Login(false);};
+
   return (
     <>
   
 
 <Navbar />
 
+<Spacer y={1} />
 
 
+<Button size="xl" 
+      id="getDeviceID" 
+      auto shadow color="$colors$primary" 
+      onPress={handler_getDeviceID}
+     
+      >
+      <Text h6 
+      size={14}  
+      color="white" 
+      css={{ m: 0 , "line-height": "1rem"}}      
+      >        
+Add Device
 
-<Button width="30%" auto shadow color="$colors$primary" onClick={() => setVisible(true)}>
-        Add new device
+      </Text>     
       </Button>
       <Modal
         scroll
+        blur
         width="30%"
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
+        open={visible_getDeviceID}
+        onClose={closeHandler_getDeviceID}
        
       >
         <Modal.Header>
           <Text id="modal-title" size={18}>
-            Add new device
+            Device
           </Text>
         </Modal.Header>
         <Modal.Body>
-          <Text id="modal-description">
-       
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Device ID"
+        <Input 
+          bordered 
           
-          />
-        
-      
-          </Text>
+          color="primary" />
         </Modal.Body>
         <Modal.Footer>
-          <Button auto flat color="error" onClick={() => setVisible(false)}>
+          <Button auto flat color="error" onPress={closeHandler_getDeviceID }>
             Close
           </Button>
-          <Button auto onClick={() => setVisible(false)}>
+          <Button auto onPress={closeHandler_getDeviceID }>
            OK
           </Button>
         </Modal.Footer>
       </Modal>
+
 
 
     <Grid.Container gap={2} justify="flex-start">
