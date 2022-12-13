@@ -3,7 +3,7 @@ import { withIronSessionSsr } from "iron-session/next";
 import Navbar from '../pages/templates/navbar/navbar';
 import styles from '../styles/Home.module.css'
 
-import {  Card,  NextUIProvider , Text, Loading, Grid} from "@nextui-org/react";
+import {  Card,  Button , Text, Loading, Grid, Modal, Input} from "@nextui-org/react";
 import React from "react";
 import { Router } from "next/router";
 
@@ -19,6 +19,51 @@ export default  function Checkout({devices,devicesTitle}) {
   
 
 <Navbar />
+
+
+
+
+<Button width="30%" auto shadow color="$colors$primary" onClick={() => setVisible(true)}>
+        Add new device
+      </Button>
+      <Modal
+        scroll
+        width="30%"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+       
+      >
+        <Modal.Header>
+          <Text id="modal-title" size={18}>
+            Add new device
+          </Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Text id="modal-description">
+       
+          <Input
+            clearable
+            bordered
+            fullWidth
+            color="primary"
+            size="lg"
+            placeholder="Device ID"
+          
+          />
+        
+      
+          </Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button auto flat color="error" onClick={() => setVisible(false)}>
+            Close
+          </Button>
+          <Button auto onClick={() => setVisible(false)}>
+           OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
 
     <Grid.Container gap={2} justify="flex-start">
     {devicesTitle.map((item, index) => (

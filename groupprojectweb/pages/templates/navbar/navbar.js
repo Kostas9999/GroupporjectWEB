@@ -98,7 +98,7 @@ export default function App({data}) {
      const response = await fetch(endpoint, options);
 
      const result = await response.json();
-console.log(result)
+
 
   if(result != null && result > 0){ 
 
@@ -133,9 +133,7 @@ console.log(result)
     <Layout>
       <Navbar variant="static">
         <Navbar.Brand>
-        <Navbar.Content hideIn="xs">
-
-        
+        <Navbar.Content hideIn="xs">        
 
           <Navbar.Link isActive  href="./"> 
           <Text size={40}
