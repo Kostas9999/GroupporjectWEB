@@ -2,12 +2,12 @@ import Head from 'next/head'
 import React from "react";
 import Navbar from "./templates/navbar/navbar";
 import styles from '../styles/Home.module.css'
-import { Dropdown,  Text,Col, Row, Grid, Container , Spacer, Card, Button,Modal, useModal, Input } from "@nextui-org/react";
+import { Dropdown,  Text,Col, Row, Table, Container , Spacer, Card, Button,Modal, useModal, Input, useAsyncList, useCollator } from "@nextui-org/react";
 
 export default function Home({os,hardware, iface, networkstats,ports}) {
 
 
-console.log(ports)
+
  
 
 const [visible_getDeviceID, setVisible_Login] = React.useState(false);
@@ -26,6 +26,81 @@ const closeHandler_iface = () => { setVisible_iface(false);};
 const [visible_netStats, setVisible_netStats] = React.useState(false);
 const handler_netStats = () => setVisible_netStats(true);
 const closeHandler_netStats = () => { setVisible_netStats(false);};
+
+
+
+
+
+
+
+
+
+
+
+
+
+let keys;
+ports.map((item, index)=>(keys = Object.keys(item)))
+
+const columns = [];
+keys.map((item, index)=>(
+  columns.push({
+    key: item,
+  label: item,
+  })
+))
+
+columns.push({
+  key: "IANA",
+label: "IANA",
+})
+
+const rows =[];
+  ports.map((item, index)=>(
+
+ rows.push( {
+    key: index,
+    Created: item.Created,
+    port: item.port,
+    process: item.process,
+    pid: item.pid,
+    path: item.path,
+    IANA: "TODO"
+  }
+ )
+ 
+))
+
+
+
+
+
+const collator = useCollator({ numeric: true });
+  async function load({ signal }) {
+
+    return {
+      items: rows,
+    };
+  }
+  async function sort({ items, sortDescriptor }) {
+    return {
+      items: items.sort((a, b) => {
+        let first = a[sortDescriptor.column];
+        let second = b[sortDescriptor.column];
+        let cmp = collator.compare(first, second);
+        if (sortDescriptor.direction === "descending") {
+          cmp *= -1;
+        }
+        return cmp;
+      }),
+    };
+  }
+  const list = useAsyncList({ load, sort });
+
+
+
+
+
 
 
   
@@ -71,14 +146,28 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
         <Col>
           <Card css={{ $$cardColor: '$colors$primary',  mw: "100%" }}>
           
-      <Card.Body>
+      <Card.Body   
+      css={{  "padding": "2px"}}
+      >
     
-      <Button size="xl" id="getDeviceID" auto shadow color="$colors$primary" onPress={handler_getDeviceID}>
-      <Text h6 size={14} color="white" css={{ m: 0 }}>{os.hostname}   <> </> 
+      <Button size="xl" 
+      id="getDeviceID" 
+      auto shadow color="$colors$primary" 
+      onPress={handler_getDeviceID}
+     
+      >
+      <Text h6 
+      size={14}  
+      color="white" 
+      css={{ m: 0 , "line-height": "1rem"}}
       
-      {os.version} ({os.build})     
+      >
+        
+        {os.hostname}   <br></br>
+      
+      {os.version} ({os.build})    <br></br> 
 
-      CPU: {hardware.Title}    
+      CPU: {hardware.Title}   <br></br>  
   
       RAM: {Math.round(((hardware.TotalMemory/1024)/1024)/1024)}GB 
 
@@ -96,23 +185,19 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
       >
         <Modal.Header>
           <Text id="modal-title" size={18}>
-            Device ID
+            Device
           </Text>
         </Modal.Header>
         <Modal.Body>
           <Text id="modal-description">
       ID: {hardware.id} <br></br>
+      Member since: {os.Created}<br></br>
        Hostname:  {os.hostname}   <br></br>
       OS: {os.version} ({os.build}) <br></br>
+      Relese: {os.relese}<br></br>
       CPU: {hardware.Title}  <br></br>
       RAM: {Math.round(((hardware.TotalMemory/1024)/1024)/1024)}GB <br></br>   
 
-      
-        
-
-  
-        
-      
           </Text>
         </Modal.Body>
         <Modal.Footer>
@@ -138,17 +223,26 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
         <Col>
         <Card css={{ $$cardColor: '$colors$primary',  mw: "100%" }}>
           
-          <Card.Body>
+          <Card.Body
+          css={{  "padding": "2px"}}
+          >
         
-          <Button size="xl" id="getDeviceID" auto shadow color="$colors$primary" onPress={handler_netStats}>
-          <Text h6 size={14} color="white" css={{ m: 0 }}>
-            {networkstats.localLatency} netstats
+          <Button size="xl" id="getDeviceID"  auto shadow color="$colors$primary" onPress={handler_netStats}>
+          <Text h6 
+         
+          size="$xs"
+          color="white" css={{ m: 0 , "line-height": "1rem"}}          
+          >
+            Network Stats <br></br>
+           Local Latency: {networkstats.localLatency}ms  <br></br>
+           Public Latency: {networkstats.publicLatency}ms
     
           </Text>     
           </Button>
           <Modal
             scroll
             blur
+            closeButton
             width="30%"
             aria-labelledby="modal-title"
             aria-describedby="modal-description"
@@ -163,8 +257,19 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
             </Modal.Header>
             <Modal.Body>
               <Text id="modal-description">
-          ID: {hardware.id} <br></br>
-           Hostname:  {os.hostname}   <br></br>
+          Interface: {networkstats.interface}<br></br><br></br>
+          Local Latency: {networkstats.localLatency}ms  <br></br>
+           Public Latency: {networkstats.publicLatency}ms<br></br><br></br>
+
+          rx_total: {networkstats.rx_total } <br></br>
+          rx_dropped: {networkstats.rx_dropped} <br></br>
+          rx_error: {networkstats.rx_error} <br></br><br></br>
+
+          
+          tx_total: {networkstats.tx_total} <br></br>
+          tx_dropped: {networkstats.tx_dropped} <br></br>
+          tx_error: {networkstats.tx_error} <br></br>
+          
           
           
               </Text>
@@ -173,9 +278,7 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
               <Button auto flat color="error" onPress={closeHandler_netStats}>
                 Close
               </Button>
-              <Button auto onPress={closeHandler_netStats }>
-               OK
-              </Button>
+            
             </Modal.Footer>
           </Modal>
     
@@ -193,17 +296,27 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
    
         <Card css={{ $$cardColor: '$colors$primary',  mw: "100%" }}>
           
-          <Card.Body>
+          <Card.Body
+          css={{  "padding": "2px"}}
+          >
         
           <Button size="xl" id="getDeviceID" auto shadow color="$colors$primary" onPress={handler_iface}>
-          <Text h6 size={14} color="white" css={{ m: 0 }}>
+          <Text h6 
+         
+          size="$xs"
+          color="white" css={{ m: 0 , "line-height": "1rem"}}  
+          >
 
-            {iface.iface}
+            {iface.iface} ({iface.speed}mb/s)<br></br>
+            {iface.mac}<br></br>
+            {iface.IPv4}<br></br>
+            {iface.IPv6}
     
           </Text>     
           </Button>
           <Modal
             scroll
+            closeButton
             blur
             width="30%"
             aria-labelledby="modal-title"
@@ -219,7 +332,16 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
             </Modal.Header>
             <Modal.Body>
               <Text id="modal-description">
-              {iface.iface} 
+              Interface: {iface.iface} <br></br>
+              Speed: {iface.speed}mb/s<br></br>
+              MAC: {iface.mac}<br></br><br></br>
+             
+              IPv4<br></br>
+            {iface.IPv4}<br></br>
+            {iface.IPv4Sub}<br></br><br></br>
+            IPv6<br></br>
+            {iface.IPv6}<br></br>
+            {iface.IPv6Sub}<br></br>
     
           
             
@@ -233,9 +355,7 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
               <Button auto flat color="error" onPress={closeHandler_iface}>
                 Close
               </Button>
-              <Button auto onPress={closeHandler_iface }>
-               OK
-              </Button>
+             
             </Modal.Footer>
           </Modal>
     
@@ -253,7 +373,9 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
         <Col>
         <Card css={{ $$cardColor: '$colors$primary',  mw: "100%" }}>
           
-          <Card.Body>
+          <Card.Body
+          css={{  "padding": "2px"}}
+          >
         
           <Button size="xl" id="getDeviceID" auto shadow color="$colors$primary" onPress={handler_Ports}>
           <Text h6 size={14} color="white" css={{ m: 0 }}>Open Ports (Listening): {ports.length}    
@@ -261,6 +383,8 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
           </Button>
           <Modal
             scroll
+            fullScreen
+        closeButton
             blur
             width="30%"
             aria-labelledby="modal-title"
@@ -277,13 +401,38 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
             <Modal.Body>
               <Text id="modal-description">
         
-           {ports.map((item, index) => (
-            <Text id="modal-title" size={18}>
-               {item.port}{item.process}{item.pid}{item.path}
-              </Text>
 
 
-           ))}
+    <Table
+     bordered
+      aria-label="Example static collection table"
+      css={{ minWidth: "100%", height: "calc($space$14 * 10)" }}
+      sortDescriptor={list.sortDescriptor}
+      onSortChange={list.sort}
+    >
+
+    <Table.Header columns={columns}>
+        {(column) => (
+          <Table.Column key={column.key} allowsSorting>{column.label}</Table.Column>
+        )}
+      </Table.Header>
+      <Table.Body items={list.items} loadingState={list.loadingState}>
+        {(item) => (
+          <Table.Row key={item.name}>
+            {(columnKey) => <Table.Cell>{item[columnKey]}</Table.Cell>}
+          </Table.Row>
+        )}
+      </Table.Body>
+    </Table>
+
+
+
+
+
+
+
+
+
       
     
               </Text>
@@ -292,9 +441,7 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
               <Button auto flat color="error" onPress={closeHandler_Ports }>
                 Close
               </Button>
-              <Button auto onPress={closeHandler_Ports }>
-               OK
-              </Button>
+            
             </Modal.Footer>
           </Modal>
     
@@ -316,7 +463,9 @@ const closeHandler_netStats = () => { setVisible_netStats(false);};
     
         <Col>
           <Card css={{ $$cardColor: '$colors$primary',  mw: "100%" }}>
-            <Card.Body>
+            <Card.Body
+            
+            >
               <Text h6 size={15} color="white" css={{ m: 0 }}>
                 chart TODO
               </Text>
@@ -349,7 +498,7 @@ export async function getServerSideProps( context ) {
     const data = {device_Id: id}    
     const JSONdata = JSON.stringify(data)     
   
-    const endpoint = 'http://localhost:3001/api/getDeviceData'   
+    const endpoint = 'http://localhost:3000/api/getDeviceData'   
   
      const options = {
        method: 'POST',
