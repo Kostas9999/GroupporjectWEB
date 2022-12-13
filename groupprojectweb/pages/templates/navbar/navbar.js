@@ -12,7 +12,7 @@ import {useRouter} from 'next/router'
 
 
 
-export default function App({props}) {
+export default function App() {
 
   const StyledButton = styled("button", {
     background: "transparent",
@@ -24,7 +24,7 @@ export default function App({props}) {
   });
 
 
-console.log(props)
+
 
 
   const router = useRouter()
