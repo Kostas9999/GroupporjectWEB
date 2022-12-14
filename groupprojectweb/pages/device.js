@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import React from "react";
 import Navbar from "./templates/navbar/navbar";
+import {useRouter} from 'next/router'
 
 //require('./acquisitions')
 import styles from '../styles/Home.module.css'
@@ -8,6 +9,11 @@ import styles from '../styles/Home.module.css'
 import { Dropdown,  Text,Col, Row, Table, Container , Spacer, Card, Button,Modal, useModal, Input, useAsyncList, useCollator } from "@nextui-org/react";
 
 export default function Home({os,hardware, iface, networkstats,ports}) {
+
+  const router = useRouter()
+
+
+  
 
   init();
   async function init() {
@@ -23,7 +29,7 @@ export default function Home({os,hardware, iface, networkstats,ports}) {
 
 
     
-d()
+//d()
 async function d(){
   
   const resp = await fetch( "http://185.38.61.93:3000/api/myDevices")
@@ -55,6 +61,9 @@ const closeHandler_iface = () => { setVisible_iface(false);};
 const [visible_netStats, setVisible_netStats] = React.useState(false);
 const handler_netStats = () => setVisible_netStats(true);
 const closeHandler_netStats = () => { setVisible_netStats(false);};
+
+
+const devices = () =>  router.push("/devices");
 
 
 
@@ -144,7 +153,7 @@ const collator = useCollator({ numeric: true });
 <Spacer y={1} />
 
 <Row gap={1}>
-
+{/*
 <Dropdown>
       <Dropdown.Button flat color="$colors$primary" css={{  color:"white", tt: "capitalize" }}>
       Select Device
@@ -162,6 +171,11 @@ const collator = useCollator({ numeric: true });
         
       </Dropdown.Menu>
     </Dropdown>
+*/}
+
+    <Button auto onPress={devices }>
+           Devices
+          </Button>
 
 </Row>
 <Spacer y={1} />

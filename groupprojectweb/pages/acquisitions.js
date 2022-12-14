@@ -66,14 +66,14 @@ import { getAquisitionsByYear } from './api/api'
         labels: data.map(row => row.Created),
         datasets: [
           {
-            label: 'Data Received (rx)',   
+            label: 'Data Sent (tx)',   
             type: 'line',           
             data: data.map(row => row.tx_total),
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 1)'          
           },
           {
-            label: 'Data Sent (tx)',   
+            label: 'Data Received (rx)',   
             type: 'bar',           
             data: data.map(row => row.rx_total),
             borderColor: '#36A2EB',
