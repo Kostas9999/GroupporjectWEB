@@ -20,9 +20,24 @@ export default function Home({os,hardware, iface, networkstats,ports}) {
       setTimeout(resolve, ms);
     });
   }
+
+
     
+d()
+async function d(){
   
- 
+  const resp = await fetch( 'http://localhost:3001/api/myDevices'   )
+  const res = await resp.json();
+  console.log(res.user.devices.devices[1])
+  
+   return res.user.devices.devices
+  }
+
+
+
+
+
+
 
 const [visible_getDeviceID, setVisible_Login] = React.useState(false);
 const handler_getDeviceID = () => setVisible_Login(true);
@@ -134,6 +149,10 @@ const collator = useCollator({ numeric: true });
       <Dropdown.Button flat color="$colors$primary" css={{  color:"white", tt: "capitalize" }}>
       Select Device
       </Dropdown.Button>
+     
+  
+
+
       <Dropdown.Menu
         aria-label="Single selection actions"
         color="secondary"
@@ -546,8 +565,21 @@ export async function getServerSideProps( context ) {
        body: JSONdata,
      }
   
+
+
      const response = await fetch(endpoint, options)
      const result = await response.json();
+
+
+
+     
+  
+
+
+     const resp = await fetch( 'http://localhost:3001/api/myDevices'   )
+     const res = await resp.json();
+     
+     console.log(res)
     
      
      return { 

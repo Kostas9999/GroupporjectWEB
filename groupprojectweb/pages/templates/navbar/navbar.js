@@ -158,10 +158,7 @@ export default function App() {
 </Grid.Container>
         </Navbar.Content>
         </Navbar.Brand>
-        <Navbar.Content hideIn="xs">
-          <Navbar.Link block  href="./devices">My devices</Navbar.Link>
-          
-        </Navbar.Content>
+        
         <Navbar.Content>
 
 
@@ -224,6 +221,7 @@ export default function App() {
           aria-label="password"
           id="password"
           name="password"
+          type="password" 
             clearable
             bordered
             fullWidth
@@ -311,6 +309,7 @@ export default function App() {
           aria-label="password_Reg"
           id="password_Reg"
           name="password_Reg"
+          type="password" 
             clearable
             bordered
             fullWidth
