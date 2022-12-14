@@ -26,7 +26,7 @@ export default function Home({os,hardware, iface, networkstats,ports}) {
 d()
 async function d(){
   
-  const resp = await fetch( 'http://localhost:3001/api/myDevices'   )
+  const resp = await fetch( "http://185.38.61.93:3000/api/myDevices")
   const res = await resp.json();
   console.log(res.user.devices.devices[1])
   
@@ -557,7 +557,7 @@ export async function getServerSideProps( context ) {
     const data = {device_Id: id}    
     const JSONdata = JSON.stringify(data)     
   
-    const endpoint = 'http://localhost:3001/api/getDeviceData'   
+    const endpoint = 'http:/185.38.61.93:3000/api/getDeviceData'   
   
      const options = {
        method: 'POST',
@@ -576,7 +576,7 @@ export async function getServerSideProps( context ) {
   
 
 
-     const resp = await fetch( 'http://localhost:3001/api/myDevices'   )
+     const resp = await fetch( 'http:/185.38.61.93:3000/api/myDevices'   )
      const res = await resp.json();
      
      console.log(res)

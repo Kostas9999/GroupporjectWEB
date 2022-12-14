@@ -13,7 +13,7 @@ export async function getAquisitionsByYear() {
     
     
   
-    const endpoint = 'http://localhost:3001/api/getDeviceData'   
+    const endpoint = 'api/getDeviceData'   
   
      const options = {
        method: 'POST',
