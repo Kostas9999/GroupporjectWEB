@@ -17,6 +17,8 @@ import { Password } from "./js/Password";
 import { useRouter } from "next/router";
 
 export default function App({ props }) {
+  
+  /*
   const StyledButton = styled("button", {
     background: "transparent",
     border: "none",
@@ -25,27 +27,26 @@ export default function App({ props }) {
       opacity: 0.8,
     },
   });
-
-  const username = fetch("./api/session")
+*/
+  
+  const username = fetch("/api/session/session")
     .then((response) => response.json())
     .then((user) => {
       if (typeof user.user != "undefined") {
-        console.log(user.user.user_name);
         return user.user.user_name;
       }
     });
-
+  
   const printAddress = async () => {
     const a = await username;
-    console.log(a);
     if (a != null) {
-      document.getElementById("login").style.visibility = "hidden";
-      document.getElementById("Register").style.visibility = "hidden";
-      document.getElementById("logout").style.visibility = "visible";
+      document.getElementById("login").style.display = "none";
+      document.getElementById("Register").style.display = "none";
+      document.getElementById("logout").style.display = "inline-block";
     } else {
-      document.getElementById("login").style.visibility = "visible";
-      document.getElementById("Register").style.visibility = "visible";
-      document.getElementById("logout").style.visibility = "hidden";
+      document.getElementById("login").style.display = "inline-block";
+      document.getElementById("Register").style.display = "inline-block";
+      document.getElementById("logout").style.display = "none";
     }
   };
 
@@ -112,6 +113,18 @@ export default function App({ props }) {
     }
   }
 
+
+  async function logout(event) {
+   
+    const response = await fetch("/api/session/session_Logout");
+    const result = await response.json();
+
+    if (result.ok) {
+      router.push("/");
+    }
+  }
+
+
   const [variant, setVariant] = React.useState("sticky");
 
   const variants = ["static", "floating", "sticky"];
@@ -152,7 +165,7 @@ export default function App({ props }) {
         </Navbar.Brand>
 
         <Navbar.Content>
-          <Button id="login" auto shadow onPress={handler_Login}>
+          <Button id="login" auto shadow css={{ display : "none"}} onPress={handler_Login}>
             Login
           </Button>
 
@@ -296,11 +309,11 @@ export default function App({ props }) {
           </Modal>
 
           <Navbar.Item>
-            <Button id="Register" auto shadow onPress={handler_Reg}>
+            <Button id="Register" auto shadow css={{ display : "none"}} onPress={handler_Reg}>
               Register
             </Button>
           </Navbar.Item>
-          <Button id="logout" auto shadow onPress={handler_Login}>
+          <Button id="logout" css={{ display : "none"}} auto shadow onPress={logout}>
             Logout
           </Button>
         </Navbar.Content>
