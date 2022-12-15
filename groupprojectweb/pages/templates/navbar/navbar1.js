@@ -11,13 +11,23 @@ import {
   Spacer,
 } from "@nextui-org/react";
 
+import { Layout } from "./Layout.js";
 import { Mail } from "./js/Mail";
 import { Password } from "./js/Password";
 import { useRouter } from "next/router";
-import { Link, Avatar, Dropdown } from "@nextui-org/react";
-import { Layout } from "./Layout.js";
 
-export default function App() {
+export default function App({ props }) {
+  /*
+  const StyledButton = styled("button", {
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    "&:active": {
+      opacity: 0.8,
+    },
+  });
+*/
+
   const username = fetch("/api/session/session")
     .then((response) => response.json())
     .then((user) => {
@@ -26,23 +36,15 @@ export default function App() {
       }
     });
 
-  const handleSelect = (e) => {
-    if (e == "logout") {
-      logout();
-    }
-  };
-
   const printAddress = async () => {
     const a = await username;
     if (a != null) {
       document.getElementById("login").style.display = "none";
       document.getElementById("Register").style.display = "none";
-      document.getElementById("navbarLinks").style.display = "inline-block";
       document.getElementById("logout").style.display = "inline-block";
     } else {
       document.getElementById("login").style.display = "inline-block";
       document.getElementById("Register").style.display = "inline-block";
-      document.getElementById("navbarLinks").style.display = "none";
       document.getElementById("logout").style.display = "none";
     }
   };
@@ -136,25 +138,10 @@ export default function App() {
     setVisible_Reg(false);
   };
 
-  const collapseItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "My Settings",
-    "Log Out",
-  ];
-
   return (
     <Layout>
-      <Navbar isBordered variant="sticky">
-        <Navbar.Toggle showIn="xs" />
-        <Navbar.Brand
-          css={{
-            "@xs": {
-              w: "12%",
-            },
-          }}
-        >
+      <Navbar variant="static">
+        <Navbar.Brand>
           <Navbar.Content hideIn="xs">
             <Navbar.Link isActive href="./">
               <Text
@@ -172,31 +159,8 @@ export default function App() {
             </Grid.Container>
           </Navbar.Content>
         </Navbar.Brand>
-        <Navbar.Content
-          id="navbarLinks"
-          css={{ display: "none" }}
-          enableCursorHighlight
-          activeColor="warning"
-          hideIn="xs"
-          variant="highlight"
-        >
-          <Navbar.Link href="./devices">Devices</Navbar.Link>
-          {/*}
-          <Navbar.Link isActive href="#">
-            Customers
-          </Navbar.Link>
-          <Navbar.Link href="#">Pricing</Navbar.Link>
-          <Navbar.Link href="#">Company</Navbar.Link>
-            {*/}
-        </Navbar.Content>
-        <Navbar.Content
-          css={{
-            "@xs": {
-              w: "12%",
-              jc: "flex-end",
-            },
-          }}
-        >
+
+        <Navbar.Content>
           <Button
             id="login"
             auto
@@ -206,6 +170,7 @@ export default function App() {
           >
             Login
           </Button>
+
           <Modal
             closeButton
             blur
@@ -268,15 +233,7 @@ export default function App() {
               </Modal.Footer>
             </form>
           </Modal>
-          <Button
-            id="Register"
-            auto
-            shadow
-            css={{ display: "none" }}
-            onPress={handler_Reg}
-          >
-            Register
-          </Button>
+
           <Modal
             closeButton
             blur
@@ -353,77 +310,27 @@ export default function App() {
             </form>
           </Modal>
 
-          <div id="logout">
-            <Dropdown css={{ display: "none" }} placement="bottom-right">
-              <Navbar.Item>
-                <Dropdown.Trigger>
-                  <Avatar
-                    bordered
-                    as="button"
-                    color="warning"
-                    size="md"
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                  />
-                </Dropdown.Trigger>
-              </Navbar.Item>
-              <Dropdown.Menu
-                aria-label="User menu actions"
-                color="warning"
-                onAction={(actionKey) => {
-                  handleSelect(actionKey);
-                }}
-              >
-                <Dropdown.Item key="profile" css={{ height: "$18" }}>
-                  <Text b color="inherit" css={{ d: "flex" }}>
-                    Signed in as
-                  </Text>
-                  <Text b color="inherit" css={{ d: "flex" }}>
-                    zoey@example.com
-                  </Text>
-                </Dropdown.Item>
-                <Dropdown.Item key="settings" withDivider>
-                  My Settings
-                </Dropdown.Item>
-                <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
-                <Dropdown.Item key="analytics" withDivider>
-                  Analytics
-                </Dropdown.Item>
-                <Dropdown.Item key="system">System</Dropdown.Item>
-                <Dropdown.Item key="configurations">
-                  Configurations
-                </Dropdown.Item>
-                <Dropdown.Item key="help_and_feedback" withDivider>
-                  Help & Feedback
-                </Dropdown.Item>
-                <Dropdown.Item key="logout" withDivider color="error">
-                  Log Out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </Navbar.Content>
-        <Navbar.Collapse disableAnimation>
-          {collapseItems.map((item, index) => (
-            <Navbar.CollapseItem
-              key={item}
-              activeColor="warning"
-              css={{
-                color: index === collapseItems.length - 1 ? "$error" : "",
-              }}
-              isActive={index === 2}
+          <Navbar.Item>
+            <Button
+              id="Register"
+              auto
+              shadow
+              css={{ display: "none" }}
+              onPress={handler_Reg}
             >
-              <Link
-                color="inherit"
-                css={{
-                  minWidth: "100%",
-                }}
-                href="#"
-              >
-                {item}
-              </Link>
-            </Navbar.CollapseItem>
-          ))}
-        </Navbar.Collapse>
+              Register
+            </Button>
+          </Navbar.Item>
+          <Button
+            id="logout"
+            css={{ display: "none" }}
+            auto
+            shadow
+            onPress={logout}
+          >
+            Logout
+          </Button>
+        </Navbar.Content>
       </Navbar>
     </Layout>
   );
