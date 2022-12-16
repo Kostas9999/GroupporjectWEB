@@ -16,8 +16,15 @@ import { Password } from "./js/Password";
 import { useRouter } from "next/router";
 import { Link, Avatar, Dropdown } from "@nextui-org/react";
 import { Layout } from "./Layout.js";
+import Cookies from "js-cookie";
 
 export default function App() {
+  const handleSelect = (e) => {
+    if (e == "logout") {
+      logout();
+    }
+  };
+
   const username = fetch("/api/session/session")
     .then((response) => response.json())
     .then((user) => {
@@ -25,12 +32,6 @@ export default function App() {
         return user.user.user_name;
       }
     });
-
-  const handleSelect = (e) => {
-    if (e == "logout") {
-      logout();
-    }
-  };
 
   const printAddress = async () => {
     const a = await username;
@@ -77,7 +78,7 @@ export default function App() {
     const result = await response.json();
 
     if (result != null && result > 0) {
-      router.push("/devices");
+      router.push("/Dashboard");
     }
   }
 
@@ -105,12 +106,18 @@ export default function App() {
     const response = await fetch(endpoint, options);
     const result = await response.json();
 
-    if (result != null && result > 0) {
-      router.push("/devices");
+    if (result != null && result.user_id > 0) {
+      Cookies.set("username", result.user_name);
+      Cookies.set("email", result.user_email);
+
+      router.push("/Dashboard");
     }
   }
 
   async function logout(event) {
+    Cookies.remove("username");
+    Cookies.remove("email");
+    Cookies.remove("devices");
     const response = await fetch("/api/session/session_Logout");
     const result = await response.json();
 
@@ -136,13 +143,7 @@ export default function App() {
     setVisible_Reg(false);
   };
 
-  const collapseItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "My Settings",
-    "Log Out",
-  ];
+  const collapseItems = ["Dashboard"];
 
   return (
     <Layout>
@@ -180,7 +181,7 @@ export default function App() {
           hideIn="xs"
           variant="highlight"
         >
-          <Navbar.Link href="./devices">Devices</Navbar.Link>
+          <Navbar.Link href="./Dashboard">Dashboard</Navbar.Link>
           {/*}
           <Navbar.Link isActive href="#">
             Customers
@@ -357,16 +358,11 @@ export default function App() {
             <Dropdown css={{ display: "none" }} placement="bottom-right">
               <Navbar.Item>
                 <Dropdown.Trigger>
-                  <Avatar
-                    bordered
-                    as="button"
-                    color="warning"
-                    size="md"
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                  />
+                  <Avatar color="primary" textColor="white" />
                 </Dropdown.Trigger>
               </Navbar.Item>
               <Dropdown.Menu
+                disabledKeys={["settings", "system", "configurations"]}
                 aria-label="User menu actions"
                 color="warning"
                 onAction={(actionKey) => {
@@ -375,26 +371,21 @@ export default function App() {
               >
                 <Dropdown.Item key="profile" css={{ height: "$18" }}>
                   <Text b color="inherit" css={{ d: "flex" }}>
-                    Signed in as
+                    {Cookies.get("username")}
                   </Text>
                   <Text b color="inherit" css={{ d: "flex" }}>
-                    zoey@example.com
+                    {Cookies.get("email")}
                   </Text>
                 </Dropdown.Item>
                 <Dropdown.Item key="settings" withDivider>
                   My Settings
                 </Dropdown.Item>
-                <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
-                <Dropdown.Item key="analytics" withDivider>
-                  Analytics
-                </Dropdown.Item>
+
                 <Dropdown.Item key="system">System</Dropdown.Item>
                 <Dropdown.Item key="configurations">
                   Configurations
                 </Dropdown.Item>
-                <Dropdown.Item key="help_and_feedback" withDivider>
-                  Help & Feedback
-                </Dropdown.Item>
+
                 <Dropdown.Item key="logout" withDivider color="error">
                   Log Out
                 </Dropdown.Item>
@@ -402,22 +393,15 @@ export default function App() {
             </Dropdown>
           </div>
         </Navbar.Content>
-        <Navbar.Collapse disableAnimation>
+        <Navbar.Collapse>
           {collapseItems.map((item, index) => (
-            <Navbar.CollapseItem
-              key={item}
-              activeColor="warning"
-              css={{
-                color: index === collapseItems.length - 1 ? "$error" : "",
-              }}
-              isActive={index === 2}
-            >
+            <Navbar.CollapseItem key={item}>
               <Link
                 color="inherit"
                 css={{
                   minWidth: "100%",
                 }}
-                href="#"
+                href={item}
               >
                 {item}
               </Link>

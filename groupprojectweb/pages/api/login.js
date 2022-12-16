@@ -1,5 +1,6 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "./session/session_Config";
+import Cookies from "js-cookie";
 
 export default withIronSessionApiRoute(loginRoute, ironOptions);
 
@@ -54,7 +55,7 @@ async function loginRoute(req, res) {
             }
 
             await req.session.save();
-            await res.status(200).json(req.session.user.user_id);
+            await res.status(200).json(req.session.user);
           }
         );
       }

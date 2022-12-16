@@ -1,5 +1,5 @@
 import { withIronSessionSsr } from "iron-session/next";
-import Navbar from "../pages/templates/navbar/navbar";
+import Navbar from "./templates/navbar/navbar";
 import styles from "../styles/Home.module.css";
 
 import {
@@ -15,8 +15,11 @@ import React from "react";
 import { Router } from "next/router";
 
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 export default function Checkout({ devices, devicesTitle }) {
+  Cookies.set("devices", JSON.stringify(devicesTitle));
+
   const router = useRouter();
 
   const [visible_getDeviceID, setVisible_Login] = React.useState(false);
@@ -100,13 +103,12 @@ export default function Checkout({ devices, devicesTitle }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     let devicesTitle = [];
-    //console.log(req.session);
 
     for (const item of req.session.devices.devices) {
       const data = { device_Id: item.id };
       const JSONdata = JSON.stringify(data);
 
-      const endpoint = "http:/localhost:3000/api/getDeviceTitle";
+      const endpoint = "http://localhost:3000/api/getDeviceTitle";
 
       const options = {
         method: "POST",
@@ -131,7 +133,7 @@ export const getServerSideProps = withIronSessionSsr(
   {
     cookieName: "myapp_cookiename",
     password: "complex_password_at_least_32_characters_long",
-    // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
+
     cookieOptions: {
       secure: false, //process.env.NODE_ENV === "production",
     },

@@ -2,6 +2,7 @@ import Head from "next/head";
 import React from "react";
 import Navbar from "./templates/navbar/navbar";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 import styles from "../styles/Home.module.css";
 
@@ -16,14 +17,24 @@ import {
   Card,
   Button,
   Modal,
-  useModal,
-  Input,
   useAsyncList,
   useCollator,
 } from "@nextui-org/react";
 
 export default function Home({ os, hardware, iface, networkstats, ports }) {
   const router = useRouter();
+
+  let devices = [];
+  if (Cookies.get("devices")) {
+    devices = JSON.parse(Cookies.get("devices"));
+  }
+
+  const handleSelect = (e) => {
+    router.push({
+      pathname: "/device",
+      query: { devID: e },
+    });
+  };
 
   init();
   async function init() {
@@ -34,15 +45,6 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
-  }
-
-  //d()
-  async function d() {
-    const resp = await fetch("http://localhost:3000/api/myDevices");
-    const res = await resp.json();
-    console.log(res.user.devices.devices[1]);
-
-    return res.user.devices.devices;
   }
 
   const [visible_getDeviceID, setVisible_Login] = React.useState(false);
@@ -68,8 +70,6 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
   const closeHandler_netStats = () => {
     setVisible_netStats(false);
   };
-
-  const devices = () => router.push("/devices");
 
   let keys;
   ports.map((item, index) => (keys = Object.keys(item)));
@@ -140,18 +140,16 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
               </Dropdown.Button>
 
               <Dropdown.Menu
-                aria-label="Single selection actions"
-                color="secondary"
-                disallowEmptySelection
+                onAction={(actionKey) => {
+                  handleSelect(actionKey);
+                }}
               >
-                <Dropdown.Item key="text">TODO</Dropdown.Item>
+                {devices.map((a) => (
+                  <Dropdown.Item key={a.OS.id}>{a.OS.hostname}</Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </Dropdown>
           }
-
-          <Button auto onPress={devices}>
-            Devices
-          </Button>
         </Row>
         <Spacer y={1} />
 
@@ -512,11 +510,6 @@ export async function getServerSideProps(context) {
 
   const response = await fetch(endpoint, options);
   const result = await response.json();
-
-  const resp = await fetch("http:/localhost:3000/api/myDevices");
-  const res = await resp.json();
-
-  console.log(res);
 
   return {
     props: {
