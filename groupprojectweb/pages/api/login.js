@@ -1,18 +1,15 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "./session/session_Config";
-import Cookies from "js-cookie";
 const bcrypt = require("bcrypt");
 
 export default withIronSessionApiRoute(loginRoute, ironOptions);
 
 async function loginRoute(req, res) {
-  // Get just the username and password and put them into variables.
   const username = req.body.username;
   const pass = req.body.password;
 
   const mysql = require("mysql2/promise");
 
-  // create the connection to database
   const connection = await mysql.createConnection({
     host: "185.38.61.93",
     user: "MGproject",
@@ -36,38 +33,26 @@ async function loginRoute(req, res) {
 */
 
   let result = bcrypt.compareSync(pass, rows_user[0].pass);
+  if (result) {
+    req.session.user = {
+      user_id: user.id,
+      user_name: user.username,
+      user_email: user.email,
+      user_userSince: user.dateCreated,
+    };
 
-  req.session.user = {
-    user_id: user.id,
-    user_name: user.username,
-    user_email: user.email,
-    user_userSince: user.dateCreated,
-  };
+    const [rows_devices] = await connection.execute(
+      `SELECT * FROM devices WHERE userID = ? ;`,
+      [user.id]
+    );
 
-  const [rows_devices] = await connection.execute(
-    `SELECT * FROM devices WHERE userID = ? ;`,
-    [user.id]
-  );
+    req.session.devices = {
+      devices: rows_devices,
+    };
 
-  console.log(rows_devices);
-  /*
-
-    
-
-            if (req.session.user.user_id > 0) {
-              req.session.devices = {
-                devices: results_devices,
-              };
-
-              await req.session.save();
-            }
-
-            await req.session.save();
-            await res.status(200).json(req.session.user);
-          }
-        );
-      }
-    }
-  );
-*/
+    await req.session.save();
+    await res.status(200).json(req.session.user);
+  } else {
+    await res.status(200).json("Login Failure");
+  }
 }
