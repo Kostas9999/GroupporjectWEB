@@ -1,6 +1,7 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "./session/session_Config";
 import Cookies from "js-cookie";
+const bcrypt = require("bcrypt");
 
 export default withIronSessionApiRoute(loginRoute, ironOptions);
 
@@ -9,10 +10,10 @@ async function loginRoute(req, res) {
   const username = req.body.username;
   const pass = req.body.password;
 
-  const mysql = require("mysql2");
+  const mysql = require("mysql2/promise");
 
   // create the connection to database
-  const connection = mysql.createConnection({
+  const connection = await mysql.createConnection({
     host: "185.38.61.93",
     user: "MGproject",
     password: "F37E28sINiKukaNegu4uzIDu3I7iXe",
@@ -22,29 +23,36 @@ async function loginRoute(req, res) {
 
   let id = "";
 
-  connection.query(
-    "SELECT * FROM users WHERE username = '" +
-      username +
-      "' AND pass = '" +
-      pass +
-      "' LIMIT 1;",
-    async function (err, results_user, fields) {
-      if (results_user[0].id > 0) {
-        id = results_user[0].id;
-        req.session.user = {
-          user_id: results_user[0].id,
-          user_name: results_user[0].username,
-          user_email: results_user[0].email,
-        };
+  const [rows_user] = await connection.execute(
+    `SELECT * FROM users WHERE username = ? LIMIT 1;`,
+    [username]
+  );
 
-        connection.query(
-          "SELECT * FROM devices WHERE userID = '" +
-            req.session.user.user_id +
-            "' ;",
-          async function (err, results_devices, fields) {
-            if (results_devices == undefined) {
-              results_devices = [];
-            }
+  const user = rows_user[0];
+  /*
+  bcrypt.hash("", 13, function (err, hash) {
+    console.log(hash);
+  });
+*/
+
+  let result = bcrypt.compareSync(pass, rows_user[0].pass);
+
+  req.session.user = {
+    user_id: user.id,
+    user_name: user.username,
+    user_email: user.email,
+    user_userSince: user.dateCreated,
+  };
+
+  const [rows_devices] = await connection.execute(
+    `SELECT * FROM devices WHERE userID = ? ;`,
+    [user.id]
+  );
+
+  console.log(rows_devices);
+  /*
+
+    
 
             if (req.session.user.user_id > 0) {
               req.session.devices = {
@@ -61,4 +69,5 @@ async function loginRoute(req, res) {
       }
     }
   );
+*/
 }
