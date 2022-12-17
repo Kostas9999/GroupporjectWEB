@@ -388,6 +388,8 @@ async function getcookie() {
   const response = await fetch("/api/session/session");
   const result = await response.json();
 
+  console.log(result);
+
   if (Object.keys(result).length > 0) {
     document.getElementById("login").style.display = "none";
     document.getElementById("Register").style.display = "none";
