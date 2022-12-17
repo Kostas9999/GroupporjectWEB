@@ -24,30 +24,7 @@ export default function App({ data }) {
     }
   };
 
-  const username = fetch("/api/session/session")
-    .then((response) => response.json())
-    .then((user) => {
-      if (typeof user.user != "undefined") {
-        return user.user.user_name;
-      }
-    });
-
-  const printAddress = async () => {
-    const a = await username;
-    if (a != null) {
-      document.getElementById("login").style.display = "none";
-      document.getElementById("Register").style.display = "none";
-      document.getElementById("navbarLinks").style.display = "inline-block";
-      document.getElementById("logout").style.display = "inline-block";
-    } else {
-      document.getElementById("login").style.display = "inline-block";
-      document.getElementById("Register").style.display = "inline-block";
-      document.getElementById("navbarLinks").style.display = "none";
-      document.getElementById("logout").style.display = "none";
-    }
-  };
-
-  printAddress();
+  getcookie();
 
   const router = useRouter();
 
@@ -75,15 +52,8 @@ export default function App({ data }) {
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
-    console.log(result);
-
-    if (result.ok) {
-      Cookies.set("username", result.user.user_name);
-      Cookies.set("email", result.user.user_email);
-      router.push("/Dashboard");
-    }
   }
-  let user;
+
   async function handleSubmit_Login(event) {
     event.preventDefault();
 
@@ -115,7 +85,7 @@ export default function App({ data }) {
     }
   }
 
-  async function logout(event) {
+  async function logout() {
     Cookies.remove("username");
     Cookies.remove("email");
     Cookies.remove("devices");
@@ -412,4 +382,21 @@ export default function App({ data }) {
       </Navbar>
     </Layout>
   );
+}
+
+async function getcookie() {
+  const response = await fetch("/api/session/session");
+  const result = await response.json();
+
+  if (Object.keys(result).length > 0) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("Register").style.display = "none";
+    document.getElementById("navbarLinks").style.display = "inline-block";
+    document.getElementById("logout").style.display = "inline-block";
+  } else {
+    document.getElementById("login").style.display = "inline-block";
+    document.getElementById("Register").style.display = "inline-block";
+    document.getElementById("navbarLinks").style.display = "none";
+    document.getElementById("logout").style.display = "none";
+  }
 }

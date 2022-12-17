@@ -104,14 +104,15 @@ export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     let devicesTitle = [];
     const devices = req?.session?.devices?.devices;
-    if (devices != undefined || devices == null) {
+
+    if (devices == undefined || devices == null) {
       // TODO: add notification
     } else {
-      for (const item of req?.session?.devices?.devices) {
+      for (const item of devices) {
         const data = { device_Id: item.id };
         const JSONdata = JSON.stringify(data);
 
-        const endpoint = "http://localhost:3000/api/getDeviceTitle";
+        const endpoint = `${process.env.HOST}/api/getDeviceTitle`;
 
         const options = {
           method: "POST",
@@ -125,7 +126,7 @@ export const getServerSideProps = withIronSessionSsr(
         devicesTitle.push(result);
       }
     }
-    console.log(req.session.user);
+
     return {
       props: {
         user: req.session.user,

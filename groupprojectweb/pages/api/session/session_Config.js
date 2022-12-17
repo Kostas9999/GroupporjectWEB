@@ -1,8 +1,8 @@
 export const ironOptions = {
-  cookieName: "myapp_cookiename",
-  password: "complex_password_at_least_32_characters_long",
-  // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
+  cookieName: "MoonTool_cookie",
+  password: process.env.SESSION_KEY,
+
   cookieOptions: {
-    secure: false, //process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production",
   },
 };

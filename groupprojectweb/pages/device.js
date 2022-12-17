@@ -500,7 +500,7 @@ export async function getServerSideProps(context) {
   const data = { device_Id: id };
   const JSONdata = JSON.stringify(data);
 
-  const endpoint = "http:/localhost:3000/api/getDeviceData";
+  const endpoint = `${process.env.HOST}/api/getDeviceData`;
 
   const options = {
     method: "POST",
