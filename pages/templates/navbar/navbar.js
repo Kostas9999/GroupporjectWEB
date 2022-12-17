@@ -77,8 +77,6 @@ export default function App({ data }) {
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
-    console.log("login resp");
-    console.log(result);
 
     if (result.ok) {
       Cookies.set("username", result.user.user_name);
