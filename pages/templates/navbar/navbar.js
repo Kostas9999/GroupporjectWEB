@@ -388,7 +388,7 @@ export default function App(data) {
 }
 
 async function getcookie() {
-  const response = await fetch("montool.vercel.app/api/session/session");
+  const response = await fetch("/api/session/session");
   const result = await response.json();
   if (typeof document != "undefined") {
     if (Object.keys(result).length > 0) {
