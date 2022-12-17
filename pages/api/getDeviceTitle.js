@@ -18,10 +18,10 @@ export default async function handler(req, res) {
 
   res.send({
     OS: {
-      id: "device_Id",
-      hostname: "rows[0].hostname",
-      version: "rows[0].version",
-      build: "rows[0].build",
+      id: device_Id,
+      hostname: rows[0].hostname,
+      version: rows[0].version,
+      build: rows[0].build,
     },
   });
   /*
