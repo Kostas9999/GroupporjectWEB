@@ -510,7 +510,7 @@ export async function getServerSideProps(context) {
 
   const response = await fetch(endpoint, options);
   const result = await response.json();
-
+  //
   return {
     props: {
       os: result.os[0],
