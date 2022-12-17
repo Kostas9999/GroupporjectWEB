@@ -5,5 +5,6 @@ export default withIronSessionApiRoute(loginRoute, ironOptions);
 
 async function loginRoute(req, res) {
   // await res.status(200).json(req.session);
+
   await res.send(req.session);
 }

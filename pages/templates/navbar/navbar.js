@@ -5,6 +5,9 @@ import { useRouter } from "next/router";
 import { Link, Avatar, Dropdown } from "@nextui-org/react";
 import { Layout } from "../../../public/templates/navbar/Layout.js";
 import Cookies from "js-cookie";
+import { withIronSessionApiRoute, withIronSessionSsr } from "iron-session/next";
+import { ironOptions } from "./../../api/session/session_Config";
+import { withSessionSsr } from "./../../api/session/withSession";
 var xss = require("xss");
 
 import {
@@ -17,15 +20,13 @@ import {
   Spacer,
 } from "@nextui-org/react";
 
-export default function App({ data }) {
+export default function App(data) {
   const handleSelect = (e) => {
     if (e == "logout") {
       logout();
     }
   };
-
   getcookie();
-
   const router = useRouter();
 
   async function handleSubmit_Reg(event) {
@@ -387,20 +388,19 @@ export default function App({ data }) {
 }
 
 async function getcookie() {
-  const response = await fetch(
-    "https://montool.vercel.app/api/session/session"
-  );
+  const response = await fetch("http://localhost:3000/api/session/session");
   const result = await response.json();
-
-  if (Object.keys(result).length > 0) {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("Register").style.display = "none";
-    document.getElementById("navbarLinks").style.display = "inline-block";
-    document.getElementById("logout").style.display = "inline-block";
-  } else {
-    document.getElementById("login").style.display = "inline-block";
-    document.getElementById("Register").style.display = "inline-block";
-    document.getElementById("navbarLinks").style.display = "none";
-    document.getElementById("logout").style.display = "none";
+  if (typeof document != "undefined") {
+    if (Object.keys(result).length > 0) {
+      document.getElementById("login").style.display = "none";
+      document.getElementById("Register").style.display = "none";
+      document.getElementById("navbarLinks").style.display = "inline-block";
+      document.getElementById("logout").style.display = "inline-block";
+    } else {
+      document.getElementById("login").style.display = "inline-block";
+      document.getElementById("Register").style.display = "inline-block";
+      document.getElementById("navbarLinks").style.display = "none";
+      document.getElementById("logout").style.display = "none";
+    }
   }
 }

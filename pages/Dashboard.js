@@ -122,7 +122,6 @@ export const getServerSideProps = withIronSessionSsr(
 
         const response = await fetch(endpoint, options);
         const result = await response.json();
-        console.log(result);
 
         devicesTitle.push(result);
       }

@@ -35,17 +35,6 @@ export default function Home() {
           type="module"
           src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
         ></script>
-        <model-viewer
-          id="envlight-demo"
-          enable-pan
-          shadow-intensity="1"
-          interaction-prompt="none"
-          ar
-          camera-controls
-          oncontextmenu="return false;"
-          touch-action="pan-y"
-          src="../public/3D/knowledge_network/knowledge_network.glb"
-        ></model-viewer>
 
         <div className={styles.grid}></div>
       </main>
