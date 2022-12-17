@@ -1,7 +1,7 @@
 const mysql = require("mysql2/promise");
 
 export default async function handler(req, res) {
-  const device_Id = req.body.device_Id;
+  const device_Id = "e368b009_dc92_11e5_9c43_bc00000c0000"; //req.body.device_Id;
 
   const connection = await mysql.createConnection({
     host: "185.38.61.93",
@@ -11,10 +11,19 @@ export default async function handler(req, res) {
     database: "groupproject",
   });
 
-  const [rows] = await connection.execute(`SELECT * FROM ${device_Id}.os;`);
+  const [rows, d, y] = await connection.execute(
+    `SELECT * FROM ${device_Id}.os;`,
+    [device_Id]
+  );
 
-  console.log(rows);
-  res.send({ rows });
+  res.send({
+    OS: {
+      id: "device_Id",
+      hostname: "rows[0].hostname",
+      version: "rows[0].version",
+      build: "rows[0].build",
+    },
+  });
   /*
 
   // simple query
