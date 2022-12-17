@@ -42,7 +42,7 @@ export default function App({ data }) {
     };
 
     const JSONdata = JSON.stringify(data_Reg);
-    const endpoint = "/api/db_Register";
+    const endpoint = "https://montool.vercel.app/api/db_Register";
 
     const options = {
       method: "POST",
@@ -89,7 +89,9 @@ export default function App({ data }) {
     Cookies.remove("username");
     Cookies.remove("email");
     Cookies.remove("devices");
-    const response = await fetch("/api/session/session_Logout");
+    const response = await fetch(
+      "https://montool.vercel.app/api/session/session_Logout"
+    );
     const result = await response.json();
 
     if (result.ok) {
@@ -385,10 +387,10 @@ export default function App({ data }) {
 }
 
 async function getcookie() {
-  const response = await fetch("/api/session/session");
+  const response = await fetch(
+    "https://montool.vercel.app/api/session/session"
+  );
   const result = await response.json();
-
-  console.log(result);
 
   if (Object.keys(result).length > 0) {
     document.getElementById("login").style.display = "none";
