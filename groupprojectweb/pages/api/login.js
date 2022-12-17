@@ -1,14 +1,13 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "./session/session_Config";
 const bcrypt = require("bcrypt");
+const mysql = require("mysql2/promise");
 
 export default withIronSessionApiRoute(loginRoute, ironOptions);
 
 async function loginRoute(req, res) {
-  const username = req.body.username;
-  const pass = req.body.password;
-
-  const mysql = require("mysql2/promise");
+  const username = validator.escape(req.body.username);
+  const pass = validator.escape(req.body.password);
 
   const connection = await mysql.createConnection({
     host: "185.38.61.93",
@@ -26,11 +25,6 @@ async function loginRoute(req, res) {
   );
 
   const user = rows_user[0];
-  /*
-  bcrypt.hash("", 13, function (err, hash) {
-    console.log(hash);
-  });
-*/
 
   let result = bcrypt.compareSync(pass, rows_user[0].pass);
   if (result) {
@@ -51,8 +45,8 @@ async function loginRoute(req, res) {
     };
 
     await req.session.save();
-    await res.status(200).json(req.session.user);
+    await res.status(200).json({ ok: true, user: req.session.user });
   } else {
-    await res.status(200).json("Login Failure");
+    await res.status(200).json({ ok: false });
   }
 }

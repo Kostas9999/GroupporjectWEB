@@ -1,6 +1,6 @@
 import { withIronSessionSsr } from "iron-session/next";
 import Navbar from "./templates/navbar/navbar";
-import styles from "../styles/Home.module.css";
+import { ironOptions } from "./api/session/session_Config";
 
 import {
   Card,
@@ -103,25 +103,29 @@ export default function Checkout({ devices, devicesTitle }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     let devicesTitle = [];
+    const devices = req?.session?.devices?.devices;
+    if (devices != undefined || devices == null) {
+      // TODO: add notification
+    } else {
+      for (const item of req?.session?.devices?.devices) {
+        const data = { device_Id: item.id };
+        const JSONdata = JSON.stringify(data);
 
-    for (const item of req.session.devices.devices) {
-      const data = { device_Id: item.id };
-      const JSONdata = JSON.stringify(data);
+        const endpoint = "http://localhost:3000/api/getDeviceTitle";
 
-      const endpoint = "http://localhost:3000/api/getDeviceTitle";
+        const options = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSONdata,
+        };
 
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSONdata,
-      };
+        const response = await fetch(endpoint, options);
+        const result = await response.json();
 
-      const response = await fetch(endpoint, options);
-      const result = await response.json();
-
-      devicesTitle.push(result);
+        devicesTitle.push(result);
+      }
     }
-
+    console.log(req.session.user);
     return {
       props: {
         user: req.session.user,
@@ -130,12 +134,5 @@ export const getServerSideProps = withIronSessionSsr(
       },
     };
   },
-  {
-    cookieName: "myapp_cookiename",
-    password: "complex_password_at_least_32_characters_long",
-
-    cookieOptions: {
-      secure: false, //process.env.NODE_ENV === "production",
-    },
-  }
+  ironOptions
 );

@@ -1,4 +1,11 @@
 import React from "react";
+import { Mail } from "./js/Mail";
+import { Password } from "./js/Password";
+import { useRouter } from "next/router";
+import { Link, Avatar, Dropdown } from "@nextui-org/react";
+import { Layout } from "./Layout.js";
+import Cookies from "js-cookie";
+var xss = require("xss");
 
 import {
   Navbar,
@@ -7,18 +14,10 @@ import {
   Modal,
   Input,
   Grid,
-  styled,
   Spacer,
 } from "@nextui-org/react";
 
-import { Mail } from "./js/Mail";
-import { Password } from "./js/Password";
-import { useRouter } from "next/router";
-import { Link, Avatar, Dropdown } from "@nextui-org/react";
-import { Layout } from "./Layout.js";
-import Cookies from "js-cookie";
-
-export default function App() {
+export default function App({ data }) {
   const handleSelect = (e) => {
     if (e == "logout") {
       logout();
@@ -55,9 +54,9 @@ export default function App() {
   async function handleSubmit_Reg(event) {
     event.preventDefault();
 
-    const name_Reg = document.querySelector("#username_Reg").value;
-    const mail_Reg = document.querySelector("#email_Reg").value;
-    const pass_Reg = document.querySelector("#password_Reg").value;
+    const name_Reg = xss(document.querySelector("#username_Reg").value);
+    const mail_Reg = xss(document.querySelector("#email_Reg").value);
+    const pass_Reg = xss(document.querySelector("#password_Reg").value);
 
     const data_Reg = {
       username_Reg: event.target.username_Reg.value,
@@ -76,17 +75,20 @@ export default function App() {
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
+    console.log(result);
 
-    if (result != null && result > 0) {
+    if (result.ok) {
+      Cookies.set("username", result.user.user_name);
+      Cookies.set("email", result.user.user_email);
       router.push("/Dashboard");
     }
   }
-
+  let user;
   async function handleSubmit_Login(event) {
     event.preventDefault();
 
-    const name = document.querySelector("#username").value;
-    const pass = document.querySelector("#password").value;
+    const name = xss(document.querySelector("#username").value);
+    const pass = xss(document.querySelector("#password").value);
 
     const data = {
       username: event.target.username.value,
@@ -106,10 +108,9 @@ export default function App() {
     const response = await fetch(endpoint, options);
     const result = await response.json();
 
-    if (result != null && result.user_id > 0) {
-      Cookies.set("username", result.user_name);
-      Cookies.set("email", result.user_email);
-
+    if (result.ok) {
+      Cookies.set("username", result.user.user_name);
+      Cookies.set("email", result.user.user_email);
       router.push("/Dashboard");
     }
   }
