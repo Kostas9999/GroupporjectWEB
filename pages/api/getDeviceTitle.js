@@ -1,22 +1,27 @@
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const device_Id = req.body.device_Id;
 
-  const connection = mysql.createConnection({
+  const connection = await mysql.createConnection({
     host: "185.38.61.93",
     user: "MGproject",
     password: "F37E28sINiKukaNegu4uzIDu3I7iXe",
-    port: 3306,
+    port: "3306",
     database: "groupproject",
   });
+
+  const [rows] = await connection.execute(`SELECT * FROM ?.os;`, [device_Id]);
+
+  console.log(rows);
+  /*
 
   // simple query
   connection.query(
     `SELECT * FROM ${device_Id}.os;`,
     function (err, results, fields) {
       if (typeof results !== "undefined") {
-        res.status(200).json({
+        res.send({
           OS: {
             id: device_Id,
             hostname: results[0].hostname,
@@ -27,4 +32,6 @@ export default function handler(req, res) {
       }
     }
   );
+
+  */
 }
