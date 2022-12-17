@@ -11,9 +11,10 @@ export default async function handler(req, res) {
     database: "groupproject",
   });
 
-  const [rows] = await connection.execute(`SELECT * FROM ?.os;`, [device_Id]);
+  const [rows] = await connection.execute(`SELECT * FROM ${device_Id}.os;`);
 
   console.log(rows);
+  res.send({ rows });
   /*
 
   // simple query
