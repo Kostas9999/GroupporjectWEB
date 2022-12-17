@@ -3,6 +3,6 @@ export const ironOptions = {
   password: process.env.SESSION_KEY,
 
   cookieOptions: {
-    secure: false, //process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production",
   },
 };
