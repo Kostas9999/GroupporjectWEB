@@ -8,6 +8,8 @@ require("dotenv").config();
 export default withIronSessionApiRoute(loginRoute, ironOptions);
 
 async function loginRoute(req, res) {
+  console.log(req);
+  await res.send("in login");
   const username = validator.escape(req.body.username);
   const pass = validator.escape(req.body.password);
 
@@ -18,9 +20,6 @@ async function loginRoute(req, res) {
     port: process.env.DB_PORT,
     database: process.env.DB_DATABASE,
   });
-
-  console.log(req);
-  await res.send("in login");
 
   const [rows_user] = await connection.execute(
     `SELECT * FROM users WHERE username = ? LIMIT 1;`,
