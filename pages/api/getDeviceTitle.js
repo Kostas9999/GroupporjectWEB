@@ -1,7 +1,7 @@
 const mysql = require("mysql2/promise");
 
 export default async function handler(req, res) {
-  const device_Id = "e368b009_dc92_11e5_9c43_bc00000c0000"; //req.body.device_Id;
+  const device_Id = req.body.device_Id;
 
   const connection = await mysql.createConnection({
     host: "185.38.61.93",
