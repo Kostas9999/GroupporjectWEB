@@ -19,7 +19,8 @@ async function loginRoute(req, res) {
     database: process.env.DB_DATABASE,
   });
 
-  let id = "";
+  console.log(req);
+  await res.send("in login");
 
   const [rows_user] = await connection.execute(
     `SELECT * FROM users WHERE username = ? LIMIT 1;`,

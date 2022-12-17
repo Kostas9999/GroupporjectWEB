@@ -66,8 +66,6 @@ export default function App({ data }) {
     };
 
     const JSONdata = JSON.stringify(data);
-    console.log("login submit");
-    console.log(data);
 
     const endpoint = "/api/login";
 
