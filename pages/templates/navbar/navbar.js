@@ -1,9 +1,9 @@
 import React from "react";
-import { Mail } from "./js/Mail";
-import { Password } from "./js/Password";
+import { Mail } from "../../../public/templates/navbar/js/Mail";
+import { Password } from "../../../public/templates/navbar/js/Password";
 import { useRouter } from "next/router";
 import { Link, Avatar, Dropdown } from "@nextui-org/react";
-import { Layout } from "./Layout.js";
+import { Layout } from "../../../public/templates/navbar/Layout.js";
 import Cookies from "js-cookie";
 var xss = require("xss");
 

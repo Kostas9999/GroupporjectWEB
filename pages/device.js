@@ -39,7 +39,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
   init();
   async function init() {
     await sleep(1000);
-    require("./acquisitions");
+    // require("./acquisitions");
   }
   function sleep(ms) {
     return new Promise((resolve) => {
