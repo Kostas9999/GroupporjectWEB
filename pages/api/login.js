@@ -45,10 +45,10 @@ async function loginRoute(req, res) {
     req.session.devices = {
       devices: rows_devices,
     };
-
+    // await res.send(req.session);
     await req.session.save();
-    await res.status(200).json({ ok: true, user: req.session.user });
+    await res.send({ ok: true, user: req.session.user });
   } else {
-    await res.status(200).json({ ok: false });
+    await res.send({ ok: false });
   }
 }
