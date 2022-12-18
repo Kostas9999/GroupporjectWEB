@@ -26,7 +26,7 @@ export default function App(data) {
       logout();
     }
   };
-  getcookie();
+  // getcookie();
   const router = useRouter();
 
   async function handleSubmit_Reg(event) {
@@ -90,9 +90,7 @@ export default function App(data) {
     Cookies.remove("username");
     Cookies.remove("email");
     Cookies.remove("devices");
-    const response = await fetch(
-      "https://montool.vercel.app/api/session/session_Logout"
-    );
+    const response = await fetch("/api/session/session_Logout");
     const result = await response.json();
 
     if (result.ok) {
@@ -176,7 +174,9 @@ export default function App(data) {
             id="login"
             auto
             shadow
-            css={{ display: "none" }}
+            style={{
+              display: Cookies.get() == null ? "block" : "none",
+            }}
             onPress={handler_Login}
           >
             Login
@@ -243,11 +243,14 @@ export default function App(data) {
               </Modal.Footer>
             </form>
           </Modal>
+
           <Button
             id="Register"
             auto
             shadow
-            css={{ display: "none" }}
+            style={{
+              display: Cookies.get("username") == null ? "block" : "none",
+            }}
             onPress={handler_Reg}
           >
             Register
