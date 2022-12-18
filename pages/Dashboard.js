@@ -1,6 +1,7 @@
 import { withIronSessionSsr } from "iron-session/next";
 import Navbar from "./templates/navbar/navbar";
 import { ironOptions } from "./api/session/session_Config";
+import { NextUIProvider } from "@nextui-org/react";
 
 import {
   Card,
@@ -29,7 +30,7 @@ export default function Checkout({ devices, devicesTitle }) {
   };
 
   return (
-    <>
+    <NextUIProvider>
       <Navbar />
 
       <Spacer y={1} />
@@ -96,7 +97,7 @@ export default function Checkout({ devices, devicesTitle }) {
           </Grid>
         ))}
       </Grid.Container>
-    </>
+    </NextUIProvider>
   );
 }
 

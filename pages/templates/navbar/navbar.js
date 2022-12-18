@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { Link, Avatar, Dropdown } from "@nextui-org/react";
 import { Layout } from "../../../public/templates/navbar/Layout.js";
 import Cookies from "js-cookie";
+import { NextUIProvider } from "@nextui-org/react";
 
 var xss = require("xss");
 
@@ -116,275 +117,277 @@ export default function App(data) {
   const collapseItems = ["Dashboard"];
 
   return (
-    <Layout>
-      <Navbar isBordered variant="sticky">
-        <Navbar.Toggle showIn="xs" />
-        <Navbar.Brand
-          css={{
-            "@xs": {
-              w: "12%",
-            },
-          }}
-        >
-          <Navbar.Content hideIn="xs">
-            <Navbar.Link isActive href="./">
-              <Text
-                size={40}
-                css={{
-                  textGradient: "45deg, $black -20%, $blue600 80%",
-                }}
-              >
-                Logo
-              </Text>
-            </Navbar.Link>
-            <Grid.Container>
-              <Spacer y={0.5} />
-              <Grid.Container gap={1}></Grid.Container>
-            </Grid.Container>
-          </Navbar.Content>
-        </Navbar.Brand>
-        <Navbar.Content
-          id="navbarLinks"
-          css={{ display: "none" }}
-          enableCursorHighlight
-          activeColor="warning"
-          hideIn="xs"
-          variant="highlight"
-        >
-          <Navbar.Link href="./Dashboard">Dashboard</Navbar.Link>
-          {/*}
+    <NextUIProvider>
+      <Layout>
+        <Navbar isBordered variant="sticky">
+          <Navbar.Toggle showIn="xs" />
+          <Navbar.Brand
+            css={{
+              "@xs": {
+                w: "12%",
+              },
+            }}
+          >
+            <Navbar.Content hideIn="xs">
+              <Navbar.Link isActive href="./">
+                <Text
+                  size={40}
+                  css={{
+                    textGradient: "45deg, $black -20%, $blue600 80%",
+                  }}
+                >
+                  Logo
+                </Text>
+              </Navbar.Link>
+              <Grid.Container>
+                <Spacer y={0.5} />
+                <Grid.Container gap={1}></Grid.Container>
+              </Grid.Container>
+            </Navbar.Content>
+          </Navbar.Brand>
+          <Navbar.Content
+            id="navbarLinks"
+            css={{ display: "none" }}
+            enableCursorHighlight
+            activeColor="warning"
+            hideIn="xs"
+            variant="highlight"
+          >
+            <Navbar.Link href="./Dashboard">Dashboard</Navbar.Link>
+            {/*}
           <Navbar.Link isActive href="#">
             Customers
           </Navbar.Link>
           <Navbar.Link href="#">Pricing</Navbar.Link>
           <Navbar.Link href="#">Company</Navbar.Link>
             {*/}
-        </Navbar.Content>
-        <Navbar.Content
-          css={{
-            "@xs": {
-              w: "12%",
-              jc: "flex-end",
-            },
-          }}
-        >
-          <Button
-            id="login"
-            auto
-            shadow
-            style={{
-              display: "block",
+          </Navbar.Content>
+          <Navbar.Content
+            css={{
+              "@xs": {
+                w: "12%",
+                jc: "flex-end",
+              },
             }}
-            onPress={handler_Login}
           >
-            Login
-          </Button>
+            <Button
+              id="login"
+              auto
+              shadow
+              style={{
+                display: Cookies.get("username") == null ? "block" : "none",
+              }}
+              onClick={handler_Login}
+            >
+              Login
+            </Button>
 
-          <Modal
-            closeButton
-            blur
-            aria-labelledby="modal-title"
-            open={visible_Login}
-            onClose={closeHandler_Login}
-          >
-            <Modal.Header>
-              <Text
-                id="modal-title"
-                size={18}
-                css={{
-                  textGradient: "45deg, $black -20%, $blue600 80%",
-                }}
-              >
-                Login <br></br>
-                <Text b size={24}>
-                  Monitoring Tool
-                </Text>
-              </Text>
-            </Modal.Header>
-
-            <form onSubmit={handleSubmit_Login}>
-              <Modal.Body>
-                <Input
-                  aria-label="Username"
-                  id="username"
-                  name="username"
-                  clearable
-                  bordered
-                  fullWidth
-                  color="primary"
-                  size="sm"
-                  placeholder="Username"
-                  contentLeft={<Mail fill="currentColor" />}
-                />
-
-                <Input
-                  aria-label="password"
-                  id="password"
-                  name="password"
-                  type="password"
-                  clearable
-                  bordered
-                  fullWidth
-                  color="primary"
-                  size="sm"
-                  placeholder="Password"
-                  contentLeft={<Password fill="currentColor" />}
-                />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button auto flat color="error" onPress={closeHandler_Login}>
-                  Close
-                </Button>
-
-                <Button type="submit_Login" auto>
-                  Sign in
-                </Button>
-              </Modal.Footer>
-            </form>
-          </Modal>
-
-          <Button
-            id="Register"
-            auto
-            shadow
-            style={{
-              display: "block",
-            }}
-            onPress={handler_Reg}
-          >
-            Register
-          </Button>
-          <Modal
-            closeButton
-            blur
-            aria-labelledby="modal-title_Reg"
-            open={visible_Reg}
-            onClose={closeHandler_Reg}
-          >
-            <Modal.Header>
-              <Text
-                id="modal-title"
-                size={18}
-                css={{
-                  textGradient: "45deg, $black -20%, $blue600 80%",
-                }}
-              >
-                Register <br></br>
-                <Text b size={24}>
-                  Monitoring Tool
-                </Text>
-              </Text>
-            </Modal.Header>
-
-            <form onSubmit={handleSubmit_Reg}>
-              <Modal.Body>
-                <Input
-                  aria-label="username_Reg"
-                  id="username_Reg"
-                  name="username_Reg"
-                  clearable
-                  bordered
-                  fullWidth
-                  color="primary"
-                  size="sm"
-                  placeholder="Username"
-                  contentLeft={<Mail fill="currentColor" />}
-                />
-
-                <Input
-                  aria-label="email_Reg"
-                  id="email_Reg"
-                  name="email_Reg"
-                  clearable
-                  bordered
-                  fullWidth
-                  color="primary"
-                  size="sm"
-                  placeholder="Email"
-                  contentLeft={<Mail fill="currentColor" />}
-                />
-
-                <Input
-                  aria-label="password_Reg"
-                  id="password_Reg"
-                  name="password_Reg"
-                  type="password"
-                  clearable
-                  bordered
-                  fullWidth
-                  color="primary"
-                  size="sm"
-                  placeholder="Password"
-                  contentLeft={<Password fill="currentColor" />}
-                />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button auto flat color="error" onPress={closeHandler_Reg}>
-                  Close
-                </Button>
-
-                <Button type="submit_Reg" auto>
-                  Register
-                </Button>
-              </Modal.Footer>
-            </form>
-          </Modal>
-
-          <div css={{ display: "none" }}>
-            <Dropdown css={{ display: "none" }} placement="bottom-right">
-              <Navbar.Item>
-                <Dropdown.Trigger>
-                  <Avatar color="primary" textColor="white" />
-                </Dropdown.Trigger>
-              </Navbar.Item>
-              <Dropdown.Menu
-                disabledKeys={["settings", "system", "configurations"]}
-                aria-label="User menu actions"
-                color="warning"
-                onAction={(actionKey) => {
-                  handleSelect(actionKey);
-                }}
-              >
-                <Dropdown.Item key="profile" css={{ height: "$18" }}>
-                  <Text b color="inherit" css={{ d: "flex" }}>
-                    {Cookies.get("username")}
+            <Modal
+              closeButton
+              blur
+              aria-labelledby="modal-title"
+              open={visible_Login}
+              onClose={closeHandler_Login}
+            >
+              <Modal.Header>
+                <Text
+                  id="modal-title"
+                  size={18}
+                  css={{
+                    textGradient: "45deg, $black -20%, $blue600 80%",
+                  }}
+                >
+                  Login <br></br>
+                  <Text b size={24}>
+                    Monitoring Tool
                   </Text>
-                  <Text b color="inherit" css={{ d: "flex" }}>
-                    {Cookies.get("email")}
+                </Text>
+              </Modal.Header>
+
+              <form onSubmit={handleSubmit_Login}>
+                <Modal.Body>
+                  <Input
+                    aria-label="Username"
+                    id="username"
+                    name="username"
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="sm"
+                    placeholder="Username"
+                    contentLeft={<Mail fill="currentColor" />}
+                  />
+
+                  <Input
+                    aria-label="password"
+                    id="password"
+                    name="password"
+                    type="password"
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="sm"
+                    placeholder="Password"
+                    contentLeft={<Password fill="currentColor" />}
+                  />
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button auto flat color="error" onClick={closeHandler_Login}>
+                    Close
+                  </Button>
+
+                  <Button type="submit_Login" auto>
+                    Sign in
+                  </Button>
+                </Modal.Footer>
+              </form>
+            </Modal>
+
+            <Button
+              id="Register"
+              auto
+              shadow
+              style={{
+                display: Cookies.get("username") == null ? "block" : "none",
+              }}
+              onClick={handler_Reg}
+            >
+              Register
+            </Button>
+            <Modal
+              closeButton
+              blur
+              aria-labelledby="modal-title_Reg"
+              open={visible_Reg}
+              onClose={closeHandler_Reg}
+            >
+              <Modal.Header>
+                <Text
+                  id="modal-title"
+                  size={18}
+                  css={{
+                    textGradient: "45deg, $black -20%, $blue600 80%",
+                  }}
+                >
+                  Register <br></br>
+                  <Text b size={24}>
+                    Monitoring Tool
                   </Text>
-                </Dropdown.Item>
-                <Dropdown.Item key="settings" withDivider>
-                  My Settings
-                </Dropdown.Item>
+                </Text>
+              </Modal.Header>
 
-                <Dropdown.Item key="system">System</Dropdown.Item>
-                <Dropdown.Item key="configurations">
-                  Configurations
-                </Dropdown.Item>
+              <form onSubmit={handleSubmit_Reg}>
+                <Modal.Body>
+                  <Input
+                    aria-label="username_Reg"
+                    id="username_Reg"
+                    name="username_Reg"
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="sm"
+                    placeholder="Username"
+                    contentLeft={<Mail fill="currentColor" />}
+                  />
 
-                <Dropdown.Item key="logout" withDivider color="error">
-                  Log Out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </Navbar.Content>
-        <Navbar.Collapse>
-          {collapseItems.map((item, index) => (
-            <Navbar.CollapseItem key={item}>
-              <Link
-                color="inherit"
-                css={{
-                  minWidth: "100%",
-                }}
-                href={item}
-              >
-                {item}
-              </Link>
-            </Navbar.CollapseItem>
-          ))}
-        </Navbar.Collapse>
-      </Navbar>
-    </Layout>
+                  <Input
+                    aria-label="email_Reg"
+                    id="email_Reg"
+                    name="email_Reg"
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="sm"
+                    placeholder="Email"
+                    contentLeft={<Mail fill="currentColor" />}
+                  />
+
+                  <Input
+                    aria-label="password_Reg"
+                    id="password_Reg"
+                    name="password_Reg"
+                    type="password"
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="sm"
+                    placeholder="Password"
+                    contentLeft={<Password fill="currentColor" />}
+                  />
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button auto flat color="error" onClick={closeHandler_Reg}>
+                    Close
+                  </Button>
+
+                  <Button type="submit_Reg" auto>
+                    Register
+                  </Button>
+                </Modal.Footer>
+              </form>
+            </Modal>
+
+            <div css={{ display: "none" }}>
+              <Dropdown css={{ display: "none" }} placement="bottom-right">
+                <Navbar.Item>
+                  <Dropdown.Trigger>
+                    <Avatar color="primary" textColor="white" />
+                  </Dropdown.Trigger>
+                </Navbar.Item>
+                <Dropdown.Menu
+                  disabledKeys={["settings", "system", "configurations"]}
+                  aria-label="User menu actions"
+                  color="warning"
+                  onAction={(actionKey) => {
+                    handleSelect(actionKey);
+                  }}
+                >
+                  <Dropdown.Item key="profile" css={{ height: "$18" }}>
+                    <Text b color="inherit" css={{ d: "flex" }}>
+                      {Cookies.get("username")}
+                    </Text>
+                    <Text b color="inherit" css={{ d: "flex" }}>
+                      {Cookies.get("email")}
+                    </Text>
+                  </Dropdown.Item>
+                  <Dropdown.Item key="settings" withDivider>
+                    My Settings
+                  </Dropdown.Item>
+
+                  <Dropdown.Item key="system">System</Dropdown.Item>
+                  <Dropdown.Item key="configurations">
+                    Configurations
+                  </Dropdown.Item>
+
+                  <Dropdown.Item key="logout" withDivider color="error">
+                    Log Out
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </Navbar.Content>
+          <Navbar.Collapse>
+            {collapseItems.map((item, index) => (
+              <Navbar.CollapseItem key={item}>
+                <Link
+                  color="inherit"
+                  css={{
+                    minWidth: "100%",
+                  }}
+                  href={item}
+                >
+                  {item}
+                </Link>
+              </Navbar.CollapseItem>
+            ))}
+          </Navbar.Collapse>
+        </Navbar>
+      </Layout>
+    </NextUIProvider>
   );
 }

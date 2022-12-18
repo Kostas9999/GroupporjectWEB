@@ -163,7 +163,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                   auto
                   shadow
                   color="$colors$primary"
-                  onPress={handler_getDeviceID}
+                  onClick={handler_getDeviceID}
                 >
                   <Text
                     h6
@@ -213,11 +213,11 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                       auto
                       flat
                       color="error"
-                      onPress={closeHandler_getDeviceID}
+                      onClick={closeHandler_getDeviceID}
                     >
                       Close
                     </Button>
-                    <Button auto onPress={closeHandler_getDeviceID}>
+                    <Button auto onClick={closeHandler_getDeviceID}>
                       OK
                     </Button>
                   </Modal.Footer>
@@ -238,7 +238,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                   auto
                   shadow
                   color="$colors$primary"
-                  onPress={handler_netStats}
+                  onClick={handler_netStats}
                 >
                   <Text
                     h6
@@ -288,7 +288,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                       auto
                       flat
                       color="error"
-                      onPress={closeHandler_netStats}
+                      onClick={closeHandler_netStats}
                     >
                       Close
                     </Button>
@@ -307,7 +307,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                   auto
                   shadow
                   color="$colors$primary"
-                  onPress={handler_iface}
+                  onClick={handler_iface}
                 >
                   <Text
                     h6
@@ -363,7 +363,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                       auto
                       flat
                       color="error"
-                      onPress={closeHandler_iface}
+                      onClick={closeHandler_iface}
                     >
                       Close
                     </Button>
@@ -382,7 +382,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                   auto
                   shadow
                   color="$colors$primary"
-                  onPress={handler_Ports}
+                  onClick={handler_Ports}
                 >
                   <Text h6 size={14} color="white" css={{ m: 0 }}>
                     Open Ports (Listening): {ports.length}
@@ -443,7 +443,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                       auto
                       flat
                       color="error"
-                      onPress={closeHandler_Ports}
+                      onClick={closeHandler_Ports}
                     >
                       Close
                     </Button>
