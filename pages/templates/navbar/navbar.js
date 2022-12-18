@@ -26,6 +26,13 @@ export default function App(data) {
       logout();
     }
   };
+
+  function a() {
+    return Cookies.get() != null;
+  }
+
+  console.log(Cookies.get());
+
   // getcookie();
   const router = useRouter();
 
@@ -175,12 +182,13 @@ export default function App(data) {
             auto
             shadow
             style={{
-              display: Cookies.get() == null ? "block" : "none",
+              display: "block",
             }}
             onPress={handler_Login}
           >
             Login
           </Button>
+
           <Modal
             closeButton
             blur
@@ -249,7 +257,7 @@ export default function App(data) {
             auto
             shadow
             style={{
-              display: Cookies.get("username") == null ? "block" : "none",
+              display: "block",
             }}
             onPress={handler_Reg}
           >
@@ -331,7 +339,7 @@ export default function App(data) {
             </form>
           </Modal>
 
-          <div id="logout">
+          <div css={{ display: "none" }}>
             <Dropdown css={{ display: "none" }} placement="bottom-right">
               <Navbar.Item>
                 <Dropdown.Trigger>
