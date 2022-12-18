@@ -500,7 +500,7 @@ export async function getServerSideProps(context) {
   const data = { device_Id: id };
   const JSONdata = JSON.stringify(data);
 
-  const endpoint = `${process.env.HOST}/api/getDeviceData`;
+  const endpoint = `https://montool.vercel.app/api/getDeviceData`;
 
   const options = {
     method: "POST",

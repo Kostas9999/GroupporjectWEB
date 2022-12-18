@@ -5,9 +5,7 @@ import { useRouter } from "next/router";
 import { Link, Avatar, Dropdown } from "@nextui-org/react";
 import { Layout } from "../../../public/templates/navbar/Layout.js";
 import Cookies from "js-cookie";
-import { withIronSessionApiRoute, withIronSessionSsr } from "iron-session/next";
-import { ironOptions } from "./../../api/session/session_Config";
-import { withSessionSsr } from "./../../api/session/withSession";
+
 var xss = require("xss");
 
 import {
@@ -27,13 +25,6 @@ export default function App(data) {
     }
   };
 
-  function a() {
-    return Cookies.get() != null;
-  }
-
-  console.log(Cookies.get());
-
-  // getcookie();
   const router = useRouter();
 
   async function handleSubmit_Reg(event) {
@@ -396,22 +387,4 @@ export default function App(data) {
       </Navbar>
     </Layout>
   );
-}
-
-async function getcookie() {
-  const response = await fetch("/api/session/session");
-  const result = await response.json();
-  if (typeof document != "undefined") {
-    if (Object.keys(result).length > 0) {
-      document.getElementById("login").style.display = "none";
-      document.getElementById("Register").style.display = "none";
-      document.getElementById("navbarLinks").style.display = "inline-block";
-      document.getElementById("logout").style.display = "inline-block";
-    } else {
-      document.getElementById("login").style.display = "inline-block";
-      document.getElementById("Register").style.display = "inline-block";
-      document.getElementById("navbarLinks").style.display = "none";
-      document.getElementById("logout").style.display = "none";
-    }
-  }
 }
