@@ -176,10 +176,10 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                 >
                   <Card.Body css={{ padding: "2px" }}>
                     <Button
+                      shadow
                       size="xl"
                       id="getDeviceID"
                       auto
-                      shadow
                       css={{ background: btn_back }}
                       onClick={handler_getDeviceID}
                     >

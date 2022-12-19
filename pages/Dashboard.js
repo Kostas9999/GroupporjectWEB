@@ -21,7 +21,11 @@ import { Router } from "next/router";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
-export default function Checkout({ devices, devicesTitle }) {
+export default function Dashboard({ devices, devicesTitle }) {
+  const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
+  const btn_top_back = "rgba(255, 0, 0, 0.6)"; //red
+  const btn_back = "rgba(0, 0, 0, .6)"; // black
+  const card_back = "rgba(100, 100, 100, .6)"; // blue
   Cookies.set("devices", JSON.stringify(devicesTitle));
 
   const router = useRouter();
@@ -44,6 +48,7 @@ export default function Checkout({ devices, devicesTitle }) {
           auto
           shadow
           onPress={handler_getDeviceID}
+          css={{ background: btn_back }}
         >
           <Text
             h6
@@ -87,8 +92,9 @@ export default function Checkout({ devices, devicesTitle }) {
               <Card
                 isPressable
                 isHoverable
+                css={{ background: card_back }}
+                shadow
                 variant="bordered"
-                css={{ mw: "400px" }}
                 onPress={(event) => {
                   router.push({
                     pathname: "/device",
@@ -96,7 +102,7 @@ export default function Checkout({ devices, devicesTitle }) {
                   });
                 }}
               >
-                <Card.Body>
+                <Card.Body css={{ color: text_Color }}>
                   {item.OS.hostname} <br></br>
                   {item.OS.version} ({item.OS.build} )<br></br>
                 </Card.Body>
