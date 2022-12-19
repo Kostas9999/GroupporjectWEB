@@ -140,12 +140,10 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
               {
                 <Dropdown>
                   <Dropdown.Button
-                    flat
-                    css={{
-                      color: text_Color,
-                      tt: "capitalize",
-                      backgroundColor: btn_top_back,
-                    }}
+                    size="md"
+                    auto
+                    shadow
+                    css={{ background: btn_back }}
                   >
                     Select Device
                   </Dropdown.Button>
@@ -509,6 +507,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
 
                     <div style={{ width: "800px" }}>
                       <canvas id="acquisitions2"></canvas>
+                      <script></script>
                     </div>
                   </Card.Body>
                 </Card>

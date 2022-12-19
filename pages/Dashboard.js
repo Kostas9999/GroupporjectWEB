@@ -53,7 +53,7 @@ export default function Dashboard({ devices, devicesTitle }) {
           <Text
             h6
             size={14}
-            color="white"
+            color={text_Color}
             css={{ m: 0, "line-height": "1rem" }}
           >
             Add Device
