@@ -43,7 +43,7 @@ export default function App(data) {
     };
 
     const JSONdata = JSON.stringify(data_Reg);
-    const endpoint = "https://montool.vercel.app/api/db_Register";
+    const endpoint = `/api/db_Register`;
 
     const options = {
       method: "POST",
