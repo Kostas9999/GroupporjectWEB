@@ -127,395 +127,391 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
 
   return (
     <NextUIProvider>
-      <div className={styles.container}>
+      <main className={styles.main}>
         <Navbar />
         <Head>
           <title>NetMon</title>
           <meta name="description" content="Monitoring Tool" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main className={styles.main}>
-          <Container gap={0}>
-            <Row gap={1}>
-              {
-                <Dropdown>
-                  <Dropdown.Button
-                    size="md"
-                    auto
-                    shadow
-                    css={{ background: btn_back }}
-                  >
-                    Select Device
-                  </Dropdown.Button>
+        <Spacer y={1}></Spacer>
 
-                  <Dropdown.Menu
-                    onAction={(actionKey) => {
-                      handleSelect(actionKey);
-                    }}
-                  >
-                    {devices.map((a) => (
-                      <Dropdown.Item key={a.OS.id}>
-                        {a.OS.hostname}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              }
-            </Row>
-            <Spacer y={1} />
+        <Container gap={0}>
+          <Row gap={1}>
+            {
+              <Dropdown>
+                <Dropdown.Button
+                  size="md"
+                  auto
+                  shadow
+                  css={{ background: btn_back }}
+                >
+                  Select Device
+                </Dropdown.Button>
 
-            <Row gap={1}>
-              <Col>
-                <Card
-                  css={{
-                    backgroundColor: card_back,
-                    mw: "100%",
+                <Dropdown.Menu
+                  onAction={(actionKey) => {
+                    handleSelect(actionKey);
                   }}
                 >
-                  <Card.Body css={{ padding: "2px" }}>
-                    <Button
-                      shadow
-                      size="xl"
-                      id="getDeviceID"
-                      auto
-                      css={{ background: btn_back }}
-                      onClick={handler_getDeviceID}
+                  {devices.map((a) => (
+                    <Dropdown.Item key={a.OS.id}>{a.OS.hostname}</Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            }
+          </Row>
+          <Spacer y={1} />
+
+          <Row gap={1}>
+            <Col>
+              <Card
+                css={{
+                  backgroundColor: card_back,
+                  mw: "100%",
+                }}
+              >
+                <Card.Body css={{ padding: "2px" }}>
+                  <Button
+                    shadow
+                    size="xl"
+                    id="getDeviceID"
+                    auto
+                    css={{ background: btn_back }}
+                    onClick={handler_getDeviceID}
+                  >
+                    <Text
+                      h6
+                      size={14}
+                      css={{
+                        color: text_Color,
+                        m: 0,
+                        "line-height": "1rem",
+                      }}
                     >
-                      <Text
-                        h6
-                        size={14}
-                        css={{
-                          color: text_Color,
-                          m: 0,
-                          "line-height": "1rem",
-                        }}
-                      >
-                        {os.hostname} <br></br>
-                        {os.version} ({os.build}) <br></br>
+                      {os.hostname} <br></br>
+                      {os.version} ({os.build}) <br></br>
+                      CPU: {hardware.Title} <br></br>
+                      RAM:{" "}
+                      {Math.round(hardware.TotalMemory / 1024 / 1024 / 1024)}
+                      GB
+                    </Text>
+                  </Button>
+                  <Modal
+                    scroll
+                    blur
+                    width="30%"
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                    open={visible_getDeviceID}
+                    onClose={closeHandler_getDeviceID}
+                  >
+                    <Modal.Header>
+                      <Text id="modal-title" size={18}>
+                        Device
+                      </Text>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Text id="modal-description">
+                        ID: {hardware.id} <br></br>
+                        Member since: {os.Created}
+                        <br></br>
+                        Hostname: {os.hostname} <br></br>
+                        OS: {os.version} ({os.build}) <br></br>
+                        Relese: {os.relese}
+                        <br></br>
                         CPU: {hardware.Title} <br></br>
                         RAM:{" "}
                         {Math.round(hardware.TotalMemory / 1024 / 1024 / 1024)}
-                        GB
+                        GB <br></br>
                       </Text>
-                    </Button>
-                    <Modal
-                      scroll
-                      blur
-                      width="30%"
-                      aria-labelledby="modal-title"
-                      aria-describedby="modal-description"
-                      open={visible_getDeviceID}
-                      onClose={closeHandler_getDeviceID}
-                    >
-                      <Modal.Header>
-                        <Text id="modal-title" size={18}>
-                          Device
-                        </Text>
-                      </Modal.Header>
-                      <Modal.Body>
-                        <Text id="modal-description">
-                          ID: {hardware.id} <br></br>
-                          Member since: {os.Created}
-                          <br></br>
-                          Hostname: {os.hostname} <br></br>
-                          OS: {os.version} ({os.build}) <br></br>
-                          Relese: {os.relese}
-                          <br></br>
-                          CPU: {hardware.Title} <br></br>
-                          RAM:{" "}
-                          {Math.round(
-                            hardware.TotalMemory / 1024 / 1024 / 1024
-                          )}
-                          GB <br></br>
-                        </Text>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button
-                          auto
-                          flat
-                          color="error"
-                          onClick={closeHandler_getDeviceID}
-                        >
-                          Close
-                        </Button>
-                        <Button auto onClick={closeHandler_getDeviceID}>
-                          OK
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-
-            <Spacer y={1} />
-            <Row gap={1}>
-              <Col>
-                <Card css={{ backgroundColor: card_back, mw: "100%" }}>
-                  <Card.Body css={{ padding: "2px" }}>
-                    <Button
-                      size="xl"
-                      id="getDeviceID"
-                      auto
-                      shadow
-                      css={{ background: btn_back }}
-                      onClick={handler_netStats}
-                    >
-                      <Text
-                        h6
-                        size="$xs"
-                        color={text_Color}
-                        css={{ m: 0, "line-height": "1rem" }}
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button
+                        auto
+                        flat
+                        color="error"
+                        onClick={closeHandler_getDeviceID}
                       >
-                        Network Stats <br></br>
+                        Close
+                      </Button>
+                      <Button auto onClick={closeHandler_getDeviceID}>
+                        OK
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+
+          <Spacer y={1} />
+          <Row gap={1}>
+            <Col>
+              <Card css={{ backgroundColor: card_back, mw: "100%" }}>
+                <Card.Body css={{ padding: "2px" }}>
+                  <Button
+                    size="xl"
+                    id="getDeviceID"
+                    auto
+                    shadow
+                    css={{ background: btn_back }}
+                    onClick={handler_netStats}
+                  >
+                    <Text
+                      h6
+                      size="$xs"
+                      color={text_Color}
+                      css={{ m: 0, "line-height": "1rem" }}
+                    >
+                      Network Stats <br></br>
+                      Local Latency: {networkstats.localLatency}ms <br></br>
+                      Public Latency: {networkstats.publicLatency}ms
+                    </Text>
+                  </Button>
+                  <Modal
+                    scroll
+                    blur
+                    closeButton
+                    width="30%"
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                    open={visible_netStats}
+                    onClose={closeHandler_netStats}
+                  >
+                    <Modal.Header>
+                      <Text id="modal-title" size={18}>
+                        Net Stats
+                      </Text>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Text id="modal-description">
+                        Interface: {networkstats.interface}
+                        <br></br>
+                        <br></br>
                         Local Latency: {networkstats.localLatency}ms <br></br>
                         Public Latency: {networkstats.publicLatency}ms
-                      </Text>
-                    </Button>
-                    <Modal
-                      scroll
-                      blur
-                      closeButton
-                      width="30%"
-                      aria-labelledby="modal-title"
-                      aria-describedby="modal-description"
-                      open={visible_netStats}
-                      onClose={closeHandler_netStats}
-                    >
-                      <Modal.Header>
-                        <Text id="modal-title" size={18}>
-                          Net Stats
-                        </Text>
-                      </Modal.Header>
-                      <Modal.Body>
-                        <Text id="modal-description">
-                          Interface: {networkstats.interface}
-                          <br></br>
-                          <br></br>
-                          Local Latency: {networkstats.localLatency}ms <br></br>
-                          Public Latency: {networkstats.publicLatency}ms
-                          <br></br>
-                          <br></br>
-                          rx_total: {networkstats.rx_total} <br></br>
-                          rx_dropped: {networkstats.rx_dropped} <br></br>
-                          rx_error: {networkstats.rx_error} <br></br>
-                          <br></br>
-                          tx_total: {networkstats.tx_total} <br></br>
-                          tx_dropped: {networkstats.tx_dropped} <br></br>
-                          tx_error: {networkstats.tx_error} <br></br>
-                        </Text>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button
-                          auto
-                          flat
-                          color="error"
-                          onClick={closeHandler_netStats}
-                        >
-                          Close
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </Card.Body>
-                </Card>
-              </Col>
-
-              <Col>
-                <Card css={{ backgroundColor: card_back, mw: "100%" }}>
-                  <Card.Body css={{ padding: "2px" }}>
-                    <Button
-                      size="xl"
-                      id="getDeviceID"
-                      auto
-                      shadow
-                      css={{ background: btn_back }}
-                      onClick={handler_iface}
-                    >
-                      <Text
-                        h6
-                        size="$xs"
-                        color={text_Color}
-                        css={{ m: 0, "line-height": "1rem" }}
-                      >
-                        {iface.iface} ({iface.speed}mb/s)<br></br>
-                        {iface.mac}
                         <br></br>
+                        <br></br>
+                        rx_total: {networkstats.rx_total} <br></br>
+                        rx_dropped: {networkstats.rx_dropped} <br></br>
+                        rx_error: {networkstats.rx_error} <br></br>
+                        <br></br>
+                        tx_total: {networkstats.tx_total} <br></br>
+                        tx_dropped: {networkstats.tx_dropped} <br></br>
+                        tx_error: {networkstats.tx_error} <br></br>
+                      </Text>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button
+                        auto
+                        flat
+                        color="error"
+                        onClick={closeHandler_netStats}
+                      >
+                        Close
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </Card.Body>
+              </Card>
+            </Col>
+
+            <Col>
+              <Card css={{ backgroundColor: card_back, mw: "100%" }}>
+                <Card.Body css={{ padding: "2px" }}>
+                  <Button
+                    size="xl"
+                    id="getDeviceID"
+                    auto
+                    shadow
+                    css={{ background: btn_back }}
+                    onClick={handler_iface}
+                  >
+                    <Text
+                      h6
+                      size="$xs"
+                      color={text_Color}
+                      css={{ m: 0, "line-height": "1rem" }}
+                    >
+                      {iface.iface} ({iface.speed}mb/s)<br></br>
+                      {iface.mac}
+                      <br></br>
+                      {iface.IPv4}
+                      <br></br>
+                      {iface.IPv6}
+                    </Text>
+                  </Button>
+                  <Modal
+                    scroll
+                    closeButton
+                    blur
+                    width="30%"
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                    open={visible_iface}
+                    onClose={closeHandler_iface}
+                  >
+                    <Modal.Header>
+                      <Text id="modal-title" size={18}>
+                        Network Interface
+                      </Text>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Text id="modal-description">
+                        Interface: {iface.iface} <br></br>
+                        Speed: {iface.speed}mb/s<br></br>
+                        MAC: {iface.mac}
+                        <br></br>
+                        <br></br>
+                        IPv4<br></br>
                         {iface.IPv4}
                         <br></br>
+                        {iface.IPv4Sub}
+                        <br></br>
+                        <br></br>
+                        IPv6<br></br>
                         {iface.IPv6}
+                        <br></br>
+                        {iface.IPv6Sub}
+                        <br></br>
                       </Text>
-                    </Button>
-                    <Modal
-                      scroll
-                      closeButton
-                      blur
-                      width="30%"
-                      aria-labelledby="modal-title"
-                      aria-describedby="modal-description"
-                      open={visible_iface}
-                      onClose={closeHandler_iface}
-                    >
-                      <Modal.Header>
-                        <Text id="modal-title" size={18}>
-                          Network Interface
-                        </Text>
-                      </Modal.Header>
-                      <Modal.Body>
-                        <Text id="modal-description">
-                          Interface: {iface.iface} <br></br>
-                          Speed: {iface.speed}mb/s<br></br>
-                          MAC: {iface.mac}
-                          <br></br>
-                          <br></br>
-                          IPv4<br></br>
-                          {iface.IPv4}
-                          <br></br>
-                          {iface.IPv4Sub}
-                          <br></br>
-                          <br></br>
-                          IPv6<br></br>
-                          {iface.IPv6}
-                          <br></br>
-                          {iface.IPv6Sub}
-                          <br></br>
-                        </Text>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button
-                          auto
-                          flat
-                          color="error"
-                          onClick={closeHandler_iface}
-                        >
-                          Close
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </Card.Body>
-                </Card>
-              </Col>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button
+                        auto
+                        flat
+                        color="error"
+                        onClick={closeHandler_iface}
+                      >
+                        Close
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </Card.Body>
+              </Card>
+            </Col>
 
-              <Col>
-                <Card css={{ backgroundColor: card_back, mw: "100%" }}>
-                  <Card.Body css={{ padding: "2px" }}>
-                    <Button
-                      size="xl"
-                      id="getDeviceID"
-                      auto
-                      shadow
-                      css={{ background: btn_back }}
-                      onClick={handler_Ports}
-                    >
-                      <Text h6 size={14} color={text_Color} css={{ m: 0 }}>
-                        Open Ports (Listening): {ports.length}
+            <Col>
+              <Card css={{ backgroundColor: card_back, mw: "100%" }}>
+                <Card.Body css={{ padding: "2px" }}>
+                  <Button
+                    size="xl"
+                    id="getDeviceID"
+                    auto
+                    shadow
+                    css={{ background: btn_back }}
+                    onClick={handler_Ports}
+                  >
+                    <Text h6 size={14} color={text_Color} css={{ m: 0 }}>
+                      Open Ports (Listening): {ports.length}
+                    </Text>
+                  </Button>
+                  <Modal
+                    scroll
+                    fullScreen
+                    closeButton
+                    blur
+                    width="30%"
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                    open={visible_Ports}
+                    onClose={closeHandler_Ports}
+                  >
+                    <Modal.Header>
+                      <Text id="modal-title" size={18}>
+                        Open Ports
                       </Text>
-                    </Button>
-                    <Modal
-                      scroll
-                      fullScreen
-                      closeButton
-                      blur
-                      width="30%"
-                      aria-labelledby="modal-title"
-                      aria-describedby="modal-description"
-                      open={visible_Ports}
-                      onClose={closeHandler_Ports}
-                    >
-                      <Modal.Header>
-                        <Text id="modal-title" size={18}>
-                          Open Ports
-                        </Text>
-                      </Modal.Header>
-                      <Modal.Body>
-                        <Text id="modal-description">
-                          <Table
-                            bordered
-                            aria-label="Example static collection table"
-                            css={{
-                              minWidth: "100%",
-                              height: "calc($space$14 * 10)",
-                            }}
-                            sortDescriptor={list.sortDescriptor}
-                            onSortChange={list.sort}
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Text id="modal-description">
+                        <Table
+                          bordered
+                          aria-label="Example static collection table"
+                          css={{
+                            minWidth: "100%",
+                            height: "calc($space$14 * 10)",
+                          }}
+                          sortDescriptor={list.sortDescriptor}
+                          onSortChange={list.sort}
+                        >
+                          <Table.Header columns={columns}>
+                            {(column) => (
+                              <Table.Column key={column.key} allowsSorting>
+                                {column.label}
+                              </Table.Column>
+                            )}
+                          </Table.Header>
+                          <Table.Body
+                            items={list.items}
+                            loadingState={list.loadingState}
                           >
-                            <Table.Header columns={columns}>
-                              {(column) => (
-                                <Table.Column key={column.key} allowsSorting>
-                                  {column.label}
-                                </Table.Column>
-                              )}
-                            </Table.Header>
-                            <Table.Body
-                              items={list.items}
-                              loadingState={list.loadingState}
-                            >
-                              {(item) => (
-                                <Table.Row key={item.name}>
-                                  {(columnKey) => (
-                                    <Table.Cell>{item[columnKey]}</Table.Cell>
-                                  )}
-                                </Table.Row>
-                              )}
-                            </Table.Body>
-                          </Table>
-                        </Text>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button
-                          auto
-                          flat
-                          color="error"
-                          onClick={closeHandler_Ports}
-                        >
-                          Close
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
+                            {(item) => (
+                              <Table.Row key={item.name}>
+                                {(columnKey) => (
+                                  <Table.Cell>{item[columnKey]}</Table.Cell>
+                                )}
+                              </Table.Row>
+                            )}
+                          </Table.Body>
+                        </Table>
+                      </Text>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button
+                        auto
+                        flat
+                        color="error"
+                        onClick={closeHandler_Ports}
+                      >
+                        Close
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
 
-            <Spacer y={1} />
+          <Spacer y={1} />
 
-            <Spacer y={1} />
+          <Spacer y={1} />
 
-            <Row gap={1}>
-              <Col>
-                <Card css={{ background: card_back, mw: "100%" }}>
-                  <Card.Body>
-                    <Text h6 size={15} color={text_Color} css={{ m: 0 }}>
-                      chart TODO
-                    </Text>
+          <Row gap={1}>
+            <Col>
+              <Card css={{ background: card_back, mw: "100%" }}>
+                <Card.Body>
+                  <Text h6 size={15} color={text_Color} css={{ m: 0 }}>
+                    chart TODO
+                  </Text>
 
-                    <div style={{ width: "800px" }}>
-                      <canvas id="acquisitions"></canvas>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
+                  <div style={{ width: "800px" }}>
+                    <canvas id="acquisitions"></canvas>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
 
-            <Spacer y={1} />
-            <Row gap={1}>
-              <Col>
-                <Card css={{ background: card_back, mw: "100%" }}>
-                  <Card.Body>
-                    <Text h6 size={15} color={text_Color} css={{ m: 0 }}>
-                      chart TODO
-                    </Text>
+          <Spacer y={1} />
+          <Row gap={1}>
+            <Col>
+              <Card css={{ background: card_back, mw: "100%" }}>
+                <Card.Body>
+                  <Text h6 size={15} color={text_Color} css={{ m: 0 }}>
+                    chart TODO
+                  </Text>
 
-                    <div style={{ width: "800px" }}>
-                      <canvas id="acquisitions2"></canvas>
-                      <script></script>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          </Container>
-        </main>
-      </div>
+                  <div style={{ width: "800px" }}>
+                    <canvas id="acquisitions2"></canvas>
+                    <script></script>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </main>
     </NextUIProvider>
   );
 }

@@ -41,9 +41,10 @@ export default function Dashboard({ devices, devicesTitle }) {
       <main className={styles.main}>
         <Navbar />
         <Header />
+        <Spacer y={1}></Spacer>
 
         <Button
-          size="xl"
+          size="md"
           id="getDeviceID"
           auto
           shadow
@@ -59,6 +60,7 @@ export default function Dashboard({ devices, devicesTitle }) {
             Add Device
           </Text>
         </Button>
+        <Spacer y={1}></Spacer>
         <Modal
           scroll
           blur

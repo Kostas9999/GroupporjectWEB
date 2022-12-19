@@ -121,6 +121,7 @@ export default function App(data) {
     <NextUIProvider>
       <Layout>
         <Navbar
+          css={{ Bottom: "5vh", "line-height": "1rem" }}
           isBordered
           variant="sticky"
           className={styles.navbar}
