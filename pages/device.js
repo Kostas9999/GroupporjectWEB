@@ -178,7 +178,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                     id="getDeviceID"
                     auto
                     css={{ background: btn_back }}
-                    onClick={handler_getDeviceID}
+                    onPress={handler_getDeviceID}
                   >
                     <Text
                       h6

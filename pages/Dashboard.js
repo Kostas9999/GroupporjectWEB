@@ -44,12 +44,12 @@ export default function Dashboard({ devices, devicesTitle }) {
         <Spacer y={1}></Spacer>
 
         <Button
+          shadow
           size="md"
           id="getDeviceID"
           auto
-          shadow
-          onPress={handler_getDeviceID}
           css={{ background: btn_back }}
+          onPress={handler_getDeviceID}
         >
           <Text
             h6

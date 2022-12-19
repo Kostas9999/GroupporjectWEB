@@ -9,9 +9,9 @@ import { Text } from "@nextui-org/react";
 export default function Home() {
   return (
     <NextUIProvider>
-      <Navbar />
       <Header />
       <main className={styles.main}>
+        <Navbar />
         <Text
           size={70}
           css={{
