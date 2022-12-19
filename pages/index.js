@@ -7,6 +7,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import { Text } from "@nextui-org/react";
 
 export default function Home() {
+  console.log(process.env.NODE_ENV);
   return (
     <NextUIProvider>
       <Header />
