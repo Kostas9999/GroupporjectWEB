@@ -6,6 +6,7 @@ import { Link, Avatar, Dropdown } from "@nextui-org/react";
 import { Layout } from "../../../public/templates/navbar/Layout.js";
 import Cookies from "js-cookie";
 import { NextUIProvider } from "@nextui-org/react";
+import styles from "../../../styles/Home.module.css";
 
 var xss = require("xss");
 
@@ -119,7 +120,12 @@ export default function App(data) {
   return (
     <NextUIProvider>
       <Layout>
-        <Navbar isBordered variant="sticky">
+        <Navbar
+          isBordered
+          variant="sticky"
+          className={styles.navbar}
+          // css={{ background: "rgba(0, 0, 0, 0.7)" }}
+        >
           <Navbar.Toggle showIn="xs" />
           <Navbar.Brand
             css={{

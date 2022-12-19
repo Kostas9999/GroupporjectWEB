@@ -1,5 +1,6 @@
 import { withIronSessionSsr } from "iron-session/next";
 import Navbar from "./templates/navbar/navbar";
+import Header from "./templates/header";
 import { ironOptions } from "./api/session/session_Config";
 import { NextUIProvider } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
@@ -35,18 +36,13 @@ export default function Checkout({ devices, devicesTitle }) {
     <NextUIProvider>
       <main className={styles.main}>
         <Navbar />
-        <Head>
-          <title>NetMon</title>
-          <meta name="description" content="Monitoring Tool" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+        <Header />
 
         <Button
           size="xl"
           id="getDeviceID"
           auto
           shadow
-          color="$colors$primary"
           onPress={handler_getDeviceID}
         >
           <Text

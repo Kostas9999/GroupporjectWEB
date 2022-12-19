@@ -3,6 +3,9 @@
 }
 
 
+.navbar {
+  background: black;
+}
 .main { 
   background: black;
   background-image: url("../public/img/map-image.png");
@@ -130,4 +133,6 @@
     filter: invert(1);
   }
 }
+
+
 

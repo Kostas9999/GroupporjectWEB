@@ -23,6 +23,10 @@ import {
 
 export default function Home({ os, hardware, iface, networkstats, ports }) {
   const router = useRouter();
+  const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
+  const btn_top_back = "rgba(255, 0, 0, 0.6)"; //red
+  const btn_back = "rgba(0, 0, 0, .6)"; // black
+  const card_back = "rgba(100, 100, 100, .6)"; // blue
 
   let devices = [];
   if (Cookies.get("devices")) {
@@ -137,8 +141,11 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                 <Dropdown>
                   <Dropdown.Button
                     flat
-                    color="$colors$primary"
-                    css={{ color: "white", tt: "capitalize" }}
+                    css={{
+                      color: text_Color,
+                      tt: "capitalize",
+                      backgroundColor: btn_top_back,
+                    }}
                   >
                     Select Device
                   </Dropdown.Button>
@@ -161,21 +168,29 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
 
             <Row gap={1}>
               <Col>
-                <Card css={{ $$cardColor: "$colors$primary", mw: "100%" }}>
+                <Card
+                  css={{
+                    backgroundColor: card_back,
+                    mw: "100%",
+                  }}
+                >
                   <Card.Body css={{ padding: "2px" }}>
                     <Button
                       size="xl"
                       id="getDeviceID"
                       auto
                       shadow
-                      color="$colors$primary"
+                      css={{ background: btn_back }}
                       onClick={handler_getDeviceID}
                     >
                       <Text
                         h6
                         size={14}
-                        color="white"
-                        css={{ m: 0, "line-height": "1rem" }}
+                        css={{
+                          color: text_Color,
+                          m: 0,
+                          "line-height": "1rem",
+                        }}
                       >
                         {os.hostname} <br></br>
                         {os.version} ({os.build}) <br></br>
@@ -238,20 +253,20 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
             <Spacer y={1} />
             <Row gap={1}>
               <Col>
-                <Card css={{ $$cardColor: "$colors$primary", mw: "100%" }}>
+                <Card css={{ backgroundColor: card_back, mw: "100%" }}>
                   <Card.Body css={{ padding: "2px" }}>
                     <Button
                       size="xl"
                       id="getDeviceID"
                       auto
                       shadow
-                      color="$colors$primary"
+                      css={{ background: btn_back }}
                       onClick={handler_netStats}
                     >
                       <Text
                         h6
                         size="$xs"
-                        color="white"
+                        color={text_Color}
                         css={{ m: 0, "line-height": "1rem" }}
                       >
                         Network Stats <br></br>
@@ -308,20 +323,20 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
               </Col>
 
               <Col>
-                <Card css={{ $$cardColor: "$colors$primary", mw: "100%" }}>
+                <Card css={{ backgroundColor: card_back, mw: "100%" }}>
                   <Card.Body css={{ padding: "2px" }}>
                     <Button
                       size="xl"
                       id="getDeviceID"
                       auto
                       shadow
-                      color="$colors$primary"
+                      css={{ background: btn_back }}
                       onClick={handler_iface}
                     >
                       <Text
                         h6
                         size="$xs"
-                        color="white"
+                        color={text_Color}
                         css={{ m: 0, "line-height": "1rem" }}
                       >
                         {iface.iface} ({iface.speed}mb/s)<br></br>
@@ -383,17 +398,17 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
               </Col>
 
               <Col>
-                <Card css={{ $$cardColor: "$colors$primary", mw: "100%" }}>
+                <Card css={{ backgroundColor: card_back, mw: "100%" }}>
                   <Card.Body css={{ padding: "2px" }}>
                     <Button
                       size="xl"
                       id="getDeviceID"
                       auto
                       shadow
-                      color="$colors$primary"
+                      css={{ background: btn_back }}
                       onClick={handler_Ports}
                     >
-                      <Text h6 size={14} color="white" css={{ m: 0 }}>
+                      <Text h6 size={14} color={text_Color} css={{ m: 0 }}>
                         Open Ports (Listening): {ports.length}
                       </Text>
                     </Button>
@@ -469,9 +484,9 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
 
             <Row gap={1}>
               <Col>
-                <Card css={{ color: "white", mw: "100%" }}>
+                <Card css={{ background: card_back, mw: "100%" }}>
                   <Card.Body>
-                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                    <Text h6 size={15} color={text_Color} css={{ m: 0 }}>
                       chart TODO
                     </Text>
 
@@ -486,9 +501,9 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
             <Spacer y={1} />
             <Row gap={1}>
               <Col>
-                <Card css={{ color: "white", mw: "100%" }}>
+                <Card css={{ background: card_back, mw: "100%" }}>
                   <Card.Body>
-                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                    <Text h6 size={15} color={text_Color} css={{ m: 0 }}>
                       chart TODO
                     </Text>
 
