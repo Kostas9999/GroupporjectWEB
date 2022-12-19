@@ -2,6 +2,8 @@ import { withIronSessionSsr } from "iron-session/next";
 import Navbar from "./templates/navbar/navbar";
 import { ironOptions } from "./api/session/session_Config";
 import { NextUIProvider } from "@nextui-org/react";
+import styles from "../styles/Home.module.css";
+import Head from "next/head";
 
 import {
   Card,
@@ -31,72 +33,91 @@ export default function Checkout({ devices, devicesTitle }) {
 
   return (
     <NextUIProvider>
-      <Navbar />
+      <main className={styles.main}>
+        <Navbar />
+        <Head>
+          <title>NetMon</title>
+          <meta name="description" content="Monitoring Tool" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      <Spacer y={1} />
-
-      <Button
-        size="xl"
-        id="getDeviceID"
-        auto
-        shadow
-        color="$colors$primary"
-        onPress={handler_getDeviceID}
-      >
-        <Text h6 size={14} color="white" css={{ m: 0, "line-height": "1rem" }}>
-          Add Device
-        </Text>
-      </Button>
-      <Modal
-        scroll
-        blur
-        width="30%"
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-        open={visible_getDeviceID}
-        onClose={closeHandler_getDeviceID}
-      >
-        <Modal.Header>
-          <Text id="modal-title" size={18}>
-            Device
+        <Button
+          size="xl"
+          id="getDeviceID"
+          auto
+          shadow
+          color="$colors$primary"
+          onPress={handler_getDeviceID}
+        >
+          <Text
+            h6
+            size={14}
+            color="white"
+            css={{ m: 0, "line-height": "1rem" }}
+          >
+            Add Device
           </Text>
-        </Modal.Header>
-        <Modal.Body>
-          <Input bordered color="primary" />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button auto flat color="error" onPress={closeHandler_getDeviceID}>
-            Close
-          </Button>
-          <Button auto onPress={closeHandler_getDeviceID}>
-            OK
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        </Button>
+        <Modal
+          scroll
+          blur
+          width="30%"
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+          open={visible_getDeviceID}
+          onClose={closeHandler_getDeviceID}
+        >
+          <Modal.Header>
+            <Text id="modal-title" size={18}>
+              Device
+            </Text>
+          </Modal.Header>
+          <Modal.Body>
+            <Input bordered color="primary" />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button auto flat color="error" onPress={closeHandler_getDeviceID}>
+              Close
+            </Button>
+            <Button auto onPress={closeHandler_getDeviceID}>
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-      <Grid.Container gap={2} justify="flex-start">
-        {devicesTitle.map((item, index) => (
-          <Grid xs={60} sm={30}>
-            <Card
-              isPressable
-              isHoverable
-              variant="bordered"
-              css={{ mw: "400px" }}
-              onPress={(event) => {
-                router.push({
-                  pathname: "/device",
-                  query: { devID: item.OS.id },
-                });
-              }}
-            >
-              <Card.Body>
-                {item.OS.hostname} <br></br>
-                {item.OS.version} ({item.OS.build} )<br></br>
-              </Card.Body>
-            </Card>
-          </Grid>
-        ))}
-      </Grid.Container>
+        <Grid.Container gap={2} justify="flex-start">
+          {devicesTitle.map((item, index) => (
+            <Grid xs={60} sm={30}>
+              <Card
+                isPressable
+                isHoverable
+                variant="bordered"
+                css={{ mw: "400px" }}
+                onPress={(event) => {
+                  router.push({
+                    pathname: "/device",
+                    query: { devID: item.OS.id },
+                  });
+                }}
+              >
+                <Card.Body>
+                  {item.OS.hostname} <br></br>
+                  {item.OS.version} ({item.OS.build} )<br></br>
+                </Card.Body>
+              </Card>
+            </Grid>
+          ))}
+        </Grid.Container>
+      </main>
+      <footer className={styles.footer}>
+        <a
+          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Powered by Vercel
+        </a>
+      </footer>
     </NextUIProvider>
   );
 }
