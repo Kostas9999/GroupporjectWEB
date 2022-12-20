@@ -138,7 +138,7 @@ export const getServerSideProps = withIronSessionSsr(
         const data = { device_Id: item.id };
         const JSONdata = JSON.stringify(data);
 
-        const endpoint = `https://montool.vercel.app/api/getDeviceTitle`;
+        const endpoint = `${process.env.HOST}/api/getDeviceTitle`;
 
         const options = {
           method: "POST",
