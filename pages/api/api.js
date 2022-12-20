@@ -1,7 +1,5 @@
-import { CubejsApi } from "@cubejs-client/core";
-
 export async function getAquisitionsByYear() {
-  let device_Id = "2f408380_1640_a47e_e594_107b441b91a1";
+  let device_Id = "e368b009_dc92_11e5_9c43_bc00000c0000";
   const data = { device_Id };
   const JSONdata = JSON.stringify(data);
 

@@ -39,7 +39,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
       query: { devID: e },
     });
   };
-
+  /*
   init();
   async function init() {
     await sleep(1000);
@@ -49,6 +49,13 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
+  }
+*/
+  getChart();
+  setInterval(getChart, 100);
+
+  async function getChart() {
+    require("../public/acquisitions");
   }
 
   const [visible_getDeviceID, setVisible_Login] = React.useState(false);
@@ -105,11 +112,12 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
   );
 
   const collator = useCollator({ numeric: true });
-  async function load({ signal }) {
+  function load() {
     return {
       items: rows,
     };
   }
+
   async function sort({ items, sortDescriptor }) {
     return {
       items: items.sort((a, b) => {
@@ -123,6 +131,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
       }),
     };
   }
+
   const list = useAsyncList({ load, sort });
 
   return (
@@ -429,7 +438,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
                           bordered
                           aria-label="Example static collection table"
                           css={{
-                            minWidth: "100%",
+                            minWidth: "90%",
                             height: "calc($space$14 * 10)",
                           }}
                           sortDescriptor={list.sortDescriptor}
@@ -482,7 +491,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
               <Card css={{ background: card_back, mw: "100%" }}>
                 <Card.Body>
                   <Text h6 size={15} color={text_Color} css={{ m: 0 }}>
-                    chart TODO
+                    Latency
                   </Text>
 
                   <div style={{ width: "800px" }}>
@@ -499,7 +508,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
               <Card css={{ background: card_back, mw: "100%" }}>
                 <Card.Body>
                   <Text h6 size={15} color={text_Color} css={{ m: 0 }}>
-                    chart TODO
+                    Data Transfered
                   </Text>
 
                   <div style={{ width: "800px" }}>
@@ -521,7 +530,7 @@ export async function getServerSideProps(context) {
   const data = { device_Id: id };
   const JSONdata = JSON.stringify(data);
 
-  const endpoint = `https://montool.vercel.app/api/getDeviceData`;
+  const endpoint = `${process.env.HOST}/api/getDeviceData`;
 
   const options = {
     method: "POST",

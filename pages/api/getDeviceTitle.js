@@ -4,11 +4,11 @@ export default async function handler(req, res) {
   const device_Id = req.body.device_Id;
 
   const connection = await mysql.createConnection({
-    host: "185.38.61.93",
-    user: "MGproject",
-    password: "F37E28sINiKukaNegu4uzIDu3I7iXe",
-    port: "3306",
-    database: "groupproject",
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+    database: process.env.DB_DATABASE,
   });
 
   const [rows, d, y] = await connection.execute(
