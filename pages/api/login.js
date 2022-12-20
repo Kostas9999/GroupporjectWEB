@@ -10,7 +10,7 @@ export default withIronSessionApiRoute(loginRoute, ironOptions);
 async function loginRoute(req, res) {
   const username = validator.escape(req.body.username);
   const pass = validator.escape(req.body.password);
-  /*
+
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -18,8 +18,8 @@ async function loginRoute(req, res) {
     port: process.env.DB_PORT,
     database: process.env.DB_DATABASE,
   });
-*/
 
+  /*
   const connection = await mysql.createConnection({
     host: "185.38.61.93",
     user: "MGproject",
@@ -27,7 +27,7 @@ async function loginRoute(req, res) {
     port: 3306,
     database: "groupproject",
   });
-
+*/
   const [rows_user] = await connection.execute(
     `SELECT * FROM users WHERE username = ? LIMIT 1;`,
     [username]
