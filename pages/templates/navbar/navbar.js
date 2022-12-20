@@ -68,7 +68,7 @@ export default function App(data) {
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint = "/api/login";
+    const endpoint = "./api/login";
 
     const options = {
       method: "POST",
