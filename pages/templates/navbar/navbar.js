@@ -43,7 +43,7 @@ export default function App(data) {
     };
 
     const JSONdata = JSON.stringify(data_Reg);
-    const endpoint = `/api/db_Register`;
+    const endpoint = `/api/database/queries/user_registration`;
 
     const options = {
       method: "POST",

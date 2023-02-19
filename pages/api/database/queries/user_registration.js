@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
 var validator = require("validator");
 import { withIronSessionApiRoute } from "iron-session/next";
-import { ironOptions } from "./pages/api/session/session_Config";
-const client = require("./database/connections/connection");
+import { ironOptions } from "../../session/session_Config";
+const { client } = require("../connections/connection");
 
 export default withIronSessionApiRoute(loginRoute, ironOptions);
 
