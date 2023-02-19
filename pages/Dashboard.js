@@ -36,6 +36,35 @@ export default function Dashboard({ devices, devicesTitle }) {
     setVisible_Login(false);
   };
 
+  async function handleSubmit_Add_Device(event) {
+    event.preventDefault();
+
+    console.log("devAdd");
+
+    //const name = xss(document.querySelector("#dev_ID").value);
+
+    const data = {
+      dev_ID: event.target.dev_ID.value,
+    };
+
+    const JSONdata = JSON.stringify(data);
+
+    const endpoint = "./api/add_Device";
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSONdata,
+    };
+
+    const response = await fetch(endpoint, options);
+    const result = await response.json();
+
+    if (result.ok) {
+      router.push("/Dashboard");
+    }
+  }
+
   return (
     <NextUIProvider>
       <main className={styles.main}>
@@ -75,14 +104,22 @@ export default function Dashboard({ devices, devicesTitle }) {
               Device
             </Text>
           </Modal.Header>
-          <Modal.Body>
-            <Input bordered color="primary" />
-          </Modal.Body>
+          <form onSubmit={handleSubmit_Add_Device}>
+            <Modal.Body>
+              <Input
+                aria-label="dev_ID"
+                id="dev_ID"
+                name="dev_ID"
+                bordered
+                color="primary"
+              />
+            </Modal.Body>
+          </form>
           <Modal.Footer>
             <Button auto flat color="error" onPress={closeHandler_getDeviceID}>
               Close
             </Button>
-            <Button auto onPress={closeHandler_getDeviceID}>
+            <Button type="submit_dev_ID" auto>
               OK
             </Button>
           </Modal.Footer>

@@ -5,6 +5,7 @@
 
 .navbar {
   background: black;
+  min-width: 100vh; 
 }
 .main { 
   background: black;
