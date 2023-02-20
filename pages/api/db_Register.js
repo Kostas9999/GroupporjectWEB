@@ -14,7 +14,7 @@ async function loginRoute(req, res) {
   const hash = bcrypt.hashSync(pass, 13);
 
   const rows_user = await client.query(
-    `INSERT INTO "groupproject"."user" (username, email, password) VALUES (${username}, ${email}, ${hash});`
+    `INSERT INTO "groupproject"."user" (username, email, password) VALUES ('${username}', '${email}', '${hash}');`
   );
   console.log(rows_user_reg);
 

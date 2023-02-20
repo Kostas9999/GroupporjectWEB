@@ -21,6 +21,7 @@ import {
 } from "@nextui-org/react";
 
 export default function App(data) {
+  let value = "";
   const handleSelect = (e) => {
     if (e == "logout") {
       logout();
@@ -53,6 +54,13 @@ export default function App(data) {
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
+
+    if (result.ok) {
+      router.push("/Dashboard");
+    } else {
+      const elem = (document.getElementById("message").textContent =
+        "Username or Email is already in use");
+    }
   }
 
   async function handleSubmit_Login(event) {
@@ -68,7 +76,7 @@ export default function App(data) {
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint = "./api/login";
+    const endpoint = "/api/database/queries/user_login";
 
     const options = {
       method: "POST",
@@ -282,9 +290,10 @@ export default function App(data) {
                   <Text b size={24}>
                     Monitoring Tool
                   </Text>
+                  <Text b size={24}></Text>
                 </Text>
               </Modal.Header>
-
+              <a id="message"></a>
               <form onSubmit={handleSubmit_Reg}>
                 <Modal.Body>
                   <Input

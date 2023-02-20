@@ -12,13 +12,13 @@ async function loginRoute(req, res) {
   const pass = validator.escape(req.body.password_Reg);
 
   const hash = bcrypt.hashSync(pass, 13);
+  let rows_user = null;
 
-  const rows_user = await client.query(
-    `INSERT INTO "groupproject"."user" (username, email, password) VALUES (${username}, ${email}, ${hash});`
-  );
-  console.log(rows_user_reg);
+  try {
+    rows_user = await client.query(
+      `INSERT INTO "groupproject"."user" (username, email, password) VALUES ('${username}', '${email}', '${hash}');`
+    );
 
-  if (rows_user.insertId > 0) {
     req.session.user = {
       user_id: rows_user.insertId,
       user_name: username,
@@ -30,7 +30,7 @@ async function loginRoute(req, res) {
 
     await req.session.save();
     await res.status(200).json({ ok: true, user: req.session.user });
-  } else {
+  } catch (error) {
     await res.status(200).json({ ok: false });
   }
 }
