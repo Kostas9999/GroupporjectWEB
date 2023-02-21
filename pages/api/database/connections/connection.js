@@ -19,9 +19,6 @@ client.connect((err) => {
   }
 });
 
-async function test() {
-  let rows = await client.query(`SELECT * FROM "groupproject"."user";`);
-  console.log(rows);
-}
+const pool = new Pool(config);
 
-module.exports = { client };
+module.exports = { client, pool };

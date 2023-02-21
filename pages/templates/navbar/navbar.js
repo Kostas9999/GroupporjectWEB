@@ -56,7 +56,7 @@ export default function App(data) {
     const result = await response.json();
 
     if (result.ok) {
-      router.push("/Dashboard");
+      router.push("/dashboard");
     } else {
       const elem = (document.getElementById("message").textContent =
         "Username or Email is already in use");
@@ -88,7 +88,7 @@ export default function App(data) {
     const result = await response.json();
 
     if (result.ok) {
-      router.push("/Dashboard");
+      router.push("/dashboard");
     } else {
       const elem = (document.getElementById("login_Err_message").textContent =
         "Username or Password is incorrect");
@@ -124,7 +124,7 @@ export default function App(data) {
     setVisible_Reg(false);
   };
 
-  const collapseItems = ["Dashboard"];
+  const collapseItems = ["dashboard"];
 
   return (
     <NextUIProvider>
@@ -169,7 +169,7 @@ export default function App(data) {
             hideIn="xs"
             variant="highlight"
           >
-            <Navbar.Link href="./Dashboard">Dashboard</Navbar.Link>
+            <Navbar.Link href="./dashboard">Dashboard</Navbar.Link>
             {/*}
           <Navbar.Link isActive href="#">
             Customers

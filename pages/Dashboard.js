@@ -20,17 +20,12 @@ import { Router } from "next/router";
 import { useRouter } from "next/router";
 
 export default function Dashboard({ user, devicesTitle }) {
+  devicesTitle = JSON.parse(devicesTitle);
 
-  devicesTitle = JSON.parse(devicesTitle)
-
-
-
- 
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
   const btn_top_back = "rgba(255, 0, 0, 0.6)"; //red
   const btn_back = "rgba(0, 0, 0, .6)"; // black
   const card_back = "rgba(100, 100, 100, .6)"; // blue
-
 
   const router = useRouter();
 
@@ -42,7 +37,6 @@ export default function Dashboard({ user, devicesTitle }) {
 
   async function handleSubmit_Add_Device(event) {
     event.preventDefault();
-
 
     //const name = xss(document.querySelector("#dev_ID").value);
 
@@ -130,7 +124,6 @@ export default function Dashboard({ user, devicesTitle }) {
 
         <Grid.Container gap={2} justify="flex-start">
           {devicesTitle.map((item, index) => (
-          
             <Grid xs={60} sm={30}>
               <Card
                 isPressable
@@ -139,7 +132,6 @@ export default function Dashboard({ user, devicesTitle }) {
                 shadow
                 variant="bordered"
                 onPress={(event) => {
-                
                   router.push({
                     pathname: "/device",
                     query: { devID: item.id },
@@ -172,48 +164,35 @@ export default function Dashboard({ user, devicesTitle }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     const { client } = require("./api/database/connections/connection");
-    
+
     const rows_devices = await client.query(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`
     );
 
     let dev = {};
 
-    rows_devices.rows.forEach(data =>{
+    rows_devices.rows.forEach((data) => {
+      dev[`${data.id}`] = { data };
+    });
 
-  dev[`${data.id}`] = {data}
-     
-    })
-
- 
-
-
-
-   // console.log(req.session.devices)
-   
+    // console.log(req.session.devices)
 
     let devicesTitle = [];
-    if(rows_devices.rowCount > 0 ){
+    if (rows_devices.rowCount > 0) {
       const devices = rows_devices.rows;
 
-      for (const item of devices) {     
-
-            const rows = await client.query(
-        `SELECT * FROM "${item.id}"."os" ;`
-      );
-    rows.rows[0].id = item.id;
-    devicesTitle.push(rows.rows[0])
-    dev[`${item.id}`].os = rows.rows[0]
-
+      for (const item of devices) {
+        const rows = await client.query(`SELECT * FROM "${item.id}"."os" ;`);
+        rows.rows[0].id = item.id;
+        devicesTitle.push(rows.rows[0]);
+        dev[`${item.id}`].os = rows.rows[0];
       }
     }
 
-
-   req.session.devices =  {dev}  
+    req.session.devices = { dev };
     await req.session.save();
 
-    
-return {
+    return {
       props: {
         user: req.session.user,
         devicesTitle: JSON.stringify(devicesTitle),

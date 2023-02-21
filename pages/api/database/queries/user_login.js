@@ -2,7 +2,7 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "../../session/session_Config";
 const bcrypt = require("bcrypt");
 var validator = require("validator");
-const { client } = require("../connections/connection");
+const { client, pool } = require("../connections/connection");
 
 export default withIronSessionApiRoute(loginRoute, ironOptions);
 
@@ -11,7 +11,7 @@ async function loginRoute(req, res) {
   const pass = validator.escape(req.body.password);
   let rows_user = null;
   try {
-    rows_user = await client.query(
+    rows_user = await pool.query(
       `SELECT * FROM "groupproject"."user" WHERE username = '${username}' LIMIT 1;`
     );
 
@@ -26,8 +26,6 @@ async function loginRoute(req, res) {
         user_email: user.email,
         user_userSince: user.dateCreated,
       };
-
-    
 
       await req.session.save();
       await res.send({ ok: true, user: req.session.user });

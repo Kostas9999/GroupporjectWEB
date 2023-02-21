@@ -23,17 +23,12 @@ import {
   useCollator,
 } from "@nextui-org/react";
 
-export default function Home({ os, hardware, iface, networkstats, ports }) {
-
-  console.log(JSON.parse(ports))
- 
+export default function Home({ os, hardware, iface }) {
   const router = useRouter();
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
   const btn_top_back = "rgba(255, 0, 0, 0.6)"; //red
   const btn_back = "rgba(0, 0, 0, .6)"; // black
   const card_back = "rgba(100, 100, 100, .6)"; // blue
-
-
 
   const handleSelect = (e) => {
     router.push({
@@ -41,7 +36,6 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
       query: { devID: e },
     });
   };
-
 
   const [visible_getDeviceID, setVisible_Login] = React.useState(false);
   const handler_getDeviceID = () => setVisible_Login(true);
@@ -466,55 +460,46 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
               </Card>
             </Col>
           </Row>
-
         </Container>
       </main>
     </NextUIProvider>
   );
 }
 
-
-
 export const getServerSideProps = withIronSessionSsr(
-  async function getServerSideProps(req ) {
-    const { client } = require("./api/database/connections/connection");
+  async function getServerSideProps(req) {
+    const { client, pool } = require("./api/database/connections/connection");
     const id = req.query.devID;
 
+    let ports = await client.query(`select * from "${id}"."ports"; `);
+    let events = await client.query(
+      `select * from "${id}"."events" LIMIT 100;  `
+    );
 
-    console.log(req.req.session.devices)
+    // let networkstats = await pool.query(
+    //    `select * from "${id}"."networkstats"; `
+    // );
 
-    let os
-    let hardware 
-    let iface
-    let networkstats
-    let ports 
+    let hardware = await pool.query(`select * from "${id}"."hardware"; `);
 
+    let iface = await client.query(
+      `select * from "${id}"."networkinterface"; `
+    );
 
-    console.log("getting os")
-       os = await  client.query(`select * from "${id}"."os"; `)
-       console.log("getting hw")
-     hardware = await client.query(`select * from "${id}"."hardware"; `)
-     console.log("getting netif")
-     iface = await client.query(`select * from "${id}"."networkinterface"; `)
-     console.log("getting netStats")
-     networkstats =await  client.query(`select * from "${id}"."networkstats"; `)
-     console.log("getting ports")
-     ports = await client.query(`select * from "${id}"."ports"; `)
-     console.log("end")
+    let os = req.req.session.devices.dev[`${id}`].os;
+    req.req.session.devices.dev[`${id}`].hardware = hardware.rows;
+    req.req.session.devices.dev[`${id}`].iface = iface.rows;
+    req.req.session.devices.dev[`${id}`].events = events.rows;
 
-   
-  return {
-    props: {
-      os: JSON.stringify(os.rows[0]),
-      hardware:JSON.stringify(hardware.rows[0]),
-      iface: JSON.stringify(iface.rows[0]),
-      networkstats: JSON.stringify(networkstats.rows[0]),
-      ports: JSON.stringify(ports.rows),
-    }
-  
-}
-
+    return {
+      props: {
+        os: JSON.stringify(os),
+        hardware: JSON.stringify(hardware.rows[0]),
+        iface: JSON.stringify(iface.rows[0]),
+        events: JSON.stringify(events.rows[0]),
+        ports: JSON.stringify(ports.rows),
+      },
+    };
   },
   ironOptions
 );
-
