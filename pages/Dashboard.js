@@ -22,6 +22,8 @@ import { useRouter } from "next/router";
 export default function Dashboard({ user, devicesTitle }) {
   devicesTitle = JSON.parse(devicesTitle);
 
+  //
+
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
   const btn_top_back = "rgba(255, 0, 0, 0.6)"; //red
   const btn_back = "rgba(0, 0, 0, .6)"; // black
