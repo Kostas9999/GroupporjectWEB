@@ -7,9 +7,7 @@ const config = {
     "postgresql://MGproject:YP4rEujgDgdEcuUUE2e6xA@cluster-4036.6zw.cockroachlabs.cloud:26257/groupproject?sslmode=verify-full",
   ssl: {
     rejectUnauthorized: true,
-    ca: fs
-      .readFileSync("./pages/api/database/cert/cockroach_db_root.txt")
-      .toString(),
+    ca: process.env.db_crt,
   },
 };
 
