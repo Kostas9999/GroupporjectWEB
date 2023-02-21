@@ -8,7 +8,7 @@ const config = {
   ssl: {
     rejectUnauthorized: true,
     ca: fs
-      .readFileSync("./pages/api/database/cert/cockroach_db_root.crt")
+      .readFileSync("./pages/api/database/cert/cockroach_db_root.txt")
       .toString(),
   },
 };
