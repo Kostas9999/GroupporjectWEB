@@ -76,7 +76,7 @@ export default function App(data) {
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint = "/api/database/queries/user_login";
+    const endpoint = `/api/database/queries/user_login`;
 
     const options = {
       method: "POST",
