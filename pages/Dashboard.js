@@ -175,7 +175,7 @@ export const getServerSideProps = withIronSessionSsr(
         const data = { device_Id: item.id };
         const JSONdata = JSON.stringify(data);
 
-        const endpoint = `${process.env.HOST}/api/getDeviceTitle`;
+        const endpoint = `http://localhost:3000/api/database/queries/getDeviceTitle.js`;
 
         const options = {
           method: "POST",
