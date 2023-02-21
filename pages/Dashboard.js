@@ -177,7 +177,19 @@ export const getServerSideProps = withIronSessionSsr(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`
     );
 
-    req.session.devices = rows_devices.rows;
+    let dev = {};
+
+    rows_devices.rows.forEach(data =>{
+
+  dev[`${data.id}`] = {data}
+     
+    })
+
+ 
+
+
+
+   // console.log(req.session.devices)
    
 
     let devicesTitle = [];
@@ -191,10 +203,16 @@ export const getServerSideProps = withIronSessionSsr(
       );
     rows.rows[0].id = item.id;
     devicesTitle.push(rows.rows[0])
+    dev[`${item.id}`].os = rows.rows[0]
 
       }
     }
+
+
+   req.session.devices =  {dev}  
     await req.session.save();
+
+    
 return {
       props: {
         user: req.session.user,

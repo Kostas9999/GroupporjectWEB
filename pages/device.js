@@ -24,6 +24,8 @@ import {
 } from "@nextui-org/react";
 
 export default function Home({ os, hardware, iface, networkstats, ports }) {
+
+  console.log(JSON.parse(ports))
  
   const router = useRouter();
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
@@ -31,10 +33,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
   const btn_back = "rgba(0, 0, 0, .6)"; // black
   const card_back = "rgba(100, 100, 100, .6)"; // blue
 
-  let devices = [];
-  if (Cookies.get("devices")) {
-    devices = JSON.parse(Cookies.get("devices"));
-  }
+
 
   const handleSelect = (e) => {
     router.push({
@@ -477,54 +476,45 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
 
 
 export const getServerSideProps = withIronSessionSsr(
-  async function getServerSideProps({ req }) {
+  async function getServerSideProps(req ) {
     const { client } = require("./api/database/connections/connection");
+    const id = req.query.devID;
+
+
+    console.log(req.req.session.devices)
+
+    let os
+    let hardware 
+    let iface
+    let networkstats
+    let ports 
+
+
+    console.log("getting os")
+       os = await  client.query(`select * from "${id}"."os"; `)
+       console.log("getting hw")
+     hardware = await client.query(`select * from "${id}"."hardware"; `)
+     console.log("getting netif")
+     iface = await client.query(`select * from "${id}"."networkinterface"; `)
+     console.log("getting netStats")
+     networkstats =await  client.query(`select * from "${id}"."networkstats"; `)
+     console.log("getting ports")
+     ports = await client.query(`select * from "${id}"."ports"; `)
+     console.log("end")
+
    
+  return {
+    props: {
+      os: JSON.stringify(os.rows[0]),
+      hardware:JSON.stringify(hardware.rows[0]),
+      iface: JSON.stringify(iface.rows[0]),
+      networkstats: JSON.stringify(networkstats.rows[0]),
+      ports: JSON.stringify(ports.rows),
+    }
+  
+}
 
-    console.log(req.query)
-    console.log("====================================================")
-
-    return {
-      props: {
-        user: req.session.user,
-     //   devicesTitle: JSON.stringify(devicesTitle),
-      },
-    };
   },
   ironOptions
 );
 
-
-/*
-
-export async function getServerSideProps(context) {
-  const id = context.query.devID; // Get ID from slug `/book/1`
-
-
-  console.log()
-
-  const data = { device_Id: id };
-  const JSONdata = JSON.stringify(data);
-
-  const endpoint = `${process.env.HOST}/api/getDeviceData`;
-
-  const options = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSONdata,
-  };
-
-  const response = await fetch(endpoint, options);
-  const result = await response.json();
-  //
-  return {
-    props: {
-      os: result.os[0],
-      hardware: result.hardware[0],
-      iface: result.iface[0],
-      networkstats: result.networkstats[0],
-      ports: result.ports,
-    },
-  };
-}
-*/
