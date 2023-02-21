@@ -88,9 +88,10 @@ export default function App(data) {
     const result = await response.json();
 
     if (result.ok) {
-      Cookies.set("username", result.user.user_name);
-      Cookies.set("email", result.user.user_email);
       router.push("/Dashboard");
+    } else {
+      const elem = (document.getElementById("login_Err_message").textContent =
+        "Username or Password is incorrect");
     }
   }
 
@@ -218,7 +219,7 @@ export default function App(data) {
                   </Text>
                 </Text>
               </Modal.Header>
-
+              <a id="login_Err_message"></a>
               <form onSubmit={handleSubmit_Login}>
                 <Modal.Body>
                   <Input
