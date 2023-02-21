@@ -44,7 +44,7 @@ export default function App(data) {
     };
 
     const JSONdata = JSON.stringify(data_Reg);
-    const endpoint = `/api/database/queries/user_registration`;
+    const endpoint = `https://montool.vercel.app/api/database/queries/user_registration`;
 
     const options = {
       method: "POST",
@@ -76,7 +76,7 @@ export default function App(data) {
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint = `/api/database/queries/user_login`;
+    const endpoint = `https://montool.vercel.app/api/database/queries/user_login`;
 
     const options = {
       method: "POST",
