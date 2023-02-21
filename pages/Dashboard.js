@@ -4,7 +4,6 @@ import Header from "./templates/header";
 import { ironOptions } from "./api/session/session_Config";
 import { NextUIProvider } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
-import Head from "next/head";
 
 import {
   Card,
@@ -19,14 +18,19 @@ import React from "react";
 import { Router } from "next/router";
 
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 
-export default function Dashboard({ devices, devicesTitle }) {
+export default function Dashboard({ user, devicesTitle }) {
+
+  devicesTitle = JSON.parse(devicesTitle)
+
+
+
+ 
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
   const btn_top_back = "rgba(255, 0, 0, 0.6)"; //red
   const btn_back = "rgba(0, 0, 0, .6)"; // black
   const card_back = "rgba(100, 100, 100, .6)"; // blue
-  Cookies.set("devices", JSON.stringify(devicesTitle));
+
 
   const router = useRouter();
 
@@ -39,7 +43,6 @@ export default function Dashboard({ devices, devicesTitle }) {
   async function handleSubmit_Add_Device(event) {
     event.preventDefault();
 
-    console.log("devAdd");
 
     //const name = xss(document.querySelector("#dev_ID").value);
 
@@ -127,6 +130,7 @@ export default function Dashboard({ devices, devicesTitle }) {
 
         <Grid.Container gap={2} justify="flex-start">
           {devicesTitle.map((item, index) => (
+          
             <Grid xs={60} sm={30}>
               <Card
                 isPressable
@@ -135,15 +139,17 @@ export default function Dashboard({ devices, devicesTitle }) {
                 shadow
                 variant="bordered"
                 onPress={(event) => {
+                
                   router.push({
                     pathname: "/device",
-                    query: { devID: item.OS.id },
+                    query: { devID: item.id },
                   });
                 }}
               >
+                {}
                 <Card.Body css={{ color: text_Color }}>
-                  {item.OS.hostname} <br></br>
-                  {item.OS.version} ({item.OS.build} )<br></br>
+                  {item.hostname} <br></br>
+                  {item.version} ({item.build} )<br></br>
                 </Card.Body>
               </Card>
             </Grid>
@@ -165,36 +171,34 @@ export default function Dashboard({ devices, devicesTitle }) {
 
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
+    const { client } = require("./api/database/connections/connection");
+    
+    const rows_devices = await client.query(
+      `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`
+    );
+
+    req.session.devices = rows_devices.rows;
+   
+
     let devicesTitle = [];
-    const devices = req?.session?.devices?.devices;
+    if(rows_devices.rowCount > 0 ){
+      const devices = rows_devices.rows;
 
-    if (devices == undefined || devices == null) {
-      // TODO: add notification
-    } else {
-      for (const item of devices) {
-        const data = { device_Id: item.id };
-        const JSONdata = JSON.stringify(data);
+      for (const item of devices) {     
 
-        const endpoint = `http://localhost:3000/api/database/queries/getDeviceTitle.js`;
+            const rows = await client.query(
+        `SELECT * FROM "${item.id}"."os" ;`
+      );
+    rows.rows[0].id = item.id;
+    devicesTitle.push(rows.rows[0])
 
-        const options = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSONdata,
-        };
-
-        const response = await fetch(endpoint, options);
-        const result = await response.json();
-
-        devicesTitle.push(result);
       }
     }
-
-    return {
+    await req.session.save();
+return {
       props: {
         user: req.session.user,
-        devices: req.session.devices,
-        devicesTitle: devicesTitle,
+        devicesTitle: JSON.stringify(devicesTitle),
       },
     };
   },

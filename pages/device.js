@@ -1,4 +1,6 @@
 import Head from "next/head";
+import { ironOptions } from "./api/session/session_Config";
+import { withIronSessionSsr } from "iron-session/next";
 import React from "react";
 import Navbar from "./templates/navbar/navbar";
 import { useRouter } from "next/router";
@@ -22,6 +24,7 @@ import {
 } from "@nextui-org/react";
 
 export default function Home({ os, hardware, iface, networkstats, ports }) {
+ 
   const router = useRouter();
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
   const btn_top_back = "rgba(255, 0, 0, 0.6)"; //red
@@ -39,24 +42,7 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
       query: { devID: e },
     });
   };
-  /*
-  init();
-  async function init() {
-    await sleep(1000);
-    require("../public/acquisitions");
-  }
-  function sleep(ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  }
-*/
-  getChart();
-  setInterval(getChart, 100);
 
-  async function getChart() {
-    require("../public/acquisitions");
-  }
 
   const [visible_getDeviceID, setVisible_Login] = React.useState(false);
   const handler_getDeviceID = () => setVisible_Login(true);
@@ -482,50 +468,40 @@ export default function Home({ os, hardware, iface, networkstats, ports }) {
             </Col>
           </Row>
 
-          <Spacer y={1} />
-
-          <Spacer y={1} />
-
-          <Row gap={1}>
-            <Col>
-              <Card css={{ background: card_back, mw: "100%" }}>
-                <Card.Body>
-                  <Text h6 size={15} color={text_Color} css={{ m: 0 }}>
-                    Latency
-                  </Text>
-
-                  <div style={{ width: "800px" }}>
-                    <canvas id="acquisitions"></canvas>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-
-          <Spacer y={1} />
-          <Row gap={1}>
-            <Col>
-              <Card css={{ background: card_back, mw: "100%" }}>
-                <Card.Body>
-                  <Text h6 size={15} color={text_Color} css={{ m: 0 }}>
-                    Data Transfered
-                  </Text>
-
-                  <div style={{ width: "800px" }}>
-                    <canvas id="acquisitions2"></canvas>
-                    <script></script>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
         </Container>
       </main>
     </NextUIProvider>
   );
 }
+
+
+
+export const getServerSideProps = withIronSessionSsr(
+  async function getServerSideProps({ req }) {
+    const { client } = require("./api/database/connections/connection");
+   
+
+    console.log(req.query)
+    console.log("====================================================")
+
+    return {
+      props: {
+        user: req.session.user,
+     //   devicesTitle: JSON.stringify(devicesTitle),
+      },
+    };
+  },
+  ironOptions
+);
+
+
+/*
+
 export async function getServerSideProps(context) {
   const id = context.query.devID; // Get ID from slug `/book/1`
+
+
+  console.log()
 
   const data = { device_Id: id };
   const JSONdata = JSON.stringify(data);
@@ -551,3 +527,4 @@ export async function getServerSideProps(context) {
     },
   };
 }
+*/

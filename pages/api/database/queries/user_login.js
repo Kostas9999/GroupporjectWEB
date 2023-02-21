@@ -27,13 +27,7 @@ async function loginRoute(req, res) {
         user_userSince: user.dateCreated,
       };
 
-      const rows_devices = await client.query(
-        `SELECT * FROM "groupproject"."device" where "user" = '${user.user_ID}' ;`
-      );
-
-      req.session.devices = {
-        devices: rows_devices.rows[0].id,
-      };
+    
 
       await req.session.save();
       await res.send({ ok: true, user: req.session.user });

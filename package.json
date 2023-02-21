@@ -11,20 +11,17 @@
     "lint": "next lint"
   },
   "devDependencies": {
-    "next": "^13.0.7",
     "parcel": "^2.6.2"
   },
   "dependencies": {
     "@cubejs-client/core": "^0.31.0",
-    "@google/model-viewer": "^2.1.1",
-    "@nextui-org/react": "^1.0.0-beta.10",
+    "@nextui-org/react": "^1.0.0-beta.12",
     "bcrypt": "^5.1.0",
-    "chart.js": "^4.0.0",
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "iron-session": "^6.3.1",
     "js-cookie": "^3.0.1",
-    "mysql2": "^2.3.3",
+    "next": "^13.1.6",
     "pg": "^8.9.0",
     "react": "^18.2.0",
     "react-dom": "18.2.0",
