@@ -23,7 +23,17 @@ import {
   useCollator,
 } from "@nextui-org/react";
 
-export default function Home({ os, hardware, iface }) {
+export default function Home({
+  os,
+  hardware,
+  iface,
+  events,
+  ports,
+  networkstats,
+  devices,
+}) {
+  ports = JSON.parse(ports);
+
   const router = useRouter();
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
   const btn_top_back = "rgba(255, 0, 0, 0.6)"; //red
@@ -62,6 +72,7 @@ export default function Home({ os, hardware, iface }) {
   };
 
   let keys;
+
   ports.map((item, index) => (keys = Object.keys(item)));
 
   const columns = [];
@@ -476,9 +487,9 @@ export const getServerSideProps = withIronSessionSsr(
       `select * from "${id}"."events" LIMIT 100;  `
     );
 
-    // let networkstats = await pool.query(
-    //    `select * from "${id}"."networkstats"; `
-    // );
+    let networkstats = await pool.query(
+      `select * from "${id}"."networkstats"; `
+    );
 
     let hardware = await pool.query(`select * from "${id}"."hardware"; `);
 
@@ -498,6 +509,8 @@ export const getServerSideProps = withIronSessionSsr(
         iface: JSON.stringify(iface.rows[0]),
         events: JSON.stringify(events.rows[0]),
         ports: JSON.stringify(ports.rows),
+        networkstats: JSON.stringify(networkstats.rows),
+        devices: req.req.session.deviceList,
       },
     };
   },
