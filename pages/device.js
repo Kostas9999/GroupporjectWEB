@@ -252,7 +252,7 @@ export default function Home({ all, currDev }) {
           </Grid>
           <Grid xs={10}>
             <Container>
-              <Card css={{ $$cardColor: btn_back, h: "30vh" }}>
+              <Card css={{ $$cardColor: btn_back, h: "50vh" }}>
                 <Card.Body>
                   <Text h6 size={15} color="red" css={{ m: 0 }}>
                     Local Latency
@@ -262,7 +262,7 @@ export default function Home({ all, currDev }) {
                     Public Latency
                   </Text>
                   <Row justify="center" align="right">
-                    <LineChart width={1000} height={200} data={latencyData}>
+                    <LineChart width={1500} height={250} data={latencyData}>
                       <Line
                         type="monotone"
                         dataKey="locallatency"
@@ -295,7 +295,7 @@ export default function Home({ all, currDev }) {
                     RAM
                   </Text>
                   <Row justify="center" align="right">
-                    <LineChart width={1000} height={200} data={latencyData}>
+                    <LineChart width={1500} height={250} data={latencyData}>
                       <Line
                         type="monotone"
                         dataKey="memory"
