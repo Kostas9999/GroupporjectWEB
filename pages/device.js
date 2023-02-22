@@ -131,7 +131,7 @@ export default function Home({ all, currDev }) {
                       <Spacer y={0}></Spacer>
                       {all.devices[`${currDev}`].os.version}
                       <Spacer y={0}></Spacer>
-                      {all.devices[`${currDev}`].os.relese} ({" "}
+                      {all.devices[`${currDev}`].os.relese} (
                       {all.devices[`${currDev}`].os.build})
                     </Text>
                   </Row>
@@ -262,7 +262,7 @@ export default function Home({ all, currDev }) {
                     Public Latency
                   </Text>
                   <Row justify="center" align="right">
-                    <LineChart width={1500} height={250} data={latencyData}>
+                    <LineChart width={1150} height={250} data={latencyData}>
                       <Line
                         type="monotone"
                         dataKey="locallatency"
@@ -295,7 +295,7 @@ export default function Home({ all, currDev }) {
                     RAM
                   </Text>
                   <Row justify="center" align="right">
-                    <LineChart width={1500} height={250} data={latencyData}>
+                    <LineChart width={1150} height={250} data={latencyData}>
                       <Line
                         type="monotone"
                         dataKey="memory"
