@@ -127,6 +127,11 @@ export default function Home({ all, currDev }) {
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
+                      Last Seen:{" "}
+                      {all.devices[`${currDev}`].networkStats[0].created
+                        .replaceAll("T", " ")
+                        .substring(0, 19)}
+                      <Spacer y={0}></Spacer>
                       {all.devices[`${currDev}`].os.hostname}
                       <Spacer y={0}></Spacer>
                       {all.devices[`${currDev}`].os.version}
