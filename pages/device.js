@@ -293,27 +293,32 @@ export default function Home({ all, currDev }) {
           </Grid>
           <Grid xs={10}>
             <Container>
-              <Card css={{ $$cardColor: btn_back, h: "30vh" }}>
-                <Card.Body>
-                  <Row justify="center" align="right">
-                    <BarChart width={1000} height={200} data={data}>
-                      <Bar dataKey="locallatency" fill="#8884d8" />
-                    </BarChart>
-                  </Row>
-                </Card.Body>
-              </Card>
-              <Spacer y={1}></Spacer>
-              <Card css={{ $$cardColor: btn_back, h: "30vh" }}>
+              <Card css={{ $$cardColor: btn_back, h: "50vh" }}>
                 <Card.Body>
                   <Row justify="center" align="right">
                     <LineChart width={1000} height={200} data={data}>
                       <Line
                         type="monotone"
                         dataKey="locallatency"
+                        stroke="red"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="publiclatency"
                         stroke="#8884d8"
                       />
+
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
                     </LineChart>
                   </Row>
+                </Card.Body>
+              </Card>
+              <Spacer y={1}></Spacer>
+              <Card css={{ $$cardColor: btn_back, h: "30vh" }}>
+                <Card.Body>
+                  <Row justify="center" align="right"></Row>
                 </Card.Body>
               </Card>
             </Container>
