@@ -271,7 +271,7 @@ export default function Home({ all, currDev }) {
                       syncId="anyId"
                       width={1150}
                       height={250}
-                      data={latencyData}
+                      data={latencyData.reverse()}
                     >
                       <Line
                         type="monotone"
@@ -304,7 +304,7 @@ export default function Home({ all, currDev }) {
                       syncId="anyId"
                       width={1150}
                       height={250}
-                      data={latencyData}
+                      data={latencyData.reverse()}
                     >
                       <Line
                         type="monotone"
@@ -341,7 +341,7 @@ export default function Home({ all, currDev }) {
                       syncId="anyId"
                       width={1150}
                       height={250}
-                      data={latencyData}
+                      data={latencyData.reverse()}
                     >
                       <Line
                         type="monotone"
