@@ -1,8 +1,22 @@
 import Head from "next/head";
 import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
-import React from "react";
+
 import Navbar from "./templates/navbar/navbar";
+import React, { PureComponent } from "react";
+import {
+  BarChart,
+  LineChart,
+  Line,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 import { useRouter } from "next/router";
 
@@ -28,7 +42,7 @@ import {
 export default function Home({ all, currDev }) {
   all = JSON.parse(all);
 
-  // console.log(all.devices[`${currDev}`].os.hostname);
+  //console.log(all.devices[`${currDev}`].networkStats);
 
   const router = useRouter();
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
@@ -53,6 +67,52 @@ export default function Home({ all, currDev }) {
       </Card>
     );
   };
+
+  const data = all.devices[`${currDev}`].networkStats;
+  const data1 = [
+    {
+      name: "Page A",
+      uv: 4000,
+      pv: 2400,
+      amt: 2400,
+    },
+    {
+      name: "Page B",
+      uv: 3000,
+      pv: 1398,
+      amt: 2210,
+    },
+    {
+      name: "Page C",
+      uv: 2000,
+      pv: 9800,
+      amt: 2290,
+    },
+    {
+      name: "Page D",
+      uv: 2780,
+      pv: 3908,
+      amt: 2000,
+    },
+    {
+      name: "Page E",
+      uv: 1890,
+      pv: 4800,
+      amt: 2181,
+    },
+    {
+      name: "Page F",
+      uv: 2390,
+      pv: 3800,
+      amt: 2500,
+    },
+    {
+      name: "Page G",
+      uv: 3490,
+      pv: 4300,
+      amt: 2100,
+    },
+  ];
   return (
     <NextUIProvider>
       <Head>
@@ -105,56 +165,103 @@ export default function Home({ all, currDev }) {
            */}
           </Grid>
           <Grid xs={10}>
-            <Container>
-              <Card css={{ $$cardColor: "$colors$primary" }}>
+            <Container s>
+              <Card css={{ $$cardColor: btn_back }}>
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      OS data
+                      {all.devices[`${currDev}`].os.hostname}
+                      <Spacer y={0}></Spacer>
+                      {all.devices[`${currDev}`].os.version}
+                      <Spacer y={0}></Spacer>
+                      {all.devices[`${currDev}`].os.relese} ({" "}
+                      {all.devices[`${currDev}`].os.build})
                     </Text>
                   </Row>
                 </Card.Body>
               </Card>
             </Container>
             <Container>
-              <Card css={{ $$cardColor: "$colors$primary" }}>
+              <Card css={{ $$cardColor: btn_back }}>
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      HW data + cpu RAM
+                      {all.devices[`${currDev}`].hardware[0].title}
+                      <Spacer y={0}></Spacer>
+                      RAM: {all.devices[`${currDev}`].hardware[0].totalmemory}
+                      <Spacer y={0}></Spacer>
                     </Text>
                   </Row>
                 </Card.Body>
               </Card>
             </Container>
             <Container>
-              <Card css={{ $$cardColor: "$colors$primary" }}>
+              <Card css={{ $$cardColor: btn_back }}>
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      Iface
+                      {all.devices[`${currDev}`].iface[0].iface}
+                      {"   \t "}
+                      {all.devices[`${currDev}`].iface[0].speed}(mb/s)
+                      <Spacer y={0}></Spacer>
+                      MAC: {all.devices[`${currDev}`].iface[0].mac}
+                      <Spacer y={0}></Spacer>
+                      IPv4: {all.devices[`${currDev}`].iface[0].ipv4}
+                      <Spacer y={0}></Spacer>
+                      IPv4Sub: {all.devices[`${currDev}`].iface[0].ipv4sub}
+                      <Spacer y={0}></Spacer>
+                      IPv6: {all.devices[`${currDev}`].iface[0].ipv6}
+                      <Spacer y={0}></Spacer>
+                      IPv6Sub: {all.devices[`${currDev}`].iface[0].ipv6sub}
                     </Text>
                   </Row>
                 </Card.Body>
               </Card>
             </Container>
             <Container>
-              <Card css={{ $$cardColor: "$colors$primary" }}>
+              <Card css={{ $$cardColor: btn_back }}>
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      Stats rx-tx
+                      rx_total:{" "}
+                      {all.devices[`${currDev}`].networkStats[0].rx_total}
+                      <Spacer y={0}></Spacer>
+                      rx_error:{" "}
+                      {all.devices[`${currDev}`].networkStats[0].rx_error}
+                      <Spacer y={0}></Spacer>
+                      rx_dropped:{" "}
+                      {all.devices[`${currDev}`].networkStats[0].rx_dropped}
+                      <Spacer y={0}></Spacer>
+                      tx_total:{" "}
+                      {all.devices[`${currDev}`].networkStats[0].tx_total}
+                      <Spacer y={0}></Spacer>
+                      tx_error:{" "}
+                      {all.devices[`${currDev}`].networkStats[0].tx_error}
+                      <Spacer y={0}></Spacer>
+                      tx_dropped:{" "}
+                      {all.devices[`${currDev}`].networkStats[0].tx_dropped}
                     </Text>
                   </Row>
                 </Card.Body>
               </Card>
             </Container>
             <Container>
-              <Card css={{ $$cardColor: "$colors$primary" }}>
+              <Card css={{ $$cardColor: btn_back }}>
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      stats Latency
+                      Local Latency:{" "}
+                      {all.devices[`${currDev}`].networkStats[0].locallatency}ms
+                      <Spacer y={0}></Spacer>
+                      Public Latency:{" "}
+                      {all.devices[`${currDev}`].networkStats[0].publiclatency}
+                      ms
+                      <Spacer y={0}></Spacer>
+                      Gateway:
+                      {all.devices[`${currDev}`].networkStats[0].defaultgateway}
+                      <Spacer y={0}></Spacer>
+                      Gateway MAC:
+                      {all.devices[`${currDev}`].networkStats[0].dgmac}
                     </Text>
                   </Row>
                 </Card.Body>
@@ -178,9 +285,7 @@ export default function Home({ all, currDev }) {
               >
                 <Card.Body>
                   <Row justify="center" align="right">
-                    <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      Button
-                    </Text>
+                    Button
                   </Row>
                 </Card.Body>
               </Card>
@@ -188,22 +293,26 @@ export default function Home({ all, currDev }) {
           </Grid>
           <Grid xs={10}>
             <Container>
-              <Card css={{ $$cardColor: "$colors$primary", h: "30vh" }}>
+              <Card css={{ $$cardColor: btn_back, h: "30vh" }}>
                 <Card.Body>
                   <Row justify="center" align="right">
-                    <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      Stats
-                    </Text>
+                    <BarChart width={1000} height={200} data={data}>
+                      <Bar dataKey="locallatency" fill="#8884d8" />
+                    </BarChart>
                   </Row>
                 </Card.Body>
               </Card>
               <Spacer y={1}></Spacer>
-              <Card css={{ $$cardColor: "$colors$primary", h: "30vh" }}>
+              <Card css={{ $$cardColor: btn_back, h: "30vh" }}>
                 <Card.Body>
                   <Row justify="center" align="right">
-                    <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      Stats 2
-                    </Text>
+                    <LineChart width={1000} height={200} data={data}>
+                      <Line
+                        type="monotone"
+                        dataKey="locallatency"
+                        stroke="#8884d8"
+                      />
+                    </LineChart>
                   </Row>
                 </Card.Body>
               </Card>
@@ -490,16 +599,18 @@ export const getServerSideProps = withIronSessionSsr(
       `select * from "${id}"."networkstats" LIMIT 1000; `
     );
 
-    let hardware = await pool.query(`select * from "${id}"."hardware"; `);
+    let hardware = await pool.query(
+      `select * from "${id}"."hardware" LIMIT 1;   `
+    );
 
     let iface = await client.query(
-      `select * from "${id}"."networkinterface"; `
+      `select * from "${id}"."networkinterface"  LIMIT 1; `
     );
 
     let arp = await client.query(`select * from "${id}"."arp"; `);
     let baseline = await client.query(`select * from "${id}"."baseline"; `);
     let disc = await client.query(`select * from "${id}"."disc"; `);
-    let user = await client.query(`select * from "${id}"."user"; `);
+    let user = await client.query(`select * from "${id}"."user"  LIMIT 1; `);
 
     let devices = req.req.session.devices;
     req.req.session.devices[`${id}`].hardware = hardware.rows;
