@@ -23,8 +23,10 @@ import {
   useCollator,
 } from "@nextui-org/react";
 
-export default function Home({ os, hardware, iface, events }) {
-  ports = JSON.parse(ports);
+export default function Home({ all, currDev }) {
+  all = JSON.parse(all);
+
+  console.log(all.devices[`${currDev}`].os.hostname);
 
   const router = useRouter();
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
@@ -38,83 +40,6 @@ export default function Home({ os, hardware, iface, events }) {
       query: { devID: e },
     });
   };
-
-  const [visible_getDeviceID, setVisible_Login] = React.useState(false);
-  const handler_getDeviceID = () => setVisible_Login(true);
-  const closeHandler_getDeviceID = () => {
-    setVisible_Login(false);
-  };
-
-  const [visible_Ports, setVisible_Ports] = React.useState(false);
-  const handler_Ports = () => setVisible_Ports(true);
-  const closeHandler_Ports = () => {
-    setVisible_Ports(false);
-  };
-
-  const [visible_iface, setVisible_iface] = React.useState(false);
-  const handler_iface = () => setVisible_iface(true);
-  const closeHandler_iface = () => {
-    setVisible_iface(false);
-  };
-
-  const [visible_netStats, setVisible_netStats] = React.useState(false);
-  const handler_netStats = () => setVisible_netStats(true);
-  const closeHandler_netStats = () => {
-    setVisible_netStats(false);
-  };
-
-  let keys;
-
-  ports.map((item, index) => (keys = Object.keys(item)));
-
-  const columns = [];
-  keys.map((item, index) =>
-    columns.push({
-      key: item,
-      label: item,
-    })
-  );
-
-  columns.push({
-    key: "IANA",
-    label: "IANA",
-  });
-
-  const rows = [];
-  ports.map((item, index) =>
-    rows.push({
-      key: index,
-      Created: item.Created,
-      port: item.port,
-      process: item.process,
-      pid: item.pid,
-      path: item.path,
-      IANA: "TODO",
-    })
-  );
-
-  const collator = useCollator({ numeric: true });
-  function load() {
-    return {
-      items: rows,
-    };
-  }
-
-  async function sort({ items, sortDescriptor }) {
-    return {
-      items: items.sort((a, b) => {
-        let first = a[sortDescriptor.column];
-        let second = b[sortDescriptor.column];
-        let cmp = collator.compare(first, second);
-        if (sortDescriptor.direction === "descending") {
-          cmp *= -1;
-        }
-        return cmp;
-      }),
-    };
-  }
-
-  const list = useAsyncList({ load, sort });
 
   return (
     <NextUIProvider>
@@ -145,15 +70,17 @@ export default function Home({ os, hardware, iface, events }) {
                     handleSelect(actionKey);
                   }}
                 >
-                  {devices.map((a) => (
-                    <Dropdown.Item key={a.OS.id}>{a.OS.hostname}</Dropdown.Item>
+                  {Object.keys(all.devices).map((device) => (
+                    <Dropdown.Item key={device}>
+                      {all.devices[`${device}`].os.hostname}
+                    </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
             }
           </Row>
           <Spacer y={1} />
-
+          {/*
           <Row gap={1}>
             <Col>
               <Card
@@ -382,87 +309,8 @@ export default function Home({ os, hardware, iface, events }) {
                 </Card.Body>
               </Card>
             </Col>
-
-            <Col>
-              <Card css={{ backgroundColor: card_back, mw: "100%" }}>
-                <Card.Body css={{ padding: "2px" }}>
-                  <Button
-                    size="xl"
-                    id="getDeviceID"
-                    auto
-                    shadow
-                    css={{ background: btn_back }}
-                    onClick={handler_Ports}
-                  >
-                    <Text h6 size={14} color={text_Color} css={{ m: 0 }}>
-                      Open Ports (Listening): {ports.length}
-                    </Text>
-                  </Button>
-                  <Modal
-                    scroll
-                    fullScreen
-                    closeButton
-                    blur
-                    width="30%"
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-description"
-                    open={visible_Ports}
-                    onClose={closeHandler_Ports}
-                  >
-                    <Modal.Header>
-                      <Text id="modal-title" size={18}>
-                        Open Ports
-                      </Text>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Text id="modal-description">
-                        <Table
-                          bordered
-                          aria-label="Example static collection table"
-                          css={{
-                            minWidth: "90%",
-                            height: "calc($space$14 * 10)",
-                          }}
-                          sortDescriptor={list.sortDescriptor}
-                          onSortChange={list.sort}
-                        >
-                          <Table.Header columns={columns}>
-                            {(column) => (
-                              <Table.Column key={column.key} allowsSorting>
-                                {column.label}
-                              </Table.Column>
-                            )}
-                          </Table.Header>
-                          <Table.Body
-                            items={list.items}
-                            loadingState={list.loadingState}
-                          >
-                            {(item) => (
-                              <Table.Row key={item.name}>
-                                {(columnKey) => (
-                                  <Table.Cell>{item[columnKey]}</Table.Cell>
-                                )}
-                              </Table.Row>
-                            )}
-                          </Table.Body>
-                        </Table>
-                      </Text>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button
-                        auto
-                        flat
-                        color="error"
-                        onClick={closeHandler_Ports}
-                      >
-                        Close
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
-                </Card.Body>
-              </Card>
-            </Col>
           </Row>
+                    */}
         </Container>
       </main>
     </NextUIProvider>
@@ -489,18 +337,19 @@ export const getServerSideProps = withIronSessionSsr(
       `select * from "${id}"."networkinterface"; `
     );
 
-    let os = req.req.session.devices[`${id}`].os;
+    let devices = req.req.session.devices;
     req.req.session.devices[`${id}`].hardware = hardware.rows;
     req.req.session.devices[`${id}`].iface = iface.rows;
     req.req.session.devices[`${id}`].events = events.rows;
 
     return {
       props: {
-        os: JSON.stringify(os),
-        hardware: JSON.stringify(hardware.rows[0]),
-        iface: JSON.stringify(iface.rows[0]),
-        events: JSON.stringify(events.rows[0]),
-        //  ports: JSON.stringify(ports.rows),
+        all: JSON.stringify(req.req.session),
+        currDev: id,
+        // hardware: JSON.stringify(hardware.rows[0]),
+        // iface: JSON.stringify(iface.rows[0]),
+        //  events: JSON.stringify(events.rows[0]),
+        //  devices: JSON.stringify(devices.rows),
         //  networkstats: JSON.stringify(networkstats.rows),
       },
     };
