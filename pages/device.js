@@ -581,7 +581,7 @@ export const getServerSideProps = withIronSessionSsr(
     );
 
     let networkstats = await pool.query(
-      `select * from "${id}"."networkstats" LIMIT 10000 ASC; `
+      `select * from "${id}"."networkstats" ORDER BY created DESC LIMIT 5000 ; `
     );
 
     let hardware = await pool.query(
