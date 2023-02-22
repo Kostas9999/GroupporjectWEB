@@ -1,8 +1,6 @@
 const { client } = require("../connections/connection");
 export default async function handler(req, res) {
   const device_Id = req.body.device_Id;
-  console.log(device_Id);
-  console.log("=========================================================");
 
   const rows = await client.query(`SELECT * FROM ${device_Id}.os;`);
   await res.status(200).json({

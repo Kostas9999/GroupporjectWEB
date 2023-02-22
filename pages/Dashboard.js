@@ -188,7 +188,6 @@ export const getServerSideProps = withIronSessionSsr(
       }
     }
     req.session.devices = dev;
-    console.log(req.session.devices);
 
     await req.session.save();
 
