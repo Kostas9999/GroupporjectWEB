@@ -68,51 +68,8 @@ export default function Home({ all, currDev }) {
     );
   };
 
-  const data = all.devices[`${currDev}`].networkStats;
-  const data1 = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+  const latencyData = all.devices[`${currDev}`].networkStats;
+
   return (
     <NextUIProvider>
       <Head>
@@ -279,13 +236,15 @@ export default function Home({ all, currDev }) {
             <Container hidden>
               <Card
                 css={{
-                  $$cardColor: "$colors$primary",
+                  $$cardColor: btn_back,
                   h: "50vh",
                 }}
               >
                 <Card.Body>
                   <Row justify="center" align="right">
-                    Button
+                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                      Some Button
+                    </Text>
                   </Row>
                 </Card.Body>
               </Card>
@@ -293,10 +252,17 @@ export default function Home({ all, currDev }) {
           </Grid>
           <Grid xs={10}>
             <Container>
-              <Card css={{ $$cardColor: btn_back, h: "50vh" }}>
+              <Card css={{ $$cardColor: btn_back, h: "30vh" }}>
                 <Card.Body>
+                  <Text h6 size={15} color="red" css={{ m: 0 }}>
+                    Local Latency
+                  </Text>
+                  <Spacer y={0}></Spacer>
+                  <Text h6 size={15} color="blue" css={{ m: 0 }}>
+                    Public Latency
+                  </Text>
                   <Row justify="center" align="right">
-                    <LineChart width={1000} height={200} data={data}>
+                    <LineChart width={1000} height={200} data={latencyData}>
                       <Line
                         type="monotone"
                         dataKey="locallatency"
@@ -308,17 +274,31 @@ export default function Home({ all, currDev }) {
                         stroke="#8884d8"
                       />
 
-                      <XAxis dataKey="name" />
-                      <YAxis />
+                      <XAxis dataKey="created" />
+                      <YAxis dataKey="publiclatency" />
                       <Tooltip />
                     </LineChart>
                   </Row>
                 </Card.Body>
               </Card>
               <Spacer y={1}></Spacer>
-              <Card css={{ $$cardColor: btn_back, h: "30vh" }}>
+              <Card css={{ $$cardColor: btn_back, h: "50vh" }}>
                 <Card.Body>
-                  <Row justify="center" align="right"></Row>
+                  <Text h6 size={15} color="blue" css={{ m: 0 }}>
+                    Downloaded
+                  </Text>{" "}
+                  <Spacer y={0}></Spacer>
+                  <Text h6 size={15} color="red" css={{ m: 0 }}>
+                    Uploaded
+                  </Text>
+                  <Row justify="center" align="right">
+                    <BarChart width={1000} height={200} data={latencyData}>
+                      <Bar dataKey="rx_total" fill="#8884d8" />
+                      <Bar dataKey="tx_total" fill="red" />
+                      <XAxis dataKey="created" />
+                      <Tooltip />
+                    </BarChart>
+                  </Row>
                 </Card.Body>
               </Card>
             </Container>
