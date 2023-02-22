@@ -257,7 +257,7 @@ export default function Home({ all, currDev }) {
           </Grid>
           <Grid xs={10}>
             <Container>
-              <Card css={{ $$cardColor: btn_back, h: "50vh" }}>
+              <Card css={{ $$cardColor: btn_back, h: "70vh" }}>
                 <Card.Body>
                   <Text h6 size={15} color="red" css={{ m: 0 }}>
                     Local Latency
@@ -267,7 +267,12 @@ export default function Home({ all, currDev }) {
                     Public Latency
                   </Text>
                   <Row justify="center" align="right">
-                    <LineChart width={1150} height={250} data={latencyData}>
+                    <LineChart
+                      syncId="anyId"
+                      width={1150}
+                      height={250}
+                      data={latencyData}
+                    >
                       <Line
                         type="monotone"
                         dataKey="locallatency"
@@ -278,7 +283,39 @@ export default function Home({ all, currDev }) {
                       <Line
                         type="monotone"
                         dataKey="publiclatency"
-                        stroke="blue"
+                        stroke="#8884d8"
+                        dot={false}
+                      />
+
+                      <XAxis dataKey="created" />
+                      <YAxis dataKey="publiclatency" domain={[0, 100]} />
+                      <Tooltip />
+                    </LineChart>
+                  </Row>
+                  <Text h6 size={15} color="red" css={{ m: 0 }}>
+                    CPU
+                  </Text>{" "}
+                  <Spacer y={0}></Spacer>
+                  <Text h6 size={15} color="#8884d8" css={{ m: 0 }}>
+                    RAM
+                  </Text>
+                  <Row justify="center" align="right">
+                    <LineChart
+                      syncId="anyId"
+                      width={1150}
+                      height={250}
+                      data={latencyData}
+                    >
+                      <Line
+                        type="monotone"
+                        dataKey="cpu"
+                        stroke="red"
+                        dot={false}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="memory"
+                        stroke="#8884d8"
                         dot={false}
                       />
 
@@ -300,17 +337,22 @@ export default function Home({ all, currDev }) {
                     RAM
                   </Text>
                   <Row justify="center" align="right">
-                    <LineChart width={1150} height={250} data={latencyData}>
-                      <Line
-                        type="monotone"
-                        dataKey="memory"
-                        stroke="#8884d8"
-                        dot={false}
-                      />
+                    <LineChart
+                      syncId="anyId"
+                      width={1150}
+                      height={250}
+                      data={latencyData}
+                    >
                       <Line
                         type="monotone"
                         dataKey="cpu"
                         stroke="red"
+                        dot={false}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="memory"
+                        stroke="#8884d8"
                         dot={false}
                       />
 
