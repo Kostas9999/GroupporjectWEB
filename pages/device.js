@@ -258,7 +258,7 @@ export default function Home({ all, currDev }) {
                     Local Latency
                   </Text>
                   <Spacer y={0}></Spacer>
-                  <Text h6 size={15} color="blue" css={{ m: 0 }}>
+                  <Text h6 size={15} color="#8884d8" css={{ m: 0 }}>
                     Public Latency
                   </Text>
                   <Row justify="center" align="right">
@@ -267,15 +267,18 @@ export default function Home({ all, currDev }) {
                         type="monotone"
                         dataKey="locallatency"
                         stroke="red"
+                        dot={false}
+                        legendType="triangle"
                       />
                       <Line
                         type="monotone"
                         dataKey="publiclatency"
-                        stroke="#8884d8"
+                        stroke="blue"
+                        dot={false}
                       />
 
                       <XAxis dataKey="created" />
-                      <YAxis height={200} dataKey="publiclatency" />
+                      <YAxis dataKey="publiclatency" domain={[0, 100]} />
                       <Tooltip />
                     </LineChart>
                   </Row>
@@ -284,20 +287,32 @@ export default function Home({ all, currDev }) {
               <Spacer y={1}></Spacer>
               <Card css={{ $$cardColor: btn_back, h: "50vh" }}>
                 <Card.Body>
-                  <Text h6 size={15} color="blue" css={{ m: 0 }}>
-                    Downloaded
+                  <Text h6 size={15} color="red" css={{ m: 0 }}>
+                    CPU
                   </Text>{" "}
                   <Spacer y={0}></Spacer>
-                  <Text h6 size={15} color="red" css={{ m: 0 }}>
-                    Uploaded
+                  <Text h6 size={15} color="#8884d8" css={{ m: 0 }}>
+                    RAM
                   </Text>
                   <Row justify="center" align="right">
-                    <BarChart width={1000} height={200} data={latencyData}>
-                      <Bar dataKey="rx_total" fill="#8884d8" />
-                      <Bar dataKey="tx_total" fill="red" />
+                    <LineChart width={1000} height={200} data={latencyData}>
+                      <Line
+                        type="monotone"
+                        dataKey="memory"
+                        stroke="#8884d8"
+                        dot={false}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="cpu"
+                        stroke="red"
+                        dot={false}
+                      />
+
                       <XAxis dataKey="created" />
+                      <YAxis dataKey="publiclatency" domain={[0, 100]} />
                       <Tooltip />
-                    </BarChart>
+                    </LineChart>
                   </Row>
                 </Card.Body>
               </Card>
