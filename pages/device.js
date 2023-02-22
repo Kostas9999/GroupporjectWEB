@@ -3,8 +3,9 @@ import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
 import React from "react";
 import Navbar from "./templates/navbar/navbar";
+
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
+
 import { NextUIProvider } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
 
@@ -17,6 +18,7 @@ import {
   Container,
   Spacer,
   Card,
+  Grid,
   Button,
   Modal,
   useAsyncList,
@@ -26,7 +28,7 @@ import {
 export default function Home({ all, currDev }) {
   all = JSON.parse(all);
 
-  console.log(all.devices[`${currDev}`].os.hostname);
+  // console.log(all.devices[`${currDev}`].os.hostname);
 
   const router = useRouter();
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
@@ -40,46 +42,203 @@ export default function Home({ all, currDev }) {
       query: { devID: e },
     });
   };
-
+  const MockItem = ({ text }) => {
+    return (
+      <Card css={{ h: "$20", $$cardColor: "$colors$primary" }}>
+        <Card.Body>
+          <Text h6 size={15} color="white" css={{ m: 0 }}>
+            {text}
+          </Text>
+        </Card.Body>
+      </Card>
+    );
+  };
   return (
     <NextUIProvider>
+      <Head>
+        <title>NetMon</title>
+        <meta name="description" content="Monitoring Tool" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <main className={styles.main}>
         <Navbar />
-        <Head>
-          <title>NetMon</title>
-          <meta name="description" content="Monitoring Tool" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+
         <Spacer y={1}></Spacer>
 
-        <Container gap={0}>
-          <Row gap={1}>
-            {
-              <Dropdown>
-                <Dropdown.Button
-                  size="md"
-                  auto
-                  shadow
-                  css={{ background: btn_back }}
-                >
-                  Select Device
-                </Dropdown.Button>
+        <Grid.Container gap={2} justify="left">
+          {/* ========================================================= Start First row
+           Start first row         
+          */}
+          <Grid xs={2}>
+            {/* ==================================================== Dropdown Start
+          Dropdown menu to select Device
+           */}
+            <Row gap={1} justify="left">
+              {
+                <Dropdown>
+                  <Dropdown.Button
+                    size="md"
+                    auto
+                    shadow
+                    css={{ background: btn_back }}
+                  >
+                    Select Device
+                  </Dropdown.Button>
 
-                <Dropdown.Menu
-                  onAction={(actionKey) => {
-                    handleSelect(actionKey);
-                  }}
-                >
-                  {Object.keys(all.devices).map((device) => (
-                    <Dropdown.Item key={device}>
-                      {all.devices[`${device}`].os.hostname}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            }
-          </Row>
+                  <Dropdown.Menu
+                    onAction={(actionKey) => {
+                      handleSelect(actionKey);
+                    }}
+                  >
+                    {Object.keys(all.devices).map((device) => (
+                      <Dropdown.Item key={device}>
+                        {all.devices[`${device}`].os.hostname}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+              }
+            </Row>
+
+            {/* ==================================================== Dropdown end
+          END Dropdown menu to select Device
+           */}
+          </Grid>
+          <Grid xs={10}>
+            <Container>
+              <Card css={{ $$cardColor: "$colors$primary" }}>
+                <Card.Body>
+                  <Row justify="center" align="right">
+                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                      OS data
+                    </Text>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Container>
+            <Container>
+              <Card css={{ $$cardColor: "$colors$primary" }}>
+                <Card.Body>
+                  <Row justify="center" align="right">
+                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                      HW data + cpu RAM
+                    </Text>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Container>
+            <Container>
+              <Card css={{ $$cardColor: "$colors$primary" }}>
+                <Card.Body>
+                  <Row justify="center" align="right">
+                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                      Iface
+                    </Text>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Container>
+            <Container>
+              <Card css={{ $$cardColor: "$colors$primary" }}>
+                <Card.Body>
+                  <Row justify="center" align="right">
+                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                      Stats rx-tx
+                    </Text>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Container>
+            <Container>
+              <Card css={{ $$cardColor: "$colors$primary" }}>
+                <Card.Body>
+                  <Row justify="center" align="right">
+                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                      stats Latency
+                    </Text>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Container>
+          </Grid>
+
+          {/* ========================================================= End First row
+           END first row         
+          */}
+          {/* ========================================================= Start second row
+           Start second row         
+          */}
+          <Grid xs={2}>
+            <Container hidden>
+              <Card
+                css={{
+                  $$cardColor: "$colors$primary",
+                  h: "50vh",
+                }}
+              >
+                <Card.Body>
+                  <Row justify="center" align="right">
+                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                      Button
+                    </Text>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Container>
+          </Grid>
+          <Grid xs={10}>
+            <Container>
+              <Card css={{ $$cardColor: "$colors$primary", h: "30vh" }}>
+                <Card.Body>
+                  <Row justify="center" align="right">
+                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                      Stats
+                    </Text>
+                  </Row>
+                </Card.Body>
+              </Card>
+              <Spacer y={1}></Spacer>
+              <Card css={{ $$cardColor: "$colors$primary", h: "30vh" }}>
+                <Card.Body>
+                  <Row justify="center" align="right">
+                    <Text h6 size={15} color="white" css={{ m: 0 }}>
+                      Stats 2
+                    </Text>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Container>
+          </Grid>
+
+          {/* ========================================================= End second row
+           END second row         
+          */}
+          <Grid xs={3}>
+            <MockItem text="1 of 4" />
+          </Grid>
+          <Grid xs={3}>
+            <MockItem text="2 of 4" />
+          </Grid>
+          <Grid xs={3}>
+            <MockItem text="3 of 4" />
+          </Grid>
+          <Grid xs={3}>
+            <MockItem text="4 of 4" />
+          </Grid>
+          <Grid xs={3}>
+            <MockItem text="1 of 3" />
+          </Grid>
+          <Grid xs={6}>
+            <MockItem text="2 of 3" />
+          </Grid>
+          <Grid xs={3}>
+            <MockItem text="3 of 3" />
+          </Grid>
+        </Grid.Container>
+
+        <Container gap={0}>
           <Spacer y={1} />
+
           {/*
           <Row gap={1}>
             <Col>
@@ -327,9 +486,9 @@ export const getServerSideProps = withIronSessionSsr(
       `select * from "${id}"."events" LIMIT 100;  `
     );
 
-    //   let networkstats = await pool.query(
-    //    `select * from "${id}"."networkstats"; `
-    //  );
+    let networkstats = await pool.query(
+      `select * from "${id}"."networkstats"; `
+    );
 
     let hardware = await pool.query(`select * from "${id}"."hardware"; `);
 
@@ -340,6 +499,7 @@ export const getServerSideProps = withIronSessionSsr(
     let devices = req.req.session.devices;
     req.req.session.devices[`${id}`].hardware = hardware.rows;
     req.req.session.devices[`${id}`].iface = iface.rows;
+    req.req.session.devices[`${id}`].networkStats = networkstats.rows;
     req.req.session.devices[`${id}`].events = events.rows;
 
     return {
