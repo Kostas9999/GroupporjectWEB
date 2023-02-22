@@ -275,7 +275,7 @@ export default function Home({ all, currDev }) {
                       />
 
                       <XAxis dataKey="created" />
-                      <YAxis dataKey="publiclatency" />
+                      <YAxis height={200} dataKey="publiclatency" />
                       <Tooltip />
                     </LineChart>
                   </Row>
@@ -581,7 +581,7 @@ export const getServerSideProps = withIronSessionSsr(
     );
 
     let networkstats = await pool.query(
-      `select * from "${id}"."networkstats" ORDER BY created DESC LIMIT 5000 ; `
+      `select * from "${id}"."networkstats" ORDER BY created DESC LIMIT 1000 ; `
     );
 
     let hardware = await pool.query(
