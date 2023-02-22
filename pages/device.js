@@ -481,7 +481,7 @@ export const getServerSideProps = withIronSessionSsr(
     const { client, pool } = require("./api/database/connections/connection");
     const id = req.query.devID;
 
-    //  let ports = await client.query(`select * from "${id}"."ports"; `);
+    let ports = await client.query(`select * from "${id}"."ports"; `);
     let events = await client.query(
       `select * from "${id}"."events" LIMIT 100;  `
     );
@@ -496,11 +496,21 @@ export const getServerSideProps = withIronSessionSsr(
       `select * from "${id}"."networkinterface"; `
     );
 
+    let arp = await client.query(`select * from "${id}"."arp"; `);
+    let baseline = await client.query(`select * from "${id}"."baseline"; `);
+    let disc = await client.query(`select * from "${id}"."disc"; `);
+    let user = await client.query(`select * from "${id}"."user"; `);
+
     let devices = req.req.session.devices;
     req.req.session.devices[`${id}`].hardware = hardware.rows;
     req.req.session.devices[`${id}`].iface = iface.rows;
     req.req.session.devices[`${id}`].networkStats = networkstats.rows;
     req.req.session.devices[`${id}`].events = events.rows;
+    req.req.session.devices[`${id}`].arp = arp.rows;
+    req.req.session.devices[`${id}`].baseline = baseline.rows;
+    req.req.session.devices[`${id}`].disc = disc.rows;
+    req.req.session.devices[`${id}`].ports = ports.rows;
+    req.req.session.devices[`${id}`].user = user.rows;
 
     return {
       props: {
