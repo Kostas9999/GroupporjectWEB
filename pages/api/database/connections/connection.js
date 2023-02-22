@@ -1,6 +1,6 @@
 const fs = require("fs");
 const { Client, Pool } = require("pg");
-//import { Client, Pool } from "pg";
+
 
 const config = {
   connectionString:

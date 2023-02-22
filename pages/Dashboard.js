@@ -172,11 +172,8 @@ export const getServerSideProps = withIronSessionSsr(
     );
 
     let dev = {};
-    let devList = [];
-
     rows_devices.rows.forEach((data) => {
       dev[`${data.id}`] = { data };
-      devList.push(data.id);
     });
 
     let devicesTitle = [];
@@ -190,8 +187,8 @@ export const getServerSideProps = withIronSessionSsr(
         dev[`${item.id}`].os = rows.rows[0];
       }
     }
-    req.session.deviceList = devList;
-    req.session.devices = { dev };
+    req.session.devices = dev;
+    console.log(req.session.devices);
 
     await req.session.save();
 

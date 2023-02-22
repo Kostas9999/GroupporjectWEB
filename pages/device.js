@@ -23,15 +23,7 @@ import {
   useCollator,
 } from "@nextui-org/react";
 
-export default function Home({
-  os,
-  hardware,
-  iface,
-  events,
-  ports,
-  networkstats,
-  devices,
-}) {
+export default function Home({ os, hardware, iface, events }) {
   ports = JSON.parse(ports);
 
   const router = useRouter();
@@ -482,14 +474,14 @@ export const getServerSideProps = withIronSessionSsr(
     const { client, pool } = require("./api/database/connections/connection");
     const id = req.query.devID;
 
-    let ports = await client.query(`select * from "${id}"."ports"; `);
+    //  let ports = await client.query(`select * from "${id}"."ports"; `);
     let events = await client.query(
       `select * from "${id}"."events" LIMIT 100;  `
     );
 
-    let networkstats = await pool.query(
-      `select * from "${id}"."networkstats"; `
-    );
+    //   let networkstats = await pool.query(
+    //    `select * from "${id}"."networkstats"; `
+    //  );
 
     let hardware = await pool.query(`select * from "${id}"."hardware"; `);
 
@@ -497,10 +489,10 @@ export const getServerSideProps = withIronSessionSsr(
       `select * from "${id}"."networkinterface"; `
     );
 
-    let os = req.req.session.devices.dev[`${id}`].os;
-    req.req.session.devices.dev[`${id}`].hardware = hardware.rows;
-    req.req.session.devices.dev[`${id}`].iface = iface.rows;
-    req.req.session.devices.dev[`${id}`].events = events.rows;
+    let os = req.req.session.devices[`${id}`].os;
+    req.req.session.devices[`${id}`].hardware = hardware.rows;
+    req.req.session.devices[`${id}`].iface = iface.rows;
+    req.req.session.devices[`${id}`].events = events.rows;
 
     return {
       props: {
@@ -508,9 +500,8 @@ export const getServerSideProps = withIronSessionSsr(
         hardware: JSON.stringify(hardware.rows[0]),
         iface: JSON.stringify(iface.rows[0]),
         events: JSON.stringify(events.rows[0]),
-        ports: JSON.stringify(ports.rows),
-        networkstats: JSON.stringify(networkstats.rows),
-        devices: req.req.session.deviceList,
+        //  ports: JSON.stringify(ports.rows),
+        //  networkstats: JSON.stringify(networkstats.rows),
       },
     };
   },
