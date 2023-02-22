@@ -590,9 +590,11 @@ export const getServerSideProps = withIronSessionSsr(
     const { client, pool } = require("./api/database/connections/connection");
     const id = req.query.devID;
 
-    let ports = await client.query(`select * from "${id}"."ports"; `);
+    let ports = await client.query(
+      `select * from "${id}"."ports" ORDER BY created DESC; `
+    );
     let events = await client.query(
-      `select * from "${id}"."events" LIMIT 100;  `
+      `select * from "${id}"."events" ORDER BY created DESC LIMIT 100;  `
     );
 
     let networkstats = await pool.query(
@@ -600,14 +602,16 @@ export const getServerSideProps = withIronSessionSsr(
     );
 
     let hardware = await pool.query(
-      `select * from "${id}"."hardware" LIMIT 1;   `
+      `select * from "${id}"."hardware" ORDER BY created DESC LIMIT 1;   `
     );
 
     let iface = await client.query(
-      `select * from "${id}"."networkinterface"  LIMIT 1; `
+      `select * from "${id}"."networkinterface" ORDER BY created DESC LIMIT 1; `
     );
 
-    let arp = await client.query(`select * from "${id}"."arp"; `);
+    let arp = await client.query(
+      `select * from "${id}"."arp" ORDER BY created DESC; `
+    );
     let baseline = await client.query(`select * from "${id}"."baseline"; `);
     let disc = await client.query(`select * from "${id}"."disc"; `);
     let user = await client.query(`select * from "${id}"."user"  LIMIT 1; `);
