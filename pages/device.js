@@ -43,10 +43,11 @@ import {
 export default function Home({ all, currDev }) {
   all = JSON.parse(all);
 
-  console.log(all.devices[`${currDev}`].arp[0]);
+  //console.log(all.devices[`${currDev}`].arp);
 
   let disc = all.devices[`${currDev}`].disc;
   let arp = all.devices[`${currDev}`].arp;
+  let ports = all.devices[`${currDev}`].ports;
 
   const router = useRouter();
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
@@ -62,6 +63,44 @@ export default function Home({ all, currDev }) {
       ["Bytes", "KB", "MB", "GB", "TB"][d]
     }`;
   }
+
+  function dateTimeFormater(datetime) {
+    return datetime.replaceAll("T", " ").substring(0, 19);
+  }
+
+  let keys_port = Object.keys(ports[0]);
+  keys_port.push("action");
+
+  const columns_port = [];
+  keys_port.map((item, index) =>
+    columns_port.push({
+      key: item,
+      label: item,
+    })
+  );
+
+  const rows_port = [];
+  ports.map((item, index) =>
+    rows_port.push({
+      key: index,
+      port: item.port,
+      processname: item.processname,
+      pid: item.pid,
+      processpath: item.processpath,
+      created: dateTimeFormater(item.created),
+      action: (
+        <Button
+          onClick={(e) => closeApp(item.pid, e)}
+          auto
+          ghost
+          color="error"
+          bordered
+        >
+          Close
+        </Button>
+      ),
+    })
+  );
 
   let keys_arp;
   keys_arp = Object.keys(arp[0]);
@@ -81,7 +120,7 @@ export default function Home({ all, currDev }) {
       ip: item.ip,
       mac: item.mac,
       type: item.type,
-      created: item.created,
+      created: dateTimeFormater(item.created),
     })
   );
 
@@ -106,7 +145,7 @@ export default function Home({ all, currDev }) {
       type: item.type,
       value: item.value,
       baseline: item.baseline,
-      created: item.created,
+      created: dateTimeFormater(item.created),
     })
   );
 
@@ -128,6 +167,17 @@ export default function Home({ all, currDev }) {
       </Card>
     );
   };
+
+  async function refresh() {
+    router.push({
+      pathname: "/device",
+      query: { devID: currDev },
+    });
+  }
+
+  async function closeApp(pid) {
+    console.log("close " + pid);
+  }
 
   const latencyData = all.devices[`${currDev}`].networkStats;
 
@@ -151,6 +201,7 @@ export default function Home({ all, currDev }) {
             {/* ==================================================== Dropdown Start
           Dropdown menu to select Device
            */}
+
             <Row gap={1} justify="left">
               {
                 <Dropdown>
@@ -179,10 +230,13 @@ export default function Home({ all, currDev }) {
               }
             </Row>
 
+            <Spacer y={0}></Spacer>
+            <Row></Row>
             {/* ==================================================== Dropdown end
           END Dropdown menu to select Device
            */}
           </Grid>
+
           <Grid xs={10}>
             <Container>
               <Card css={{ $$cardColor: btn_back }} className={styles.thirteen}>
@@ -190,9 +244,9 @@ export default function Home({ all, currDev }) {
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
                       Last Seen:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].created
-                        .replaceAll("T", " ")
-                        .substring(0, 19)}
+                      {dateTimeFormater(
+                        all.devices[`${currDev}`].networkStats[0].created
+                      )}
                       <Spacer y={0}></Spacer>
                       {all.devices[`${currDev}`].os.hostname}
                       <Spacer y={0}></Spacer>
@@ -212,7 +266,12 @@ export default function Home({ all, currDev }) {
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
                       {all.devices[`${currDev}`].hardware[0].title}
                       <Spacer y={0}></Spacer>
-                      RAM: {all.devices[`${currDev}`].hardware[0].totalmemory}
+                      RAM:{" "}
+                      {formatBytes(
+                        Math.ceil(
+                          all.devices[`${currDev}`].hardware[0].totalmemory
+                        )
+                      )}
                       <Spacer y={0}></Spacer>
                     </Text>
                   </Row>
@@ -248,22 +307,34 @@ export default function Home({ all, currDev }) {
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
                       rx_total:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].rx_total}
+                      {formatBytes(
+                        all.devices[`${currDev}`].networkStats[0].rx_total
+                      )}
                       <Spacer y={0}></Spacer>
                       rx_error:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].rx_error}
+                      {formatBytes(
+                        all.devices[`${currDev}`].networkStats[0].rx_error
+                      )}
                       <Spacer y={0}></Spacer>
                       rx_dropped:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].rx_dropped}
+                      {formatBytes(
+                        all.devices[`${currDev}`].networkStats[0].rx_dropped
+                      )}
                       <Spacer y={0}></Spacer>
                       tx_total:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].tx_total}
+                      {formatBytes(
+                        all.devices[`${currDev}`].networkStats[0].tx_total
+                      )}
                       <Spacer y={0}></Spacer>
                       tx_error:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].tx_error}
+                      {formatBytes(
+                        all.devices[`${currDev}`].networkStats[0].tx_error
+                      )}
                       <Spacer y={0}></Spacer>
                       tx_dropped:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].tx_dropped}
+                      {formatBytes(
+                        all.devices[`${currDev}`].networkStats[0].tx_dropped
+                      )}
                     </Text>
                   </Row>
                 </Card.Body>
@@ -309,15 +380,18 @@ export default function Home({ all, currDev }) {
               >
                 <Card.Body>
                   <Row justify="center" align="right">
-                    <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      Some Button
-                    </Text>
+                    <Button
+                      onClick={refresh}
+                      size="md"
+                      auto
+                      shadow
+                      css={{ background: btn_back }}
+                      className={styles.thirteen}
+                    >
+                      Refresh
+                    </Button>
                   </Row>
-                  <Row justify="center" align="right">
-                    <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      Some Button
-                    </Text>
-                  </Row>
+                  <Row justify="center" align="right"></Row>
                 </Card.Body>
               </Card>
             </Container>
@@ -394,11 +468,6 @@ export default function Home({ all, currDev }) {
                 </Card.Body>
               </Card>
               <Spacer y={1}></Spacer>
-              <Card css={{ $$cardColor: btn_back, h: "50vh" }}>
-                <Card.Body>
-                  <Row></Row>
-                </Card.Body>
-              </Card>
             </Container>
           </Grid>
 
@@ -407,7 +476,7 @@ export default function Home({ all, currDev }) {
                
           */}
 
-          <Grid xs={12}>
+          <Grid xs={7}>
             <Card css={{ h: "75vh", $$cardColor: btn_back, width: "100%" }}>
               <Card.Body>
                 {disc.map((item, index) => (
@@ -426,7 +495,7 @@ export default function Home({ all, currDev }) {
               </Card.Body>
             </Card>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={5}>
             <Card
               css={{
                 h: "100vh",
@@ -460,13 +529,12 @@ export default function Home({ all, currDev }) {
                     noMargin
                     align="center"
                     rowsPerPage={10}
-                    onPageChange={(page) => console.log({ page })}
                   />
                 </Table>
               </Card.Body>
             </Card>
           </Grid>
-          <Grid xs={8}>
+          <Grid xs={12}>
             <Card
               css={{
                 h: "100vh",
@@ -506,8 +574,45 @@ export default function Home({ all, currDev }) {
               </Card.Body>
             </Card>
           </Grid>
-          <Grid xs={3}>
-            <MockItem text="4 of 4" />
+          <Grid xs={12}>
+            <Card
+              css={{
+                h: "100vh",
+                $$cardColor: btn_back,
+                width: "100%",
+                overflowY: "visible",
+              }}
+            >
+              <Card.Body>
+                <Table>
+                  <Table.Header columns={columns_port}>
+                    {(column) => (
+                      <Table.Column key={column.key}>
+                        {column.label}
+                      </Table.Column>
+                    )}
+                  </Table.Header>
+                  <Table.Body items={rows_port}>
+                    {(item) => (
+                      <Table.Row key={item.key}>
+                        {(columnKey) => (
+                          <Table.Cell>
+                            <Text color={text_Color}> {item[columnKey]}</Text>
+                          </Table.Cell>
+                        )}
+                      </Table.Row>
+                    )}
+                  </Table.Body>
+                  <Table.Pagination
+                    shadow
+                    noMargin
+                    align="center"
+                    rowsPerPage={10}
+                    onPageChange={(page) => console.log({ page })}
+                  />
+                </Table>
+              </Card.Body>
+            </Card>
           </Grid>
           <Grid xs={3}>
             <MockItem text="1 of 3" />
