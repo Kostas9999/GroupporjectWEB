@@ -11,7 +11,7 @@ async function loginRoute(req, res) {
   const email = validator.escape(req.body.email_Reg);
   const pass = validator.escape(req.body.password_Reg);
 
-  const hash = bcrypt.hashSync(pass, 13);
+  const hash = bcrypt.hashSync(pass, 5);
   let rows_user = null;
 
   try {
