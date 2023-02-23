@@ -140,18 +140,6 @@ export default function Home({ all, currDev }) {
     });
   };
 
-  const MockItem = ({ text }) => {
-    return (
-      <Card css={{ h: "$20", $$cardColor: "$colors$primary" }}>
-        <Card.Body>
-          <Text h6 size={15} color="white" css={{ m: 0 }}>
-            {text}
-          </Text>
-        </Card.Body>
-      </Card>
-    );
-  };
-
   //  setInterval(refresh, 10000);
 
   async function refresh() {
@@ -159,6 +147,24 @@ export default function Home({ all, currDev }) {
       pathname: "/device",
       query: { devID: currDev },
     });
+  }
+
+  async function test(id) {
+    let myIDs = ["charts", "disc", "events", "arp", "ports"];
+    console.log(id);
+
+    myIDs.forEach((e) => {
+      if (id == e) {
+        document.getElementById(e).style.display = "block";
+      } else {
+        document.getElementById(e).style.display = "none";
+      }
+    });
+    // document.getElementById("charts").style.display = "none";
+    // document.getElementById("disc").style.display = "block";
+    //  document.getElementById("events").style.display = "none";
+    //  document.getElementById("arp").style.display = "none";
+    //   document.getElementById("ports").style.display = "none";
   }
 
   async function closeApp(pid) {
@@ -314,7 +320,7 @@ export default function Home({ all, currDev }) {
           {/* ========================================================= End First row
            END first row         
           */}
-          {/* ========================================================= Start second row
+          {/* ========================================================= Start second row SIDEBAR
            Start second row         
           */}
           <Grid xs={2}>
@@ -325,7 +331,7 @@ export default function Home({ all, currDev }) {
                   h: "50vh",
                 }}
               >
-                <Row gap={1} justify="center">
+                <Row justify="center">
                   {
                     <Dropdown>
                       <Dropdown.Button
@@ -352,6 +358,7 @@ export default function Home({ all, currDev }) {
                     </Dropdown>
                   }
                 </Row>
+                <Spacer y={1}></Spacer>
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Button
@@ -365,238 +372,307 @@ export default function Home({ all, currDev }) {
                       Refresh
                     </Button>
                   </Row>
-                  <Row justify="center" align="right"></Row>
+                  <Spacer y={1}></Spacer>
+                  <Row justify="center" align="right">
+                    <Button
+                      onClick={(e) => test("charts")}
+                      size="md"
+                      auto
+                      shadow
+                      css={{ background: btn_back }}
+                      className={styles.thirteen}
+                    >
+                      Charts
+                    </Button>
+                  </Row>
+                  <Spacer y={1}></Spacer>
+                  <Row justify="center" align="right">
+                    <Button
+                      onClick={(e) => test("disc")}
+                      size="md"
+                      auto
+                      shadow
+                      css={{ background: btn_back }}
+                      className={styles.thirteen}
+                    >
+                      HDD
+                    </Button>
+                  </Row>
+                  <Spacer y={1}></Spacer>
+                  <Row justify="center" align="right">
+                    <Button
+                      onClick={(e) => test("events")}
+                      size="md"
+                      auto
+                      shadow
+                      css={{ background: btn_back }}
+                      className={styles.thirteen}
+                    >
+                      Events
+                    </Button>
+                  </Row>
+                  <Spacer y={1}></Spacer>
+                  <Row justify="center" align="right">
+                    <Button
+                      onClick={(e) => test("arp")}
+                      size="md"
+                      auto
+                      shadow
+                      css={{ background: btn_back }}
+                      className={styles.thirteen}
+                    >
+                      ARP
+                    </Button>
+                  </Row>
+                  <Spacer y={1}></Spacer>
+                  <Row justify="center" align="right">
+                    <Button
+                      onClick={(e) => test("ports")}
+                      size="md"
+                      auto
+                      shadow
+                      css={{ background: btn_back }}
+                      className={styles.thirteen}
+                    >
+                      Ports
+                    </Button>
+                  </Row>
                 </Card.Body>
               </Card>
             </Container>
           </Grid>
-          <Grid xs={10}>
-            <Container>
-              <Card css={{ $$cardColor: btn_back, h: "75vh" }}>
-                <Card.Body>
-                  <Text h6 size={15} color="red" css={{ m: 0 }}>
-                    Local Latency
-                  </Text>
-                  <Spacer y={0}></Spacer>
-                  <Text h6 size={15} color="#8884d8" css={{ m: 0 }}>
-                    Public Latency
-                  </Text>
-                  <Row justify="center" align="right">
-                    <LineChart
-                      syncId="anyId"
-                      width={1150}
-                      height={200}
-                      data={latencyData.reverse()}
-                    >
-                      <Line
-                        type="monotone"
-                        dataKey="locallatency"
-                        stroke="red"
-                        dot={false}
-                        legendType="triangle"
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="publiclatency"
-                        stroke="#8884d8"
-                        dot={false}
-                      />
 
-                      <XAxis dataKey="created" />
-                      <YAxis dataKey="publiclatency" domain={[0, 100]} />
-                      <Tooltip />
-                    </LineChart>
-                  </Row>
-                  <Text h6 size={15} color="red" css={{ m: 0 }}>
-                    CPU
-                  </Text>{" "}
-                  <Spacer y={0}></Spacer>
-                  <Text h6 size={15} color="#8884d8" css={{ m: 0 }}>
-                    RAM
-                  </Text>
-                  <Row justify="center" align="right">
-                    <LineChart
-                      syncId="anyId"
-                      width={1150}
-                      height={200}
-                      data={latencyData.reverse()}
-                    >
-                      <Line
-                        type="monotone"
-                        dataKey="cpu"
-                        stroke="red"
-                        dot={false}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="memory"
-                        stroke="#8884d8"
-                        dot={false}
-                      />
-
-                      <XAxis dataKey="created" />
-                      <YAxis dataKey="publiclatency" domain={[0, 100]} />
-                      <Tooltip />
-                    </LineChart>
-                  </Row>
-                </Card.Body>
-              </Card>
-              <Spacer y={1}></Spacer>
-            </Container>
-          </Grid>
-
-          {/* ========================================================= End second row
-           END second row     
+          {/* ========================================================= Start chart row
+           Start chart row     
                
           */}
+          <div id="charts" style={{ width: "80%" }}>
+            <Grid xs={10}>
+              <Container>
+                <Card css={{ $$cardColor: btn_back, h: "75vh" }}>
+                  <Card.Body>
+                    <Text h6 size={15} color="red" css={{ m: 0 }}>
+                      Local Latency
+                    </Text>
+                    <Spacer y={0}></Spacer>
+                    <Text h6 size={15} color="#8884d8" css={{ m: 0 }}>
+                      Public Latency
+                    </Text>
+                    <Row justify="center" align="right">
+                      <LineChart
+                        syncId="anyId"
+                        width={1150}
+                        height={200}
+                        data={latencyData.reverse()}
+                      >
+                        <Line
+                          type="monotone"
+                          dataKey="locallatency"
+                          stroke="red"
+                          dot={false}
+                          legendType="triangle"
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="publiclatency"
+                          stroke="#8884d8"
+                          dot={false}
+                        />
 
-          <Grid xs={7}>
-            <Card css={{ h: "75vh", $$cardColor: btn_back, width: "100%" }}>
-              <Card.Body>
-                {disc.map((item, index) => (
-                  <Text h5 size={20} color={text_Color} css={{ m: 5 }}>
-                    {item.fs} {formatBytes(item.size)} {item.uses} % used
-                    <Progress
-                      className={styles.thirteen}
-                      css={{ display: "block" }}
-                      value={item.uses}
+                        <XAxis dataKey="created" />
+                        <YAxis dataKey="publiclatency" domain={[0, 100]} />
+                        <Tooltip />
+                      </LineChart>
+                    </Row>
+                    <Text h6 size={15} color="red" css={{ m: 0 }}>
+                      CPU
+                    </Text>{" "}
+                    <Spacer y={0}></Spacer>
+                    <Text h6 size={15} color="#8884d8" css={{ m: 0 }}>
+                      RAM
+                    </Text>
+                    <Row justify="center" align="right">
+                      <LineChart
+                        syncId="anyId"
+                        width={1150}
+                        height={200}
+                        data={latencyData.reverse()}
+                      >
+                        <Line
+                          type="monotone"
+                          dataKey="cpu"
+                          stroke="red"
+                          dot={false}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="memory"
+                          stroke="#8884d8"
+                          dot={false}
+                        />
+
+                        <XAxis dataKey="created" />
+                        <YAxis dataKey="publiclatency" domain={[0, 100]} />
+                        <Tooltip />
+                      </LineChart>
+                    </Row>
+                  </Card.Body>
+                </Card>
+                <Spacer y={1}></Spacer>
+              </Container>
+            </Grid>
+          </div>
+
+          {/* ========================================================= End chart row
+           END chart row     
+               
+          */}
+          <div id="disc" style={{ display: "none", width: "80%" }}>
+            <Grid xs={7}>
+              <Card css={{ h: "75vh", $$cardColor: btn_back, width: "100%" }}>
+                <Card.Body>
+                  {disc.map((item, index) => (
+                    <Text h5 size={20} color={text_Color} css={{ m: 5 }}>
+                      {item.fs} {formatBytes(item.size)} {item.uses} % used
+                      <Progress
+                        className={styles.thirteen}
+                        css={{ display: "block" }}
+                        value={item.uses}
+                        shadow
+                        color="primary"
+                        status="primary"
+                      />
+                    </Text>
+                  ))}
+                </Card.Body>
+              </Card>
+            </Grid>
+          </div>
+          <div id="events" style={{ display: "none", width: "80%" }}>
+            <Grid xs={5}>
+              <Card
+                css={{
+                  h: "100vh",
+                  $$cardColor: btn_back,
+                  width: "100%",
+                  overflowY: "visible",
+                }}
+              >
+                <Card.Body>
+                  <Table>
+                    <Table.Header columns={columns_events}>
+                      {(column) => (
+                        <Table.Column key={column.key}>
+                          {column.label}
+                        </Table.Column>
+                      )}
+                    </Table.Header>
+                    <Table.Body items={rows_events}>
+                      {(item) => (
+                        <Table.Row key={item.key}>
+                          {(columnKey) => (
+                            <Table.Cell>
+                              <Text color={text_Color}> {item[columnKey]}</Text>
+                            </Table.Cell>
+                          )}
+                        </Table.Row>
+                      )}
+                    </Table.Body>
+                    <Table.Pagination
                       shadow
-                      color="primary"
-                      status="primary"
+                      noMargin
+                      align="center"
+                      rowsPerPage={10}
                     />
-                  </Text>
-                ))}
-              </Card.Body>
-            </Card>
-          </Grid>
-          <Grid xs={5}>
-            <Card
-              css={{
-                h: "100vh",
-                $$cardColor: btn_back,
-                width: "100%",
-                overflowY: "visible",
-              }}
-            >
-              <Card.Body>
-                <Table>
-                  <Table.Header columns={columns_events}>
-                    {(column) => (
-                      <Table.Column key={column.key}>
-                        {column.label}
-                      </Table.Column>
-                    )}
-                  </Table.Header>
-                  <Table.Body items={rows_events}>
-                    {(item) => (
-                      <Table.Row key={item.key}>
-                        {(columnKey) => (
-                          <Table.Cell>
-                            <Text color={text_Color}> {item[columnKey]}</Text>
-                          </Table.Cell>
-                        )}
-                      </Table.Row>
-                    )}
-                  </Table.Body>
-                  <Table.Pagination
-                    shadow
-                    noMargin
-                    align="center"
-                    rowsPerPage={10}
-                  />
-                </Table>
-              </Card.Body>
-            </Card>
-          </Grid>
-          <Grid xs={12}>
-            <Card
-              css={{
-                h: "100vh",
-                $$cardColor: btn_back,
-                width: "100%",
-                overflowY: "visible",
-              }}
-            >
-              <Card.Body>
-                <Table>
-                  <Table.Header columns={columns_arp}>
-                    {(column) => (
-                      <Table.Column key={column.key}>
-                        {column.label}
-                      </Table.Column>
-                    )}
-                  </Table.Header>
-                  <Table.Body items={rows_arp}>
-                    {(item) => (
-                      <Table.Row key={item.key}>
-                        {(columnKey) => (
-                          <Table.Cell>
-                            <Text color={text_Color}> {item[columnKey]}</Text>
-                          </Table.Cell>
-                        )}
-                      </Table.Row>
-                    )}
-                  </Table.Body>
-                  <Table.Pagination
-                    shadow
-                    noMargin
-                    align="center"
-                    rowsPerPage={10}
-                    onPageChange={(page) => console.log({ page })}
-                  />
-                </Table>
-              </Card.Body>
-            </Card>
-          </Grid>
-          <Grid xs={12}>
-            <Card
-              css={{
-                h: "100vh",
-                $$cardColor: btn_back,
-                width: "100%",
-                overflowY: "visible",
-              }}
-            >
-              <Card.Body>
-                <Table>
-                  <Table.Header columns={columns_port}>
-                    {(column) => (
-                      <Table.Column key={column.key}>
-                        {column.label}
-                      </Table.Column>
-                    )}
-                  </Table.Header>
-                  <Table.Body items={rows_port}>
-                    {(item) => (
-                      <Table.Row key={item.key}>
-                        {(columnKey) => (
-                          <Table.Cell>
-                            <Text color={text_Color}> {item[columnKey]}</Text>
-                          </Table.Cell>
-                        )}
-                      </Table.Row>
-                    )}
-                  </Table.Body>
-                  <Table.Pagination
-                    shadow
-                    noMargin
-                    align="center"
-                    rowsPerPage={10}
-                    onPageChange={(page) => console.log({ page })}
-                  />
-                </Table>
-              </Card.Body>
-            </Card>
-          </Grid>
-          <Grid xs={3}>
-            <MockItem text="1 of 3" />
-          </Grid>
-          <Grid xs={6}>
-            <MockItem text="2 of 3" />
-          </Grid>
-          <Grid xs={3}>
-            <MockItem text="3 of 3" />
-          </Grid>
+                  </Table>
+                </Card.Body>
+              </Card>
+            </Grid>
+          </div>
+          <div id="arp" style={{ display: "none", width: "80%" }}>
+            <Grid xs={12}>
+              <Card
+                css={{
+                  h: "100vh",
+                  $$cardColor: btn_back,
+                  width: "100%",
+                  overflowY: "visible",
+                }}
+              >
+                <Card.Body>
+                  <Table>
+                    <Table.Header columns={columns_arp}>
+                      {(column) => (
+                        <Table.Column key={column.key}>
+                          {column.label}
+                        </Table.Column>
+                      )}
+                    </Table.Header>
+                    <Table.Body items={rows_arp}>
+                      {(item) => (
+                        <Table.Row key={item.key}>
+                          {(columnKey) => (
+                            <Table.Cell>
+                              <Text color={text_Color}> {item[columnKey]}</Text>
+                            </Table.Cell>
+                          )}
+                        </Table.Row>
+                      )}
+                    </Table.Body>
+                    <Table.Pagination
+                      shadow
+                      noMargin
+                      align="center"
+                      rowsPerPage={10}
+                      onPageChange={(page) => console.log({ page })}
+                    />
+                  </Table>
+                </Card.Body>
+              </Card>
+            </Grid>
+          </div>
+          <div id="ports" style={{ display: "none", width: "80%" }}>
+            <Grid xs={12}>
+              <Card
+                css={{
+                  h: "100vh",
+                  $$cardColor: btn_back,
+                  width: "100%",
+                  overflowY: "visible",
+                }}
+              >
+                <Card.Body>
+                  <Table>
+                    <Table.Header columns={columns_port}>
+                      {(column) => (
+                        <Table.Column key={column.key}>
+                          {column.label}
+                        </Table.Column>
+                      )}
+                    </Table.Header>
+                    <Table.Body items={rows_port}>
+                      {(item) => (
+                        <Table.Row key={item.key}>
+                          {(columnKey) => (
+                            <Table.Cell>
+                              <Text color={text_Color}> {item[columnKey]}</Text>
+                            </Table.Cell>
+                          )}
+                        </Table.Row>
+                      )}
+                    </Table.Body>
+                    <Table.Pagination
+                      shadow
+                      noMargin
+                      align="center"
+                      rowsPerPage={10}
+                      onPageChange={(page) => console.log({ page })}
+                    />
+                  </Table>
+                </Card.Body>
+              </Card>
+            </Grid>
+          </div>
         </Grid.Container>
       </main>
     </>
