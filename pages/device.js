@@ -152,7 +152,7 @@ export default function Home({ all, currDev }) {
     );
   };
 
-  setInterval(refresh, 10000);
+  //  setInterval(refresh, 10000);
 
   async function refresh() {
     router.push({
