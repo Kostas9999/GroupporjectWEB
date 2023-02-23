@@ -150,8 +150,8 @@ export default function Home({ all, currDev }) {
   }
 
   async function test(id) {
+    refresh();
     let myIDs = ["charts", "disc", "events", "arp", "ports"];
-    console.log(id);
 
     myIDs.forEach((e) => {
       if (id == e) {
@@ -382,7 +382,7 @@ export default function Home({ all, currDev }) {
                       css={{ background: btn_back }}
                       className={styles.thirteen}
                     >
-                      Charts
+                      Latency
                     </Button>
                   </Row>
                   <Spacer y={1}></Spacer>
@@ -447,7 +447,7 @@ export default function Home({ all, currDev }) {
                
           */}
           <div id="charts" style={{ width: "80%" }}>
-            <Grid xs={10}>
+            <Grid xs={12}>
               <Container>
                 <Card css={{ $$cardColor: btn_back, h: "75vh" }}>
                   <Card.Body>
@@ -528,7 +528,7 @@ export default function Home({ all, currDev }) {
                
           */}
           <div id="disc" style={{ display: "none", width: "80%" }}>
-            <Grid xs={7}>
+            <Grid xs={12}>
               <Card css={{ h: "75vh", $$cardColor: btn_back, width: "100%" }}>
                 <Card.Body>
                   {disc.map((item, index) => (
@@ -549,7 +549,7 @@ export default function Home({ all, currDev }) {
             </Grid>
           </div>
           <div id="events" style={{ display: "none", width: "80%" }}>
-            <Grid xs={5}>
+            <Grid xs={12}>
               <Card
                 css={{
                   h: "100vh",
@@ -707,7 +707,9 @@ export const getServerSideProps = withIronSessionSsr(
       `select * from "${id}"."arp" ORDER BY created DESC; `
     );
     let baseline = await client.query(`select * from "${id}"."baseline"; `);
-    let disc = await client.query(`select * from "${id}"."disc"; `);
+    let disc = await client.query(
+      `select * from "${id}"."disc" ORDER BY created ASC; `
+    );
     let user = await client.query(`select * from "${id}"."user"  LIMIT 1; `);
 
     let devices = req.req.session.devices;
