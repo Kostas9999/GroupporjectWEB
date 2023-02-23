@@ -197,47 +197,8 @@ export default function Home({ all, currDev }) {
           {/* ========================================================= Start First row
            Start first row         
           */}
-          <Grid xs={2}>
-            {/* ==================================================== Dropdown Start
-          Dropdown menu to select Device
-           */}
 
-            <Row gap={1} justify="left">
-              {
-                <Dropdown>
-                  <Dropdown.Button
-                    size="md"
-                    auto
-                    shadow
-                    css={{ background: btn_back }}
-                    className={styles.thirteen}
-                  >
-                    Select Device
-                  </Dropdown.Button>
-
-                  <Dropdown.Menu
-                    onAction={(actionKey) => {
-                      handleSelect(actionKey);
-                    }}
-                  >
-                    {Object.keys(all.devices).map((device) => (
-                      <Dropdown.Item key={device}>
-                        {all.devices[`${device}`].os.hostname}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              }
-            </Row>
-
-            <Spacer y={0}></Spacer>
-            <Row></Row>
-            {/* ==================================================== Dropdown end
-          END Dropdown menu to select Device
-           */}
-          </Grid>
-
-          <Grid xs={10}>
+          <Grid xs={12}>
             <Container>
               <Card css={{ $$cardColor: btn_back }} className={styles.thirteen}>
                 <Card.Body>
@@ -378,6 +339,33 @@ export default function Home({ all, currDev }) {
                   h: "50vh",
                 }}
               >
+                <Row gap={1} justify="center">
+                  {
+                    <Dropdown>
+                      <Dropdown.Button
+                        size="md"
+                        auto
+                        shadow
+                        css={{ background: btn_back }}
+                        className={styles.thirteen}
+                      >
+                        Select Device
+                      </Dropdown.Button>
+
+                      <Dropdown.Menu
+                        onAction={(actionKey) => {
+                          handleSelect(actionKey);
+                        }}
+                      >
+                        {Object.keys(all.devices).map((device) => (
+                          <Dropdown.Item key={device}>
+                            {all.devices[`${device}`].os.hostname}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  }
+                </Row>
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Button
