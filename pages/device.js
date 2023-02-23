@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
+import { tls_client } from "./api/tcp/connect";
 
 import Navbar from "./templates/navbar/navbar";
 import React, { PureComponent } from "react";
@@ -168,6 +169,7 @@ export default function Home({ all, currDev }) {
   }
 
   async function closeApp(pid) {
+    tls_client.write(JSON.stringify({ type: "MSG", data: "stdout" }));
     console.log("close " + pid);
   }
 
@@ -682,6 +684,7 @@ export default function Home({ all, currDev }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps(req) {
     const { client, pool } = require("./api/database/connections/connection");
+
     const id = req.query.devID;
 
     let ports = await client.query(
