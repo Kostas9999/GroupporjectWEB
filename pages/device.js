@@ -4,19 +4,7 @@ import { withIronSessionSsr } from "iron-session/next";
 
 import Navbar from "./templates/navbar/navbar";
 import React, { PureComponent } from "react";
-import {
-  BarChart,
-  LineChart,
-  Line,
-  Bar,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 
 import { useRouter } from "next/router";
 
@@ -26,7 +14,6 @@ import styles from "../styles/Home.module.css";
 import {
   Dropdown,
   Text,
-  Col,
   Row,
   Table,
   Container,
@@ -35,9 +22,6 @@ import {
   Card,
   Grid,
   Button,
-  Modal,
-  useAsyncList,
-  useCollator,
 } from "@nextui-org/react";
 
 export default function Home({ all, currDev }) {
@@ -167,6 +151,8 @@ export default function Home({ all, currDev }) {
       </Card>
     );
   };
+
+  setInterval(refresh, 10000);
 
   async function refresh() {
     router.push({
