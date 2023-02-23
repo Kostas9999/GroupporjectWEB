@@ -19,8 +19,10 @@ import { Router } from "next/router";
 
 import { useRouter } from "next/router";
 
-export default function Dashboard({ user, devicesTitle }) {
+export default function Dashboard({ session, devicesTitle }) {
   devicesTitle = JSON.parse(devicesTitle);
+  session = JSON.parse(session);
+  //console.log(session.user.user_id);
 
   //
 
@@ -43,12 +45,15 @@ export default function Dashboard({ user, devicesTitle }) {
     //const name = xss(document.querySelector("#dev_ID").value);
 
     const data = {
-      dev_ID: event.target.dev_ID.value,
+      user_id: session.user.user_id,
+      dev_id: event.target.dev_ID.value,
     };
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint = "./api/add_Device";
+    console.log(JSONdata);
+
+    const endpoint = "/api/database/queries/add_Device";
 
     const options = {
       method: "POST",
@@ -113,15 +118,21 @@ export default function Dashboard({ user, devicesTitle }) {
                 color="primary"
               />
             </Modal.Body>
+
+            <Modal.Footer>
+              <Button
+                auto
+                flat
+                color="error"
+                onPress={closeHandler_getDeviceID}
+              >
+                Close
+              </Button>
+              <Button type="submit_dev_ID" auto>
+                OK
+              </Button>
+            </Modal.Footer>
           </form>
-          <Modal.Footer>
-            <Button auto flat color="error" onPress={closeHandler_getDeviceID}>
-              Close
-            </Button>
-            <Button type="submit_dev_ID" auto>
-              OK
-            </Button>
-          </Modal.Footer>
         </Modal>
 
         <Grid.Container gap={2} justify="flex-start">
@@ -150,15 +161,6 @@ export default function Dashboard({ user, devicesTitle }) {
           ))}
         </Grid.Container>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by Vercel
-        </a>
-      </footer>
     </NextUIProvider>
   );
 }
@@ -193,7 +195,7 @@ export const getServerSideProps = withIronSessionSsr(
 
     return {
       props: {
-        user: req.session.user,
+        session: JSON.stringify(req.session),
         devicesTitle: JSON.stringify(devicesTitle),
       },
     };
