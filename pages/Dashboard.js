@@ -53,7 +53,7 @@ export default function Dashboard({ session, devicesTitle }) {
 
     console.log(JSONdata);
 
-    const endpoint = "/api/database/queries/add_Device";
+    const endpoint = "/api/database/queries/device_add";
 
     const options = {
       method: "POST",
