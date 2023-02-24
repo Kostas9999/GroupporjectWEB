@@ -172,7 +172,7 @@ export default function Home({ all, currDev }) {
     
     const JSONdata = JSON.stringify({pid:pid});
 
-    const endpoint = `/api/tcp/send_tls`;
+    const endpoint = `/api/tcp/connect`;
 
     const options = {
       method: "POST",
