@@ -15,14 +15,18 @@ export default async function handler(req, res) {
     rejectUnauthorized: false,
   };
   
-  const tls_client = tls.connect(options, async () => {});
+  const tls_client = await tls.connect(options, async () => {
+    tls_client.write(JSON.stringify({ type: "MSG", data:pid }))
+  });
   
   tls_client.on("error", (e) => {
     console.log(e);
   });
-  tls_client.write(JSON.stringify({ type: "MSG", data:pid }));
+  //await tls_client.write(JSON.stringify({ type: "MSG", data:pid })).then(()=>{
+  //  tls_client.destroy()
+ // });
 
-  tls_client.end()
+// tls_client.destroy()
 }
 //tls_client.close()
 
