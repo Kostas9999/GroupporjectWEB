@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
-import { tls_client } from "./api/tcp/connect";
+
 
 import Navbar from "./templates/navbar/navbar";
 import React, { PureComponent } from "react";
@@ -169,7 +169,23 @@ export default function Home({ all, currDev }) {
   }
 
   async function closeApp(pid) {
-    tls_client.write(JSON.stringify({ type: "MSG", data: "stdout" }));
+    
+    const JSONdata = JSON.stringify({pid:pid});
+
+    const endpoint = `/api/tcp/connect`;
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSONdata,
+    };
+
+    const response = await fetch(endpoint, options);
+    console.log(response)
+    const result = await response.json();
+
+    if (result.ok) {console.log("here")}
+   
     console.log("close " + pid);
   }
 

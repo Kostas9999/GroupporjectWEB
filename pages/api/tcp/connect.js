@@ -1,5 +1,33 @@
 const tls = require("tls");
 
+export default async function handler(req, res) {
+  const pid = req.body.pid;
+
+  console.log(pid)
+  console.log("==========================================================")
+
+  const options = {
+    host: "185.38.61.93",
+    port: 57070,
+    key: key_e,
+    cert: cert_e,
+    passphrase: "MGproject",
+    rejectUnauthorized: false,
+  };
+  
+  const tls_client = tls.connect(options, async () => {});
+  
+  tls_client.on("error", (e) => {
+    console.log(e);
+  });
+  tls_client.write(JSON.stringify({ type: "MSG", data:pid }));
+
+  await res.status(200).json({
+    ok: true
+  });
+}
+
+
 let cert_e = `-----BEGIN CERTIFICATE-----
 MIIF5TCCA82gAwIBAgIUYbvF542ZadYJYcccv0A1oA4b1y0wDQYJKoZIhvcNAQEL
 BQAwgYExCzAJBgNVBAYTAklSMQ8wDQYDVQQIDAZEdWJsaW4xCzAJBgNVBAcMAlRV
@@ -92,7 +120,7 @@ sLtTB86doxZRi/LljwWDxHv+dWUZ5x83H0/AIUUb3EdLd3uD4aHPehgpVHjnxcFA
 +vJZ/ohoPRehOX56SJPO62w/Ze1+aZDfuIqN3ws5xSVs
 -----END ENCRYPTED PRIVATE KEY-----
 `;
-
+/*
 const options = {
   host: "185.38.61.93",
   port: 57070,
@@ -110,4 +138,4 @@ tls_client.on("error", (e) => {
 
 module.exports = { tls_client };
 //client.write(JSON.stringify({ type: "MSG", data: "stdout" }));
-2
+*/

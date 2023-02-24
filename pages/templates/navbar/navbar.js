@@ -163,7 +163,7 @@ export default function App(data) {
           </Navbar.Brand>
           <Navbar.Content
             id="navbarLinks"
-            css={{ display: "none" }}
+            css={{ display: "block" }}
             enableCursorHighlight
             activeColor="warning"
             hideIn="xs"
