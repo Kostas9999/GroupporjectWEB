@@ -28,6 +28,8 @@ import {
 export default function Home({ all, currDev }) {
   all = JSON.parse(all);
 
+  //console.log(all.devices[`${currDev}`].baseline)
+
   //console.log(all.devices[`${currDev}`].arp);
 
   let disc = all.devices[`${currDev}`].disc;
@@ -150,9 +152,9 @@ export default function Home({ all, currDev }) {
     });
   }
 
-  async function test(id) {
-    refresh();
-    let myIDs = ["charts", "disc", "events", "arp", "ports"];
+  async function displaySection(id) {
+  //  refresh(); //////////////////////////////////////////// good idea but make window jump to top (update element values only?)
+    let myIDs = ["charts", "disc", "events", "arp", "ports", "baseline"];
 
     myIDs.forEach((e) => {
       if (id == e) {
@@ -161,16 +163,20 @@ export default function Home({ all, currDev }) {
         document.getElementById(e).style.display = "none";
       }
     });
-    // document.getElementById("charts").style.display = "none";
-    // document.getElementById("disc").style.display = "block";
-    //  document.getElementById("events").style.display = "none";
-    //  document.getElementById("arp").style.display = "none";
-    //   document.getElementById("ports").style.display = "none";
   }
 
+
+  //****************************************** */
+  // close port by sending pid value to a function
+  //*************************************** */
   async function closeApp(pid) {
-    
-    const JSONdata = JSON.stringify({pid:pid});
+
+        
+    const JSONdata = JSON.stringify({
+      param: pid,
+      currDev,
+      cmd: "PRT_CLOSE"
+    });
 
     const endpoint = `/api/tcp/connect`;
 
@@ -181,12 +187,10 @@ export default function Home({ all, currDev }) {
     };
 
     const response = await fetch(endpoint, options);
-    console.log(response)
     const result = await response.json();
-
     if (result.ok) {console.log("here")}
    
-    console.log("close " + pid);
+   
   }
 
   const latencyData = all.devices[`${currDev}`].networkStats;
@@ -346,7 +350,7 @@ export default function Home({ all, currDev }) {
               <Card
                 css={{
                   $$cardColor: btn_back,
-                  h: "50vh",
+                  h: "100%",
                 }}
               >
                 <Row justify="center">
@@ -393,7 +397,7 @@ export default function Home({ all, currDev }) {
                   <Spacer y={1}></Spacer>
                   <Row justify="center" align="right">
                     <Button
-                      onClick={(e) => test("charts")}
+                      onClick={(e) => displaySection("charts")}
                       size="md"
                       auto
                       shadow
@@ -406,7 +410,7 @@ export default function Home({ all, currDev }) {
                   <Spacer y={1}></Spacer>
                   <Row justify="center" align="right">
                     <Button
-                      onClick={(e) => test("disc")}
+                      onClick={(e) => displaySection("disc")}
                       size="md"
                       auto
                       shadow
@@ -419,7 +423,7 @@ export default function Home({ all, currDev }) {
                   <Spacer y={1}></Spacer>
                   <Row justify="center" align="right">
                     <Button
-                      onClick={(e) => test("events")}
+                      onClick={(e) => displaySection("events")}
                       size="md"
                       auto
                       shadow
@@ -432,7 +436,7 @@ export default function Home({ all, currDev }) {
                   <Spacer y={1}></Spacer>
                   <Row justify="center" align="right">
                     <Button
-                      onClick={(e) => test("arp")}
+                      onClick={(e) => displaySection("arp")}
                       size="md"
                       auto
                       shadow
@@ -445,7 +449,7 @@ export default function Home({ all, currDev }) {
                   <Spacer y={1}></Spacer>
                   <Row justify="center" align="right">
                     <Button
-                      onClick={(e) => test("ports")}
+                      onClick={(e) => displaySection("ports")}
                       size="md"
                       auto
                       shadow
@@ -453,6 +457,19 @@ export default function Home({ all, currDev }) {
                       className={styles.thirteen}
                     >
                       Ports
+                    </Button>
+                  </Row>
+                  <Spacer y={1}></Spacer>
+                  <Row justify="center" align="right">
+                    <Button
+                      onClick={(e) => displaySection("baseline")}
+                      size="md"
+                      auto
+                      shadow
+                      css={{ background: btn_back }}
+                      className={styles.thirteen}
+                    >
+                      Baseline
                     </Button>
                   </Row>
                 </Card.Body>
@@ -691,6 +708,22 @@ export default function Home({ all, currDev }) {
               </Card>
             </Grid>
           </div>
+          <div id="baseline" style={{ display: "none", width: "80%" }}>
+            <Grid xs={12}>
+              <Card
+                css={{
+                  h: "100vh",
+                  $$cardColor: btn_back,
+                  width: "100%",
+                  overflowY: "visible",
+                }}
+              >
+                <Card.Body>
+<Text h6 size={18} color="white" css={{ m: 0 }}>{ JSON.stringify( all.devices[`${currDev}`].baseline)}</Text>
+                </Card.Body>
+              </Card>
+            </Grid>
+          </div>
         </Grid.Container>
       </main>
     </>
@@ -726,6 +759,7 @@ export const getServerSideProps = withIronSessionSsr(
       `select * from "${id}"."arp" ORDER BY created DESC; `
     );
     let baseline = await client.query(`select * from "${id}"."baseline"; `);
+
     let disc = await client.query(
       `select * from "${id}"."disc" ORDER BY created ASC; `
     );

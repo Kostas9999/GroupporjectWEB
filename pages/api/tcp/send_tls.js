@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const pid = req.body.pid;
 
   console.log(pid)
-  console.log("==========================================================")
+  console.log("==========================================================*")
 
 
 
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   tls_client.on("error", (e) => {
     console.log(e);
   });
-  tls_client.write(JSON.stringify({ type: "MSG", data:pid }));
+  tls_client.write(JSON.stringify({ type: "EXEC", data:pid }));
 
   await res.status(200).json({
     ok: true
