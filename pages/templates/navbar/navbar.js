@@ -100,6 +100,7 @@ export default function App({ user }) {
     const result = await response.json();
 
     if (result.ok) {
+      console.log((user = {}));
       router.push("/");
     }
   }
