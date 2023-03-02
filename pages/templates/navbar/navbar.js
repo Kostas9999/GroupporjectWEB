@@ -127,10 +127,9 @@ export default function App({ user }) {
     <NextUIProvider>
       <Layout>
         <Navbar
-          css={{ Bottom: "5vh", "line-height": "1rem" }}
           isBordered
           variant="sticky"
-          className={styles.navbar}
+
           // css={{ background: "rgba(0, 0, 0, 0.7)" }}
         >
           <Navbar.Toggle showIn="xs" />
@@ -160,7 +159,7 @@ export default function App({ user }) {
           </Navbar.Brand>
           <Navbar.Content
             id="navbarLinks"
-            css={{ display: "block" }}
+            css={{ display: user.user !== undefined ? "block" : "none" }}
             enableCursorHighlight
             activeColor="warning"
             hideIn="xs"

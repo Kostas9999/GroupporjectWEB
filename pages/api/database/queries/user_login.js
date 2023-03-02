@@ -12,7 +12,7 @@ async function loginRoute(req, res) {
   let rows_user = null;
   try {
     rows_user = await pool.query(
-      `SELECT * FROM "groupproject"."user" WHERE username = '${username}' LIMIT 1;`
+      `SELECT * FROM "groupproject"."user" WHERE username ILIKE '${username}' LIMIT 1;`
     );
 
     const user = rows_user.rows[0];
