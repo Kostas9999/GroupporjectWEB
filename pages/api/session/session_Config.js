@@ -5,7 +5,7 @@ export const ironOptions = {
 
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
-    domain: montool.vercel.app,
+    // domain: "montool.vercel.app",
     maxAge: undefined,
   },
 };
