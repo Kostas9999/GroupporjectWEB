@@ -12,7 +12,7 @@ import { Text } from "@nextui-org/react";
 export default function Home({ session }) {
   session = JSON.parse(session);
   let user = session.user;
-  //console.log(session.user);
+  console.log(session.user);
   return (
     <NextUIProvider>
       <Header />
