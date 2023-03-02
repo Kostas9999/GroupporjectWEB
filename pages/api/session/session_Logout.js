@@ -7,6 +7,7 @@ async function loginRoute(req, res) {
   // await res.status(200).json(req.session);
   console.log("destroy session");
   req.session = {};
+  res.setHeader("cache-control", "no-store, max-age=0");
   await req.session.destroy();
   await res.send({ ok: true });
 }
