@@ -11,6 +11,7 @@ import styles from "../../../styles/Home.module.css";
 var xss = require("xss");
 
 import {
+  Image,
   Navbar,
   Button,
   Text,
@@ -143,13 +144,19 @@ export default function App({ user }) {
           >
             <Navbar.Content hideIn="xs">
               <Navbar.Link isActive href="./">
+                <Image
+                  width={100}
+                  height={100}
+                  src="/img/ico.png"
+                  alt="monTool"
+                />
                 <Text
                   size={40}
                   css={{
                     textGradient: "45deg, $black -20%, $blue600 80%",
                   }}
                 >
-                  Logo
+                  monTool
                 </Text>
               </Navbar.Link>
               <Grid.Container>
