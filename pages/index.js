@@ -12,7 +12,7 @@ import { Text } from "@nextui-org/react";
 export default function Home({ session }) {
   session = JSON.parse(session);
   let user = session.user;
-  console.log(session.user);
+  console.log("Index top" + session.user);
   return (
     <NextUIProvider>
       <Header />
@@ -34,11 +34,7 @@ export default function Home({ session }) {
 
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
-    //  console.log(req.session);
-    //req.session.devices ;
-
-    // await req.session.save();
-
+    console.log("idex buttom " + JSON.stringify(req.session.user));
     return {
       props: {
         session: JSON.stringify(req.session),
