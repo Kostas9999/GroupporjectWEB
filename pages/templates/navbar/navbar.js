@@ -159,7 +159,9 @@ export default function App({ user }) {
           </Navbar.Brand>
           <Navbar.Content
             id="navbarLinks"
-            css={{ display: user.user !== undefined ? "block" : "none" }}
+            css={{
+              display: user?.user !== undefined ? "block" : "none",
+            }}
             enableCursorHighlight
             activeColor="warning"
             hideIn="xs"
@@ -187,7 +189,7 @@ export default function App({ user }) {
               auto
               shadow
               style={{
-                display: user.user === undefined ? "block" : "none",
+                display: user?.user === undefined ? "block" : "none",
               }}
               onClick={handler_Login}
             >
@@ -262,7 +264,7 @@ export default function App({ user }) {
               auto
               shadow
               style={{
-                display: user.user === undefined ? "block" : "none",
+                display: user?.user === undefined ? "block" : "none",
               }}
               onClick={handler_Reg}
             >
@@ -348,7 +350,9 @@ export default function App({ user }) {
             <div>
               <Dropdown placement="bottom-right">
                 <Navbar.Item
-                  css={{ display: user.user !== undefined ? "block" : "none" }}
+                  css={{
+                    display: user?.user !== undefined ? "block" : "none",
+                  }}
                 >
                   <Dropdown.Trigger>
                     <Avatar color="primary" textColor="white" />
@@ -364,10 +368,10 @@ export default function App({ user }) {
                 >
                   <Dropdown.Item key="profile" css={{ height: "$18" }}>
                     <Text b color="inherit" css={{ d: "flex" }}>
-                      {user.user?.user_name}
+                      {user?.user?.user_name}
                     </Text>
                     <Text b color="inherit" css={{ d: "flex" }}>
-                      {user.user?.user_email}
+                      {user?.user?.user_email}
                     </Text>
                   </Dropdown.Item>
                   <Dropdown.Item key="settings" withDivider>
