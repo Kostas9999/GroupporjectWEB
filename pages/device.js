@@ -2,7 +2,6 @@ import Head from "next/head";
 import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
 
-
 import Navbar from "./templates/navbar/navbar";
 import React, { PureComponent } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
@@ -27,7 +26,8 @@ import {
 
 export default function Home({ all, currDev }) {
   all = JSON.parse(all);
-
+  console.log(all);
+  let user = all.user;
   //console.log(all.devices[`${currDev}`].baseline)
 
   //console.log(all.devices[`${currDev}`].arp);
@@ -153,7 +153,7 @@ export default function Home({ all, currDev }) {
   }
 
   async function displaySection(id) {
-  //  refresh(); //////////////////////////////////////////// good idea but make window jump to top (update element values only?)
+    //  refresh(); //////////////////////////////////////////// good idea but make window jump to top (update element values only?)
     let myIDs = ["charts", "disc", "events", "arp", "ports", "baseline"];
 
     myIDs.forEach((e) => {
@@ -165,17 +165,14 @@ export default function Home({ all, currDev }) {
     });
   }
 
-
   //****************************************** */
   // close port by sending pid value to a function
   //*************************************** */
   async function closeApp(pid) {
-
-        
     const JSONdata = JSON.stringify({
       param: pid,
       currDev,
-      cmd: "PRT_CLOSE"
+      cmd: "PRT_CLOSE",
     });
 
     const endpoint = `/api/tcp/connect`;
@@ -188,9 +185,9 @@ export default function Home({ all, currDev }) {
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
-    if (result.ok) {console.log("here")}
-   
-   
+    if (result.ok) {
+      console.log("here");
+    }
   }
 
   const latencyData = all.devices[`${currDev}`].networkStats;
@@ -203,7 +200,7 @@ export default function Home({ all, currDev }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <Navbar />
+        <Navbar user={{ user }} />
 
         <Spacer y={1}></Spacer>
 
@@ -719,7 +716,9 @@ export default function Home({ all, currDev }) {
                 }}
               >
                 <Card.Body>
-<Text h6 size={18} color="white" css={{ m: 0 }}>{ JSON.stringify( all.devices[`${currDev}`].baseline)}</Text>
+                  <Text h6 size={18} color="white" css={{ m: 0 }}>
+                    {JSON.stringify(all.devices[`${currDev}`].baseline)}
+                  </Text>
                 </Card.Body>
               </Card>
             </Grid>

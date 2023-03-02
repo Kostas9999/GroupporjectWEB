@@ -4,7 +4,7 @@ import { Password } from "../../../public/templates/navbar/js/Password";
 import { useRouter } from "next/router";
 import { Link, Avatar, Dropdown } from "@nextui-org/react";
 import { Layout } from "../../../public/templates/navbar/Layout.js";
-import Cookies from "js-cookie";
+
 import { NextUIProvider } from "@nextui-org/react";
 import styles from "../../../styles/Home.module.css";
 
@@ -20,7 +20,7 @@ import {
   Spacer,
 } from "@nextui-org/react";
 
-export default function App(data) {
+export default function App({ user }) {
   let value = "";
   const handleSelect = (e) => {
     if (e == "logout") {
@@ -96,9 +96,6 @@ export default function App(data) {
   }
 
   async function logout() {
-    Cookies.remove("username");
-    Cookies.remove("email");
-    Cookies.remove("devices");
     const response = await fetch("/api/session/session_Logout");
     const result = await response.json();
 
@@ -191,7 +188,7 @@ export default function App(data) {
               auto
               shadow
               style={{
-                display: Cookies.get("username") == null ? "block" : "none",
+                display: user.user === undefined ? "block" : "none",
               }}
               onClick={handler_Login}
             >
@@ -266,7 +263,7 @@ export default function App(data) {
               auto
               shadow
               style={{
-                display: Cookies.get("username") == null ? "block" : "none",
+                display: user.user === undefined ? "block" : "none",
               }}
               onClick={handler_Reg}
             >
@@ -349,9 +346,11 @@ export default function App(data) {
               </form>
             </Modal>
 
-            <div css={{ display: "none" }}>
-              <Dropdown css={{ display: "none" }} placement="bottom-right">
-                <Navbar.Item>
+            <div>
+              <Dropdown placement="bottom-right">
+                <Navbar.Item
+                  css={{ display: user.user !== undefined ? "block" : "none" }}
+                >
                   <Dropdown.Trigger>
                     <Avatar color="primary" textColor="white" />
                   </Dropdown.Trigger>
@@ -366,10 +365,10 @@ export default function App(data) {
                 >
                   <Dropdown.Item key="profile" css={{ height: "$18" }}>
                     <Text b color="inherit" css={{ d: "flex" }}>
-                      {Cookies.get("username")}
+                      {user.user?.user_name}
                     </Text>
                     <Text b color="inherit" css={{ d: "flex" }}>
-                      {Cookies.get("email")}
+                      {user.user?.user_email}
                     </Text>
                   </Dropdown.Item>
                   <Dropdown.Item key="settings" withDivider>

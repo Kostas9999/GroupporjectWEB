@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 export default function Dashboard({ session, devicesTitle }) {
   devicesTitle = JSON.parse(devicesTitle);
   session = JSON.parse(session);
+  let user = session.user;
   //console.log(session.user.user_id);
 
   //
@@ -72,7 +73,7 @@ export default function Dashboard({ session, devicesTitle }) {
   return (
     <NextUIProvider>
       <main className={styles.main}>
-        <Navbar />
+        <Navbar user={{ user }} />
         <Header />
         <Spacer y={1}></Spacer>
 
