@@ -385,7 +385,7 @@ export default function Home({ all, currDev }) {
                       size="md"
                       auto
                       shadow
-                      css={{ background: btn_back }}
+                      css={{ background: btn_back, width: "15vh" }}
                       className={styles.thirteen}
                     >
                       Refresh
@@ -398,7 +398,7 @@ export default function Home({ all, currDev }) {
                       size="md"
                       auto
                       shadow
-                      css={{ background: btn_back }}
+                      css={{ background: btn_back, width: "15vh" }}
                       className={styles.thirteen}
                     >
                       Latency
@@ -411,7 +411,7 @@ export default function Home({ all, currDev }) {
                       size="md"
                       auto
                       shadow
-                      css={{ background: btn_back }}
+                      css={{ background: btn_back, width: "15vh" }}
                       className={styles.thirteen}
                     >
                       HDD
@@ -424,7 +424,7 @@ export default function Home({ all, currDev }) {
                       size="md"
                       auto
                       shadow
-                      css={{ background: btn_back }}
+                      css={{ background: btn_back, width: "15vh" }}
                       className={styles.thirteen}
                     >
                       Events
@@ -437,7 +437,7 @@ export default function Home({ all, currDev }) {
                       size="md"
                       auto
                       shadow
-                      css={{ background: btn_back }}
+                      css={{ background: btn_back, width: "15vh" }}
                       className={styles.thirteen}
                     >
                       ARP
@@ -450,7 +450,7 @@ export default function Home({ all, currDev }) {
                       size="md"
                       auto
                       shadow
-                      css={{ background: btn_back }}
+                      css={{ background: btn_back, width: "15vh" }}
                       className={styles.thirteen}
                     >
                       Ports
@@ -463,7 +463,7 @@ export default function Home({ all, currDev }) {
                       size="md"
                       auto
                       shadow
-                      css={{ background: btn_back }}
+                      css={{ background: btn_back, width: "15vh" }}
                       className={styles.thirteen}
                     >
                       Baseline
