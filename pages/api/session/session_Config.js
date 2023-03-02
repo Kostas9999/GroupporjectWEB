@@ -1,6 +1,7 @@
 export const ironOptions = {
-  cookieName: "MoonTool_cookie",
-  password: "sfdfsdfsdfsdfsfdfsddfsdfsdfsdfsfdfsddfsdfsdfsdfsfdfsddfsdfsdfsdfsfdfsdf",//process.env.SESSION_KEY,
+  cookieName: "MonTool_cookie",
+  password:
+    "sfdfsdfsdfsdfsfdfsddfsdfsdfsdfsfdfsddfsdfsdfsdfsfdfsddfsdfsdfsdfsfdfsdf", //process.env.SESSION_KEY,
 
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
