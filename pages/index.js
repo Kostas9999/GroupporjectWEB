@@ -15,9 +15,9 @@ export default function Home({ session }) {
 
   return (
     <NextUIProvider>
-      <Header />
+     <Navbar user={{ user }}  />
       <main className={styles.main}>
-        <Navbar user={{ user }} />
+        
         <Text
           size={70}
           css={{

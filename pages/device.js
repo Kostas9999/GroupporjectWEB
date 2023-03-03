@@ -12,6 +12,9 @@ import { NextUIProvider } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
 
 import {
+  Collapse,
+  Input,
+  Modal,
   Dropdown,
   Text,
   Row,
@@ -77,7 +80,7 @@ export default function Home({ all, currDev }) {
       created: dateTimeFormater(item.created),
       action: (
         <Button
-          onClick={(e) => closeApp(item.pid, e)}
+          onClick={(e) => closeApp("PRT_CLOSE",item.pid)}
           auto
           ghost
           color="error"
@@ -168,11 +171,13 @@ export default function Home({ all, currDev }) {
   //****************************************** */
   // close port by sending pid value to a function
   //*************************************** */
-  async function closeApp(pid) {
+  async function closeApp(type, param) {
+    console.log(type)
+    console.log(param)
     const JSONdata = JSON.stringify({
-      param: pid,
+      param: param,
       currDev,
-      cmd: "PRT_CLOSE",
+      cmd: type,
     });
 
     const endpoint = `/api/tcp/connect`;
@@ -191,6 +196,18 @@ export default function Home({ all, currDev }) {
   }
 
   const latencyData = all.devices[`${currDev}`].networkStats;
+  const [visible_Reg, setVisible_Power] = React.useState(false);
+  const handler_Power = () => setVisible_Power(true);
+
+  const closeHandler_Reg = () => {
+    
+    setVisible_Power(false);
+
+  };
+
+ 
+
+
 
   return (
     <>
@@ -469,6 +486,65 @@ export default function Home({ all, currDev }) {
                       Baseline
                     </Button>
                   </Row>
+                  <Spacer y={1}></Spacer>
+                  <Row justify="center" align="right">
+                    <Button
+                     onClick={handler_Power}
+                      
+                      size="md"
+                      auto
+                      shadow
+                      css={{ background: "red", width: "15vh" }}
+                      className={styles.thirteen}
+                    >
+                      Power
+                    </Button>
+                  </Row>
+                  <Modal
+              closeButton
+              blur
+              aria-labelledby="modal-title_Reg"
+              open={visible_Reg}
+              onClose={closeHandler_Reg}
+            >
+              <Modal.Header>
+               
+                
+                  <Text b size={24}  css={{color:"red"}}>
+                    Power
+                  </Text>
+                  
+            
+              </Modal.Header>
+              <Card.Divider />
+                <Modal.Body>
+             
+
+                </Modal.Body>
+                <Modal.Footer>
+                <Button                  
+                  onClick={(e) => closeApp("PWR_MNG","RESTART")}
+                  auto                  
+                  color="primary"
+                  bordered
+                  ghost 
+         >
+                    Restart
+                  </Button>
+
+                  <Button   
+                  ghost               
+                  onClick={(e) => closeApp("PWR_MNG","SHUTDOWN")}
+                  auto                  
+                  color="error"
+                  bordered
+         >
+                    Shutdown
+                  </Button>
+                </Modal.Footer>
+             
+            </Modal>
+           
                 </Card.Body>
               </Card>
             </Container>
@@ -706,6 +782,41 @@ export default function Home({ all, currDev }) {
             </Grid>
           </div>
           <div id="baseline" style={{ display: "none", width: "80%" }}>
+
+
+          <Grid.Container gap={2}>
+
+      <Grid >
+        <Collapse.Group bordered >
+          <Collapse css={{color:"white"}} 
+          title={<Text  size={35} css={{ color:"white"}}>{all.devices[`${currDev}`].baseline[0].defaultgateway} </Text>}
+          subtitle="Click for more">
+             <Text color="white"> text</Text>
+          </Collapse>
+          <Collapse title="Option B">
+            <Text>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </Text>
+          </Collapse>
+          <Collapse title="Option C">
+            <Text>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </Text>
+          </Collapse>
+        </Collapse.Group>
+      </Grid>
+    </Grid.Container>
+
+
+          
+
+
             <Grid xs={12}>
               <Card
                 css={{

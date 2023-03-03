@@ -9,6 +9,7 @@ export default withIronSessionApiRoute(handler, ironOptions);
   const device = req.body.currDev;
   const user = req.session.user.user_id;
 
+  console.log(`${cmd}, ${param}, ${device}, ${user}`)
 
   let data = {
     cmd,param,device,user
