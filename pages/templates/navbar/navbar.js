@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { Link, Avatar, Dropdown } from "@nextui-org/react";
 import { Layout } from "../../../public/templates/navbar/Layout.js";
 
-
 import { NextUIProvider } from "@nextui-org/react";
 import styles from "../../../styles/Home.module.css";
 
@@ -107,8 +106,6 @@ export default function App({ user }) {
     }
   }
 
- 
-
   const [visible_Login, setVisible_Login] = React.useState(false);
   const [visible_Reg, setVisible_Reg] = React.useState(false);
 
@@ -125,35 +122,39 @@ export default function App({ user }) {
   const collapseItems = ["Dashboard"];
 
   return (
-<NextUIProvider>
-
-    <Layout>
-    <Navbar isCompact  isBordered variant="sticky" css={{backgroundColor:"rgba(0, 0, 0, 0.7)"}}>
-       <Navbar.Brand
+    <NextUIProvider>
+      <Layout>
+        <Navbar
+          isCompact
+          isBordered
+          variant="sticky"
+          css={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+        >
+          <Navbar.Brand
             css={{
               "@xs": {
                 w: "12%",
               },
             }}
           >
- <Link href="./">
-            <Image
-                  width={120}
-                  height={120}
-                  src="/img/ico.png"
-                  alt="monTool"
-                />
-                <Text
-                  size={30}
-                  css={{
-                    textGradient: "45deg, $black -20%, $blue600 80%",
-                  }}
-                >
-                  monTool
-                </Text>
-                </Link>
-      </Navbar.Brand>
-      <Navbar.Content
+            <Link href="./">
+              <Image
+                width={120}
+                height={120}
+                src="/img/ico.png"
+                alt="monTool"
+              />
+              <Text
+                size={30}
+                css={{
+                  textGradient: "45deg, $black -20%, $blue600 80%",
+                }}
+              >
+                monTool
+              </Text>
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Content
             id="navbarLinks"
             css={{
               display: user?.user !== undefined ? "block" : "none",
@@ -163,10 +164,9 @@ export default function App({ user }) {
             hideIn="xs"
             variant="highlight"
           >
-        <Navbar.Link href="./Dashboard">Dashboard</Navbar.Link>
-       
-      </Navbar.Content>
-      <Navbar.Content
+            <Navbar.Link href="./Dashboard">Dashboard</Navbar.Link>
+          </Navbar.Content>
+          <Navbar.Content
             css={{
               "@xs": {
                 w: "12%",
@@ -174,7 +174,7 @@ export default function App({ user }) {
               },
             }}
           >
-      <Button
+            <Button
               id="login"
               auto
               shadow
@@ -186,7 +186,6 @@ export default function App({ user }) {
               Login
             </Button>
 
-            
             <Modal
               closeButton
               blur
@@ -249,22 +248,20 @@ export default function App({ user }) {
                 </Modal.Footer>
               </form>
             </Modal>
-        <Navbar.Item>
-        <Button
-              id="Register"
-              auto
-              shadow
-              style={{
-                display: user?.user === undefined ? "block" : "none",
-              }}
-              onClick={handler_Reg}
-            >
-              Register
-            </Button>
-
-            
-        </Navbar.Item>
-        <Modal
+            <Navbar.Item>
+              <Button
+                id="Register"
+                auto
+                shadow
+                style={{
+                  display: user?.user === undefined ? "block" : "none",
+                }}
+                onClick={handler_Reg}
+              >
+                Register
+              </Button>
+            </Navbar.Item>
+            <Modal
               closeButton
               blur
               aria-labelledby="modal-title_Reg"
@@ -340,18 +337,17 @@ export default function App({ user }) {
                 </Modal.Footer>
               </form>
             </Modal>
-           
+
             <Navbar.Item
-                  css={{
-                    display: user?.user !== undefined ? "block" : "none",
-                  }}
-                >
-            <Dropdown placement="bottom-right">
-             
-                  <Dropdown.Trigger>
-                    <Avatar color="primary" textColor="white" />
-                  </Dropdown.Trigger>            
-                
+              css={{
+                display: user?.user !== undefined ? "block" : "none",
+              }}
+            >
+              <Dropdown placement="bottom-right">
+                <Dropdown.Trigger>
+                  <Avatar color="primary" textColor="white" />
+                </Dropdown.Trigger>
+
                 <Dropdown.Menu
                   disabledKeys={["settings", "system", "configurations"]}
                   aria-label="User menu actions"
@@ -383,17 +379,14 @@ export default function App({ user }) {
                 </Dropdown.Menu>
               </Dropdown>
             </Navbar.Item>
-      </Navbar.Content>
-    </Navbar>
-  </Layout>
-
-  
-  </NextUIProvider>
-   
+          </Navbar.Content>
+        </Navbar>
+      </Layout>
+    </NextUIProvider>
   );
 }
 
-     /*
+/*
         <Navbar
          isCompact isBordered variant="sticky"
          blur
