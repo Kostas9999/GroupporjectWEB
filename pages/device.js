@@ -4,7 +4,7 @@ import { withIronSessionSsr } from "iron-session/next";
 
 import Navbar from "./templates/navbar/navbar";
 import React, { PureComponent } from "react";
-import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { NotificationIcon } from "../public/img/js/notification";
 
 import { useRouter } from "next/router";
@@ -544,13 +544,6 @@ export default function Home({ all, currDev }) {
               <Container>
                 <Card css={{ $$cardColor: btn_back, h: "75vh" }}>
                   <Card.Body>
-                    <Text h6 size={15} color="red" css={{ m: 0 }}>
-                      Local Latency
-                    </Text>
-                    <Spacer y={0}></Spacer>
-                    <Text h6 size={15} color="#8884d8" css={{ m: 0 }}>
-                      Public Latency
-                    </Text>
                     <Row justify="center" align="right">
                       <LineChart
                         syncId="anyId"
@@ -572,18 +565,17 @@ export default function Home({ all, currDev }) {
                           dot={false}
                         />
 
-                        <XAxis dataKey="created" />
+                        <XAxis dataKey="created" tick={false} />
                         <YAxis dataKey="publiclatency" domain={[0, 100]} />
                         <Tooltip />
+                        <Legend
+                          layout="horizontal"
+                          verticalAlign="top"
+                          align="center"
+                        />
                       </LineChart>
                     </Row>
-                    <Text h6 size={15} color="red" css={{ m: 0 }}>
-                      CPU
-                    </Text>{" "}
-                    <Spacer y={0}></Spacer>
-                    <Text h6 size={15} color="#8884d8" css={{ m: 0 }}>
-                      RAM
-                    </Text>
+
                     <Row justify="center" align="right">
                       <LineChart
                         syncId="anyId"
@@ -604,9 +596,14 @@ export default function Home({ all, currDev }) {
                           dot={false}
                         />
 
-                        <XAxis dataKey="created" />
+                        <XAxis dataKey="created" tick={false} />
                         <YAxis dataKey="publiclatency" domain={[0, 100]} />
                         <Tooltip />
+                        <Legend
+                          layout="horizontal"
+                          verticalAlign="top"
+                          align="center"
+                        />
                       </LineChart>
                     </Row>
                   </Card.Body>
@@ -766,150 +763,124 @@ export default function Home({ all, currDev }) {
               </Card>
             </Grid>
           </div>
+          {/*=========================================================================================  Baseline */}
           <div id="baseline" style={{ display: "none", width: "80%" }}>
-            <Grid.Container>
-              <Grid xs={12}>
-                <Card
-                  css={{ $$cardColor: btn_back }}
-                  className={styles.thirteen}
-                >
-                  <Text color={text_Color}>
-                    Baseline for{" "}
-                    {all.devices[`${currDev}`].baseline[0].defaultgateway}{" "}
-                    Gateway
-                  </Text>
-                  <Card.Body>
-                    <Row justify="center" align="right">
-                      <Card css={{ $$cardColor: btn_back }} xs={4}>
-                        <Text color={text_Color}>RAM</Text>
-                        <Switch
-                          checked={true}
-                          size="sm"
-                          color="success"
-                          icon={<NotificationIcon />}
-                        />
-                        <Card.Body>
-                          <Row justify="Left" align="right">
-                            <Text color={text_Color}>
-                              Total:{" "}
-                              {formatBytes(
-                                Math.ceil(
-                                  all.devices[`${currDev}`].hardware[0]
-                                    .totalmemory
-                                )
-                              )}
-                            </Text>{" "}
-                          </Row>
-                          <Row justify="Left" align="right">
-                            <Text color={text_Color}>
-                              Avg usage:{" "}
-                              {all.devices[`${currDev}`].baseline[0].memoryuses}{" "}
-                              %
-                            </Text>
-                          </Row>
-                          <Row justify="Left" align="right">
-                            <Text color={text_Color}>
-                              Threshold:{" "}
-                              {
-                                all.devices[`${currDev}`].baseline[0]
-                                  .memoryuses_t
-                              }{" "}
-                              %
-                            </Text>
-                          </Row>
-                        </Card.Body>
-                      </Card>
-                      <Card css={{ $$cardColor: btn_back }} xs={4}>
-                        <Text color={text_Color}>Latency</Text>
-                        <Card.Body>
-                          <Row justify="Left" align="right">
-                            <Text color={text_Color}>
-                              Avg Local Latency:{" "}
-                              {
-                                all.devices[`${currDev}`].baseline[0]
-                                  .locallatency
-                              }{" "}
-                              ms
-                            </Text>
-                          </Row>
-                          <Row justify="Left" align="right">
-                            <Text color={text_Color}>
-                              Avg Public Latency:{" "}
-                              {
-                                all.devices[`${currDev}`].baseline[0]
-                                  .publiclatency
-                              }{" "}
-                              ms
-                            </Text>
-                          </Row>
-                          <Row justify="Left" align="right">
-                            <Text color={text_Color}>
-                              Local Latency Threshold:{" "}
-                              {
-                                all.devices[`${currDev}`].baseline[0]
-                                  .locallatency_t
-                              }{" "}
-                              %
-                            </Text>
-                          </Row>
-                          <Row justify="Left" align="right">
-                            <Text color={text_Color}>
-                              Local Latency Threshold:{" "}
-                              {
-                                all.devices[`${currDev}`].baseline[0]
-                                  .locallatency_t
-                              }{" "}
-                              %
-                            </Text>
-                          </Row>
-                        </Card.Body>
-                      </Card>
-                      <Card css={{ $$cardColor: btn_back }} xs={4}>
-                        <Text color={text_Color}>Period</Text>
-                        <Card.Body>
-                          <Row justify="Left" align="right">
-                            <Text color={text_Color}>
-                              From:{" "}
-                              {dateTimeFormater(
-                                all.devices[`${currDev}`].baseline[0]
-                                  .collectedfrom
-                              )}{" "}
-                            </Text>
-                          </Row>
-                          <Row justify="Left" align="right">
-                            <Text color={text_Color}>
-                              Period:{" "}
-                              {
-                                all.devices[`${currDev}`].baseline[0]
-                                  .collectionperiod
-                              }{" "}
-                              days
-                            </Text>
-                          </Row>
-                        </Card.Body>
-                      </Card>
-                    </Row>
-                  </Card.Body>
-                </Card>
-              </Grid>
-            </Grid.Container>
+            {all.devices[`${currDev}`].baseline.map((baseline) => (
+              <Grid.Container>
+                <Grid xs={12}>
+                  <Card
+                    css={{ $$cardColor: btn_back }}
+                    className={styles.thirteen}
+                  >
+                    <Spacer y={1}></Spacer>
+                    <Text color={text_Color}>
+                      Baseline for {baseline.defaultgateway} Gateway
+                    </Text>
 
-            <Grid xs={12}>
-              <Card
-                css={{
-                  h: "100vh",
-                  $$cardColor: btn_back,
-                  width: "100%",
-                  overflowY: "visible",
-                }}
-              >
-                <Card.Body>
-                  <Text h6 size={18} color="white" css={{ m: 0 }}>
-                    {JSON.stringify(all.devices[`${currDev}`].baseline)}
-                  </Text>
-                </Card.Body>
-              </Card>
-            </Grid>
+                    <Card.Body>
+                      <Row justify="center" align="right">
+                        <Card css={{ $$cardColor: btn_back }} xs={4}>
+                          <Text h4 color={text_Color}>
+                            RAM
+                          </Text>
+
+                          <Card.Body>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                Total:{" "}
+                                {formatBytes(
+                                  Math.ceil(
+                                    all.devices[`${currDev}`].hardware[0]
+                                      .totalmemory
+                                  )
+                                )}
+                              </Text>{" "}
+                            </Row>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                Avg usage: {baseline.memoryuses} %
+                              </Text>
+                            </Row>
+                          </Card.Body>
+                        </Card>
+                        <Card css={{ $$cardColor: btn_back }} xs={4}>
+                          <Text h4 color={text_Color}>
+                            Latency
+                          </Text>
+                          <Card.Body>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                Avg Local Latency: {baseline.locallatency} ms
+                              </Text>
+                            </Row>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                Avg Public Latency: {baseline.publiclatency} ms
+                              </Text>
+                            </Row>
+                          </Card.Body>
+                        </Card>
+                        <Card css={{ $$cardColor: btn_back }} xs={4}>
+                          <Text h4 color={text_Color}>
+                            Period
+                          </Text>
+                          <Card.Body>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                From: {dateTimeFormater(baseline.collectedfrom)}{" "}
+                              </Text>
+                            </Row>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                Period: {baseline.collectionperiod} days
+                              </Text>
+                            </Row>
+                          </Card.Body>
+                        </Card>
+                      </Row>
+                      <Row>
+                        <Card css={{ $$cardColor: btn_back }} xs={12}>
+                          <Text h4 color={text_Color}>
+                            Ports
+                          </Text>
+                          <Card.Body>
+                            <Text color={text_Color}>
+                              {baseline.ports.replaceAll(",", ", ")}{" "}
+                            </Text>
+                          </Card.Body>
+                        </Card>
+                      </Row>
+
+                      <Row>
+                        <Card css={{ $$cardColor: btn_back }} xs={12}>
+                          <Text h4 color={text_Color}>
+                            Neighbours
+                          </Text>
+                          <Card.Body>
+                            <Text color={text_Color}>
+                              {baseline.neighbours.replaceAll(",", ",\n ")}{" "}
+                            </Text>
+                          </Card.Body>
+                        </Card>
+                      </Row>
+                      <Button
+                        onClick={refresh}
+                        size="sm"
+                        auto
+                        shadow
+                        css={{ background: "yellow", width: "50vh" }}
+                        className={styles.thirteen}
+                        justify="right"
+                        align="right"
+                      >
+                        Export*
+                      </Button>
+                    </Card.Body>
+                  </Card>
+                </Grid>
+                <Spacer y={3}></Spacer>
+              </Grid.Container>
+            ))}
           </div>
         </Grid.Container>
       </main>
