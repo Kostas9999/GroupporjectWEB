@@ -1,5 +1,4 @@
 import Navbar from "./templates/navbar/navbar";
-import Header from "./templates/header";
 import Footer from "./templates/footer";
 
 import { ironOptions } from "./api/session/session_Config";
@@ -15,9 +14,8 @@ export default function Home({ session }) {
 
   return (
     <NextUIProvider>
-     <Navbar user={{ user }}  />
       <main className={styles.main}>
-        
+        <Navbar user={{ user }} />
         <Text
           size={70}
           css={{

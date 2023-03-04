@@ -5,6 +5,7 @@ import { withIronSessionSsr } from "iron-session/next";
 import Navbar from "./templates/navbar/navbar";
 import React, { PureComponent } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
+import { NotificationIcon } from "../public/img/js/notification";
 
 import { useRouter } from "next/router";
 
@@ -13,7 +14,7 @@ import styles from "../styles/Home.module.css";
 
 import {
   Collapse,
-  Input,
+  Switch,
   Modal,
   Dropdown,
   Text,
@@ -80,7 +81,7 @@ export default function Home({ all, currDev }) {
       created: dateTimeFormater(item.created),
       action: (
         <Button
-          onClick={(e) => closeApp("PRT_CLOSE",item.pid)}
+          onClick={(e) => closeApp("PRT_CLOSE", item.pid)}
           auto
           ghost
           color="error"
@@ -172,8 +173,8 @@ export default function Home({ all, currDev }) {
   // close port by sending pid value to a function
   //*************************************** */
   async function closeApp(type, param) {
-    console.log(type)
-    console.log(param)
+    console.log(type);
+    console.log(param);
     const JSONdata = JSON.stringify({
       param: param,
       currDev,
@@ -200,14 +201,8 @@ export default function Home({ all, currDev }) {
   const handler_Power = () => setVisible_Power(true);
 
   const closeHandler_Reg = () => {
-    
     setVisible_Power(false);
-
   };
-
- 
-
-
 
   return (
     <>
@@ -489,8 +484,7 @@ export default function Home({ all, currDev }) {
                   <Spacer y={1}></Spacer>
                   <Row justify="center" align="right">
                     <Button
-                     onClick={handler_Power}
-                      
+                      onClick={handler_Power}
                       size="md"
                       auto
                       shadow
@@ -501,50 +495,41 @@ export default function Home({ all, currDev }) {
                     </Button>
                   </Row>
                   <Modal
-              closeButton
-              blur
-              aria-labelledby="modal-title_Reg"
-              open={visible_Reg}
-              onClose={closeHandler_Reg}
-            >
-              <Modal.Header>
-               
-                
-                  <Text b size={24}  css={{color:"red"}}>
-                    Power
-                  </Text>
-                  
-            
-              </Modal.Header>
-              <Card.Divider />
-                <Modal.Body>
-             
+                    closeButton
+                    blur
+                    aria-labelledby="modal-title_Reg"
+                    open={visible_Reg}
+                    onClose={closeHandler_Reg}
+                  >
+                    <Modal.Header>
+                      <Text b size={24} css={{ color: "red" }}>
+                        Power
+                      </Text>
+                    </Modal.Header>
+                    <Card.Divider />
+                    <Modal.Body></Modal.Body>
+                    <Modal.Footer>
+                      <Button
+                        onClick={(e) => closeApp("PWR_MNG", "RESTART")}
+                        auto
+                        color="primary"
+                        bordered
+                        ghost
+                      >
+                        Restart
+                      </Button>
 
-                </Modal.Body>
-                <Modal.Footer>
-                <Button                  
-                  onClick={(e) => closeApp("PWR_MNG","RESTART")}
-                  auto                  
-                  color="primary"
-                  bordered
-                  ghost 
-         >
-                    Restart
-                  </Button>
-
-                  <Button   
-                  ghost               
-                  onClick={(e) => closeApp("PWR_MNG","SHUTDOWN")}
-                  auto                  
-                  color="error"
-                  bordered
-         >
-                    Shutdown
-                  </Button>
-                </Modal.Footer>
-             
-            </Modal>
-           
+                      <Button
+                        ghost
+                        onClick={(e) => closeApp("PWR_MNG", "SHUTDOWN")}
+                        auto
+                        color="error"
+                        bordered
+                      >
+                        Shutdown
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
                 </Card.Body>
               </Card>
             </Container>
@@ -782,40 +767,132 @@ export default function Home({ all, currDev }) {
             </Grid>
           </div>
           <div id="baseline" style={{ display: "none", width: "80%" }}>
-
-
-          <Grid.Container gap={2}>
-
-      <Grid >
-        <Collapse.Group bordered >
-          <Collapse css={{color:"white"}} 
-          title={<Text  size={35} css={{ color:"white"}}>{all.devices[`${currDev}`].baseline[0].defaultgateway} </Text>}
-          subtitle="Click for more">
-             <Text color="white"> text</Text>
-          </Collapse>
-          <Collapse title="Option B">
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </Collapse>
-          <Collapse title="Option C">
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </Collapse>
-        </Collapse.Group>
-      </Grid>
-    </Grid.Container>
-
-
-          
-
+            <Grid.Container>
+              <Grid xs={12}>
+                <Card
+                  css={{ $$cardColor: btn_back }}
+                  className={styles.thirteen}
+                >
+                  <Text color={text_Color}>
+                    Baseline for{" "}
+                    {all.devices[`${currDev}`].baseline[0].defaultgateway}{" "}
+                    Gateway
+                  </Text>
+                  <Card.Body>
+                    <Row justify="center" align="right">
+                      <Card css={{ $$cardColor: btn_back }} xs={4}>
+                        <Text color={text_Color}>RAM</Text>
+                        <Switch
+                          checked={true}
+                          size="sm"
+                          color="success"
+                          icon={<NotificationIcon />}
+                        />
+                        <Card.Body>
+                          <Row justify="Left" align="right">
+                            <Text color={text_Color}>
+                              Total:{" "}
+                              {formatBytes(
+                                Math.ceil(
+                                  all.devices[`${currDev}`].hardware[0]
+                                    .totalmemory
+                                )
+                              )}
+                            </Text>{" "}
+                          </Row>
+                          <Row justify="Left" align="right">
+                            <Text color={text_Color}>
+                              Avg usage:{" "}
+                              {all.devices[`${currDev}`].baseline[0].memoryuses}{" "}
+                              %
+                            </Text>
+                          </Row>
+                          <Row justify="Left" align="right">
+                            <Text color={text_Color}>
+                              Threshold:{" "}
+                              {
+                                all.devices[`${currDev}`].baseline[0]
+                                  .memoryuses_t
+                              }{" "}
+                              %
+                            </Text>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                      <Card css={{ $$cardColor: btn_back }} xs={4}>
+                        <Text color={text_Color}>Latency</Text>
+                        <Card.Body>
+                          <Row justify="Left" align="right">
+                            <Text color={text_Color}>
+                              Avg Local Latency:{" "}
+                              {
+                                all.devices[`${currDev}`].baseline[0]
+                                  .locallatency
+                              }{" "}
+                              ms
+                            </Text>
+                          </Row>
+                          <Row justify="Left" align="right">
+                            <Text color={text_Color}>
+                              Avg Public Latency:{" "}
+                              {
+                                all.devices[`${currDev}`].baseline[0]
+                                  .publiclatency
+                              }{" "}
+                              ms
+                            </Text>
+                          </Row>
+                          <Row justify="Left" align="right">
+                            <Text color={text_Color}>
+                              Local Latency Threshold:{" "}
+                              {
+                                all.devices[`${currDev}`].baseline[0]
+                                  .locallatency_t
+                              }{" "}
+                              %
+                            </Text>
+                          </Row>
+                          <Row justify="Left" align="right">
+                            <Text color={text_Color}>
+                              Local Latency Threshold:{" "}
+                              {
+                                all.devices[`${currDev}`].baseline[0]
+                                  .locallatency_t
+                              }{" "}
+                              %
+                            </Text>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                      <Card css={{ $$cardColor: btn_back }} xs={4}>
+                        <Text color={text_Color}>Period</Text>
+                        <Card.Body>
+                          <Row justify="Left" align="right">
+                            <Text color={text_Color}>
+                              From:{" "}
+                              {dateTimeFormater(
+                                all.devices[`${currDev}`].baseline[0]
+                                  .collectedfrom
+                              )}{" "}
+                            </Text>
+                          </Row>
+                          <Row justify="Left" align="right">
+                            <Text color={text_Color}>
+                              Period:{" "}
+                              {
+                                all.devices[`${currDev}`].baseline[0]
+                                  .collectionperiod
+                              }{" "}
+                              days
+                            </Text>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                    </Row>
+                  </Card.Body>
+                </Card>
+              </Grid>
+            </Grid.Container>
 
             <Grid xs={12}>
               <Card

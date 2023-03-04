@@ -2,7 +2,7 @@ import React from "react";
 import { Mail } from "../../../public/templates/navbar/js/Mail";
 import { Password } from "../../../public/templates/navbar/js/Password";
 import { useRouter } from "next/router";
-import { Link, Avatar, Dropdown } from "@nextui-org/react";
+import { Avatar, Dropdown } from "@nextui-org/react";
 import { Layout } from "../../../public/templates/navbar/Layout.js";
 
 import { NextUIProvider } from "@nextui-org/react";
@@ -17,7 +17,8 @@ import {
   Text,
   Modal,
   Input,
-  Grid,
+  Link,
+  User,
   Spacer,
 } from "@nextui-org/react";
 
@@ -128,7 +129,10 @@ export default function App({ user }) {
           isCompact
           isBordered
           variant="sticky"
-          css={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+          css={{
+            $$navbarBackgroundColor: "transparent",
+            $$navbarBlurBackgroundColor: "transparent",
+          }}
         >
           <Navbar.Brand
             css={{
@@ -164,7 +168,9 @@ export default function App({ user }) {
             hideIn="xs"
             variant="highlight"
           >
-            <Navbar.Link href="./Dashboard">Dashboard</Navbar.Link>
+            <Link href="./Dashboard" block color="primary">
+              Dashboard
+            </Link>
           </Navbar.Content>
           <Navbar.Content
             css={{
@@ -345,7 +351,15 @@ export default function App({ user }) {
             >
               <Dropdown placement="bottom-right">
                 <Dropdown.Trigger>
-                  <Avatar color="primary" textColor="white" />
+                  <User
+                    bordered
+                    name={
+                      <Text b color="White" css={{ d: "flex" }}>
+                        {user?.user?.user_name}
+                      </Text>
+                    }
+                    color="primary"
+                  />
                 </Dropdown.Trigger>
 
                 <Dropdown.Menu
