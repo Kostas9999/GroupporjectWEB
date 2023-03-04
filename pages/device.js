@@ -173,8 +173,6 @@ export default function Home({ all, currDev }) {
   // close port by sending pid value to a function
   //*************************************** */
   async function closeApp(type, param) {
-    console.log(type);
-    console.log(param);
     const JSONdata = JSON.stringify({
       param: param,
       currDev,

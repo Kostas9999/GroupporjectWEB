@@ -3,22 +3,24 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "../session/session_Config";
 export default withIronSessionApiRoute(handler, ironOptions);
 
-  async function handler(req, res) {
+async function handler(req, res) {
   const cmd = req.body.cmd;
   const param = req.body.param;
   const device = req.body.currDev;
   const user = req.session.user.user_id;
 
-  console.log(`${cmd}, ${param}, ${device}, ${user}`)
+  console.log(`${cmd}, ${param}, ${device}, ${user}`);
 
   let data = {
-    cmd,param,device,user
-  }
-
+    cmd,
+    param,
+    device,
+    user,
+  };
 
   const options = {
-    host: "185.38.61.93",
-  // host: "127.0.0.1",
+    // host: "185.38.61.93",
+    host: "127.0.0.1",
     port: 57070,
     key: key_e,
     cert: cert_e,
@@ -26,22 +28,20 @@ export default withIronSessionApiRoute(handler, ironOptions);
     rejectUnauthorized: false,
   };
 
-
-
   data = JSON.stringify(data);
-  
+
   const tls_client = await tls.connect(options, async () => {
-    tls_client.write(JSON.stringify({ type: "MSG", data:data }))
+    tls_client.write(JSON.stringify({ type: "EXEC", data: data }));
   });
-  
+
   tls_client.on("error", (e) => {
     console.log(e);
   });
   //await tls_client.write(JSON.stringify({ type: "MSG", data:pid })).then(()=>{
   //  tls_client.destroy()
- // });
+  // });
 
-// tls_client.destroy()
+  // tls_client.destroy()
 }
 //tls_client.close()
 
