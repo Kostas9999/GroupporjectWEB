@@ -30,7 +30,7 @@ import {
 
 export default function Home({ all, currDev }) {
   all = JSON.parse(all);
-  console.log(all);
+
   let user = all.user;
   //console.log(all.devices[`${currDev}`].baseline)
 
@@ -119,6 +119,10 @@ export default function Home({ all, currDev }) {
   all.devices[`${currDev}`].events.map(
     (item, index) => (keys = Object.keys(item))
   );
+ 
+  if(keys ===  undefined){
+     keys = ["none"]
+    }
 
   const columns_events = [];
   keys.map((item, index) =>
@@ -132,7 +136,7 @@ export default function Home({ all, currDev }) {
   all.devices[`${currDev}`].events.map((item, index) =>
     rows_events.push({
       key: item.event_id,
-
+      event_id:item.event_id,
       type: item.type,
       value: item.value,
       baseline: item.baseline,
@@ -190,7 +194,7 @@ export default function Home({ all, currDev }) {
     const response = await fetch(endpoint, options);
     const result = await response.json();
     if (result.ok) {
-      console.log("here");
+      
     }
   }
 
