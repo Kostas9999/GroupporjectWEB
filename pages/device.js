@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 import { NextUIProvider } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
 
+const json2csv = require('json2csv')
+
 import {
   Collapse,
   Switch,
@@ -205,6 +207,24 @@ export default function Home({ all, currDev }) {
   const closeHandler_Reg = () => {
     setVisible_Power(false);
   };
+
+
+  //==================================================== export
+
+
+
+  function downloadCsv() {
+    const element = document.createElement("a");
+
+
+    element.setAttribute("href", `data:text/csv;charset=utf-8,${ json2csv.parse( all.devices[`${currDev}`].baseline[0])}`);
+    element.setAttribute("download", "filename");
+    element.style.display = "none";
+
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
 
   return (
     <>
@@ -866,7 +886,7 @@ export default function Home({ all, currDev }) {
                         </Card>
                       </Row>
                       <Button
-                        onClick={refresh}
+                        onClick={downloadCsv}
                         size="sm"
                         auto
                         shadow
@@ -875,7 +895,7 @@ export default function Home({ all, currDev }) {
                         justify="right"
                         align="right"
                       >
-                        Export*
+                        Export CSV
                       </Button>
                     </Card.Body>
                   </Card>
