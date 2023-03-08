@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { NextUIProvider } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
 
-const json2csv = require('json2csv')
+const json2csv = require("json2csv");
 
 import {
   Collapse,
@@ -121,10 +121,10 @@ export default function Home({ all, currDev }) {
   all.devices[`${currDev}`].events.map(
     (item, index) => (keys = Object.keys(item))
   );
- 
-  if(keys ===  undefined){
-     keys = ["none"]
-    }
+
+  if (keys === undefined) {
+    keys = ["none"];
+  }
 
   const columns_events = [];
   keys.map((item, index) =>
@@ -138,7 +138,7 @@ export default function Home({ all, currDev }) {
   all.devices[`${currDev}`].events.map((item, index) =>
     rows_events.push({
       key: item.event_id,
-      event_id:item.event_id,
+      event_id: item.event_id,
       type: item.type,
       value: item.value,
       baseline: item.baseline,
@@ -196,7 +196,6 @@ export default function Home({ all, currDev }) {
     const response = await fetch(endpoint, options);
     const result = await response.json();
     if (result.ok) {
-      
     }
   }
 
@@ -208,16 +207,17 @@ export default function Home({ all, currDev }) {
     setVisible_Power(false);
   };
 
-
   //==================================================== export
-
-
 
   function downloadCsv() {
     const element = document.createElement("a");
 
-
-    element.setAttribute("href", `data:text/csv;charset=utf-8,${ json2csv.parse( all.devices[`${currDev}`].baseline[0])}`);
+    element.setAttribute(
+      "href",
+      `data:text/csv;charset=utf-8,${json2csv.parse(
+        all.devices[`${currDev}`].baseline[0]
+      )}`
+    );
     element.setAttribute("download", "filename");
     element.style.display = "none";
 
@@ -549,6 +549,15 @@ export default function Home({ all, currDev }) {
                         bordered
                       >
                         Shutdown
+                      </Button>
+                      <Button
+                        ghost
+                        onClick={(e) => closeApp("PWR_MNG", "CANCEL_SHUTDOWN")}
+                        auto
+                        color="warning"
+                        bordered
+                      >
+                        Cancel
                       </Button>
                     </Modal.Footer>
                   </Modal>
