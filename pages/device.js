@@ -363,6 +363,12 @@ export default function Home({ all, currDev }) {
                       <Spacer y={0}></Spacer>
                       Gateway MAC:
                       {all.devices[`${currDev}`].networkStats[0].dgmac}
+                      <Spacer y={0}></Spacer>
+                      Server: {" "}
+                      {all.devices[`${currDev}`]?.server[0]?.ip} {" "}
+                      ( 
+                      {all.devices[`${currDev}`]?.server[0]?.port}
+                      )
                     </Text>
                   </Row>
                 </Card.Body>
@@ -829,16 +835,79 @@ export default function Home({ all, currDev }) {
                             </Row>
                             <Row justify="Left" align="right">
                               <Text color={text_Color}>
-                                Avg usage: {baseline.memoryuses} %
+                                Avg RAM usage: {baseline.memoryuses} %
+                              </Text>
+                            </Row>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                Avg CPU usage: {baseline.cpuuses} %
                               </Text>
                             </Row>
                           </Card.Body>
                         </Card>
                         <Card css={{ $$cardColor: btn_back }} xs={4}>
                           <Text h4 color={text_Color}>
-                            Latency
+                            Addressing
                           </Text>
                           <Card.Body>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                IPv4: {dateTimeFormater(baseline.ipv4)}{" "}
+                              </Text>
+                            </Row>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                IPv4 Mask: {dateTimeFormater(baseline.ipv4sub)}{" "}
+                              </Text>
+                            </Row>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                IPv6: {baseline.ipv6} ms
+                              </Text>
+                            </Row>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                IPv6 Mask: {dateTimeFormater(baseline.ipv6sub)}{" "}
+                              </Text>
+                            </Row>
+                          </Card.Body>
+                        </Card>
+                        <Card css={{ $$cardColor: btn_back }} xs={4}>
+                          <Text h4 color={text_Color}>
+                            NIC
+                          </Text>
+                          <Card.Body>
+                          <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                Interface: {baseline.iface} ({baseline.speed}mb/s)
+                              </Text>
+                            </Row>
+
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                Iface MAC: {baseline.mac}
+                              </Text>
+                            </Row>
+                           
+                           
+                          
+                          </Card.Body>
+                        </Card>
+                        <Card css={{ $$cardColor: btn_back }} xs={4}>
+                          <Text h4 color={text_Color}>
+                            Gateway
+                          </Text>
+                          <Card.Body>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                Gateway: {dateTimeFormater(baseline.defaultgateway)}{" "}
+                              </Text>
+                            </Row>
+                            <Row justify="Left" align="right">
+                              <Text color={text_Color}>
+                                Public IP: {dateTimeFormater(baseline.publicip)}{" "}
+                              </Text>
+                            </Row>
                             <Row justify="Left" align="right">
                               <Text color={text_Color}>
                                 Avg Local Latency: {baseline.locallatency} ms
@@ -851,23 +920,7 @@ export default function Home({ all, currDev }) {
                             </Row>
                           </Card.Body>
                         </Card>
-                        <Card css={{ $$cardColor: btn_back }} xs={4}>
-                          <Text h4 color={text_Color}>
-                            Period
-                          </Text>
-                          <Card.Body>
-                            <Row justify="Left" align="right">
-                              <Text color={text_Color}>
-                                From: {dateTimeFormater(baseline.collectedfrom)}{" "}
-                              </Text>
-                            </Row>
-                            <Row justify="Left" align="right">
-                              <Text color={text_Color}>
-                                Period: {baseline.collectionperiod} days
-                              </Text>
-                            </Row>
-                          </Card.Body>
-                        </Card>
+
                       </Row>
                       <Row>
                         <Card css={{ $$cardColor: btn_back }} xs={12}>
@@ -952,6 +1005,9 @@ export const getServerSideProps = withIronSessionSsr(
     let disc = await client.query(
       `select * from "${id}"."disc" ORDER BY created ASC; `
     );
+    let server = await client.query(
+      `select * from "${id}"."server" ORDER BY created ASC; `
+    );
     let user = await client.query(`select * from "${id}"."user"  LIMIT 1; `);
 
     let devices = req.req.session.devices;
@@ -964,6 +1020,7 @@ export const getServerSideProps = withIronSessionSsr(
     req.req.session.devices[`${id}`].disc = disc.rows;
     req.req.session.devices[`${id}`].ports = ports.rows;
     req.req.session.devices[`${id}`].user = user.rows;
+    req.req.session.devices[`${id}`].server = server.rows;
 
     return {
       props: {
