@@ -16,7 +16,7 @@ const json2csv = require("json2csv");
 
 import {
   Collapse,
-  Switch,
+  Input,
   Modal,
   Dropdown,
   Text,
@@ -36,7 +36,43 @@ export default function Home({ all, currDev }) {
   let user = all.user;
   //console.log(all.devices[`${currDev}`].baseline)
 
-  //console.log(all.devices[`${currDev}`].arp);
+  const handler_getDeviceID = () => setVisible_Login(true);
+  const [visible_getDeviceID, setVisible_Login] = React.useState(false);
+  const closeHandler_getDeviceID = () => {
+    setVisible_Login(false);
+  };
+
+  async function handleSubmit_Add_Device(event) {
+    event.preventDefault();
+
+    console.log(event.target.dev_ID);
+
+    //const name = xss(document.querySelector("#dev_ID").value);
+
+    // const data = {
+    //   user_id: session.user.user_id,
+    // dev_id: event.target.dev_ID.value,
+    // };
+
+    const JSONdata = JSON.stringify({
+      param: event.target.dev_ID.value,
+      currDev,
+      cmd: "MSG",
+    });
+
+    const endpoint = `/api/tcp/connect`;
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSONdata,
+    };
+
+    const response = await fetch(endpoint, options);
+    const result = await response.json();
+    if (result.ok) {
+    }
+  }
 
   let disc = all.devices[`${currDev}`].disc;
   let arp = all.devices[`${currDev}`].arp;
@@ -204,6 +240,13 @@ export default function Home({ all, currDev }) {
   const handler_Power = () => setVisible_Power(true);
 
   const closeHandler_Reg = () => {
+    setVisible_Power(false);
+  };
+
+  const [visible_MSG, setVisible_MSG] = React.useState(false);
+  const handler_MSG = () => setVisible_MSG(true);
+
+  const closeHandler_MSG = () => {
     setVisible_Power(false);
   };
 
@@ -509,6 +552,62 @@ export default function Home({ all, currDev }) {
                   <Spacer y={1}></Spacer>
                   <Row justify="center" align="right">
                     <Button
+                      onClick={handler_MSG}
+                      size="md"
+                      auto
+                      shadow
+                      css={{ background: "yellow", width: "15vh" }}
+                      className={styles.thirteen}
+                    >
+                      Message
+                    </Button>
+                  </Row>
+                  <Modal
+                    closeButton
+                    blur
+                    aria-labelledby="modal-title_Reg"
+                    open={visible_MSG}
+                    onClose={closeHandler_MSG}
+                  >
+                    <Modal.Header>
+                      <Text b size={24} css={{ color: "red" }}>
+                        Message
+                      </Text>
+                    </Modal.Header>
+                    <Card.Divider />
+                    <Modal.Body>
+                      {" "}
+                      <form onSubmit={handleSubmit_Add_Device}>
+                        <Modal.Body>
+                          <Input
+                            aria-label="dev_ID"
+                            id="dev_ID"
+                            name="dev_ID"
+                            bordered
+                            color="primary"
+                          />
+                        </Modal.Body>
+
+                        <Modal.Footer>
+                          <Button
+                            auto
+                            flat
+                            color="error"
+                            onPress={closeHandler_getDeviceID}
+                          >
+                            Close
+                          </Button>
+                          <Button type="submit_dev_ID" auto>
+                            OK
+                          </Button>
+                        </Modal.Footer>
+                      </form>
+                    </Modal.Body>
+                    <Modal.Footer></Modal.Footer>
+                  </Modal>
+                  <Spacer y={1}></Spacer>
+                  <Row justify="center" align="right">
+                    <Button
                       onClick={handler_Power}
                       size="md"
                       auto
@@ -563,6 +662,48 @@ export default function Home({ all, currDev }) {
                         Cancel
                       </Button>
                     </Modal.Footer>
+                  </Modal>
+
+                  <Spacer y={1}></Spacer>
+                  <Modal
+                    scroll
+                    blur
+                    width="30%"
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                    open={visible_getDeviceID}
+                    onClose={closeHandler_getDeviceID}
+                  >
+                    <Modal.Header>
+                      <Text id="modal-title" size={18}>
+                        Device
+                      </Text>
+                    </Modal.Header>
+                    <form onSubmit={handleSubmit_Add_Device}>
+                      <Modal.Body>
+                        <Input
+                          aria-label="dev_ID"
+                          id="dev_ID"
+                          name="dev_ID"
+                          bordered
+                          color="primary"
+                        />
+                      </Modal.Body>
+
+                      <Modal.Footer>
+                        <Button
+                          auto
+                          flat
+                          color="error"
+                          onPress={closeHandler_getDeviceID}
+                        >
+                          Close
+                        </Button>
+                        <Button type="submit_dev_ID" auto>
+                          OK
+                        </Button>
+                      </Modal.Footer>
+                    </form>
                   </Modal>
                 </Card.Body>
               </Card>
