@@ -1001,12 +1001,13 @@ export const getServerSideProps = withIronSessionSsr(
       `select * from "${id}"."disc" ORDER BY created ASC; `
     );
     let server = await client.query(
-      `select * from "${id}"."server" ORDER BY created ASC LIMIT 1; `
+      `select * from "${id}"."server" ORDER BY created DESC LIMIT 1; `
     );
     let user = await client.query(`select * from "${id}"."user"  LIMIT 1; `);
 
     let devices = req.req.session.devices;
     req.req.session.devices[`${id}`].server = server.rows;
+    console.log(req.req.session.devices[`${id}`].server);
 
     await req.req.session.save();
     req.req.session.devices[`${id}`].user = user.rows;
