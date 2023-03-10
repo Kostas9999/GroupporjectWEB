@@ -8,8 +8,7 @@ async function handler(req, res) {
   const param = req.body.param;
   const device = req.body.currDev;
   const user = req.session.user.user_id;
-
-  console.log(`${cmd}, ${param}, ${device}, ${user}`);
+  const server = req.session.devices[device].server[0];
 
   let data = {
     cmd,
@@ -19,9 +18,8 @@ async function handler(req, res) {
   };
 
   const options = {
-    host: "185.38.61.93",
-    // host: "127.0.0.1",
-    port: 57070,
+    host: server.ip,
+    port: server.port,
     key: key_e,
     cert: cert_e,
     passphrase: "MGproject",
