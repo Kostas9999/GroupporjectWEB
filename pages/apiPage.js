@@ -11,6 +11,7 @@ import { withIronSessionSsr } from "iron-session/next";
 
 import styles from "../styles/Home.module.css";
 import { Dropdown, Grid, Button, Row, Card, Text } from "@nextui-org/react";
+let api_output = "";
 let message = "";
 //http://localhost:3000/api/api/serveAPI?key=<api_key>&device=<device>&table=<table>
 let api_link_template =
@@ -65,7 +66,9 @@ export default function Home({ session }) {
       .replace("<table>", table);
 
     const response = await fetch(api_link);
-    const result = await response.json();
+    const result = await response.json().then((d) => {
+      api_output = d;
+    });
     console.log(result);
 
     router.push("/apiPage");
@@ -193,9 +196,15 @@ export default function Home({ session }) {
             </Card>
           </Grid>
           <Grid xs={12}>
-            <Card css={{ h: "$24", $$cardColor: "black" }}>
+            <Card css={{ h: "100%", $$cardColor: "black" }}>
               <Card.Body>
-                <Row justify="center" align="center"></Row>
+                <Row justify="center" align="center">
+                  <div id="output">
+                    <Text h6 size={15} color="white">
+                      {JSON.stringify(api_output)}
+                    </Text>
+                  </div>
+                </Row>
               </Card.Body>
             </Card>
           </Grid>
