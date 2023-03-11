@@ -119,7 +119,7 @@ export default function Home({ all, currDev }) {
       created: dateTimeFormater(item.created),
       action: (
         <Button
-          onClick={(e) => closeApp("PRT_CLOSE", item.pid)}
+          onPress={(e) => closeApp("PRT_CLOSE", item.pid)}
           auto
           ghost
           color="error"
@@ -461,7 +461,7 @@ export default function Home({ all, currDev }) {
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Button
-                      onClick={refresh}
+                      onPress={refresh}
                       size="md"
                       auto
                       shadow
@@ -557,7 +557,8 @@ export default function Home({ all, currDev }) {
                       auto
                       shadow
                       css={{
-                        background: "yellow", width: "15vh"
+                        background: "yellow",
+                        width: "15vh",
                       }}
                       className={styles.thirteen}
                     >

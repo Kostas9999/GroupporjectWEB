@@ -25,6 +25,7 @@ async function loginRoute(req, res) {
         user_name: user.username,
         user_email: user.email,
         user_userSince: user.dateCreated,
+        user_api_key: user.api_key,
       };
 
       await req.session.save();
