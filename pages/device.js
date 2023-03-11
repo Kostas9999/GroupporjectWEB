@@ -47,13 +47,6 @@ export default function Home({ all, currDev }) {
 
     console.log(event.target.dev_ID);
 
-    //const name = xss(document.querySelector("#dev_ID").value);
-
-    // const data = {
-    //   user_id: session.user.user_id,
-    // dev_id: event.target.dev_ID.value,
-    // };
-
     const JSONdata = JSON.stringify({
       param: event.target.dev_ID.value,
       currDev,

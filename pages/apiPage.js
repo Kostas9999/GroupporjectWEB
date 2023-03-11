@@ -2,6 +2,7 @@ import Navbar from "./templates/navbar/navbar";
 import { useRouter } from "next/router";
 import { Snackbar, Slide } from "@mui/material";
 import { useState } from "react";
+import React from "react";
 
 import { SSRProvider } from "react-aria";
 
@@ -9,8 +10,12 @@ import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
 
 import styles from "../styles/Home.module.css";
-import { Loading, Grid, Button, Row, Card, Text } from "@nextui-org/react";
+import { Dropdown, Grid, Button, Row, Card, Text } from "@nextui-org/react";
 let message = "";
+//http://localhost:3000/api/api/serveAPI?key=<api_key>&device=<device>&table=<table>
+let api_link_template =
+  "http://localhost:3000/api/api/serveAPI?key=<api_key>&device=<device>&table=<table>";
+let api_link = api_link_template;
 export default function Home({ session }) {
   session = JSON.parse(session);
   let user = session.user;
@@ -23,6 +28,51 @@ export default function Home({ session }) {
     setOpen(true);
   }
 
+  let device_arr = Object.keys(session.devices);
+  let tables = [
+    "arp",
+    "baseline",
+    "disc",
+    "events",
+    "hardware",
+    "networkinterface",
+    "networkstats",
+    "os",
+    "ports",
+    "server",
+    "user",
+  ];
+
+  let [selectedDev, setSelectedDev] = React.useState(new Set([device_arr[0]]));
+  const selectedDevice = React.useMemo(
+    () => Array.from(selectedDev),
+    [selectedDev]
+  );
+
+  let [selectedTab, setSelectedTab] = React.useState(new Set([tables[0]]));
+  const selectedTable = React.useMemo(
+    () => Array.from(selectedTab),
+    [selectedTab]
+  );
+
+  async function showApiLink() {
+    let device = selectedDev.values().next().value;
+    let table = selectedTab.values().next().value;
+
+    api_link = api_link_template
+      .replace("<api_key>", session.user.user_api_key)
+      .replace("<device>", device)
+      .replace("<table>", table);
+
+    fetch("https://quotes.toscrape.com/random")
+      .then((response) => response.text())
+      .then((body) => {
+        console.log(body);
+      });
+
+    router.push("/apiPage");
+  }
+
   function toClipboard(data) {
     notification("Copied to clipboard...");
     navigator.clipboard.writeText(data);
@@ -30,21 +80,7 @@ export default function Home({ session }) {
 
   async function generateKey() {
     notification("Generating key. Please wait...");
-    // console.log(session.user);
 
-    /*
-    const JSONdata = JSON.stringify({
-      param: target.dev_ID.value,
-      currDev,
-      cmd: "MSG",
-    });    
-
-    const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSONdata,
-    };
-    */
     const endpoint = `./api/api/generateAPI`;
     const response = await fetch(endpoint);
     const result = await response.json();
@@ -80,9 +116,88 @@ export default function Home({ session }) {
                     auto
                     ghost
                   >
-                    <Text color="white">Generate new</Text>
+                    <Text color="white">Generate new key</Text>
                   </Button>
                 </Row>
+              </Card.Body>
+            </Card>
+          </Grid>
+          <Grid xs={12}>
+            <Card css={{ h: "$24", $$cardColor: "$transparent" }}>
+              <Card.Body>
+                <Row justify="center" align="center">
+                  <Text>title</Text>
+                </Row>
+                <Row justify="center" align="center">
+                  <Dropdown>
+                    <Dropdown.Button
+                      flat
+                      color="primary"
+                      css={{ tt: "capitalize" }}
+                    >
+                      {session.devices[selectedDevice]?.os?.hostname}
+                    </Dropdown.Button>
+                    <Dropdown.Menu
+                      aria-label="Single selection actions"
+                      color="primary"
+                      disallowEmptySelection
+                      selectionMode="single"
+                      selectedKeys={selectedDev}
+                      onSelectionChange={setSelectedDev}
+                    >
+                      {Object.keys(session.devices).map((device) => (
+                        <Dropdown.Item key={device}>
+                          {session.devices[`${device}`].os.hostname}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <Dropdown>
+                    <Dropdown.Button
+                      flat
+                      color="primary"
+                      css={{ tt: "capitalize" }}
+                    >
+                      {selectedTab}
+                    </Dropdown.Button>
+                    <Dropdown.Menu
+                      aria-label="Single selection actions"
+                      color="primary"
+                      disallowEmptySelection
+                      selectionMode="single"
+                      selectedKeys={selectedTab}
+                      onSelectionChange={setSelectedTab}
+                    >
+                      {tables.map((device) => (
+                        <Dropdown.Item key={device}>{device}</Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <Button onPress={showApiLink}>Get Link</Button>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Grid>
+          <Grid xs={12}>
+            <Card css={{ h: "$24", $$cardColor: "$transparent" }}>
+              <Card.Body>
+                <Row justify="center" align="center">
+                  <Button
+                    onPress={(e) => toClipboard(api_link)}
+                    color="primary"
+                    auto
+                    ghost
+                  >
+                    <Text color="white">{api_link}</Text>
+                  </Button>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Grid>
+          <Grid xs={12}>
+            <Card css={{ h: "$24", $$cardColor: "black" }}>
+              <Card.Body>
+                <Row justify="center" align="center"></Row>
               </Card.Body>
             </Card>
           </Grid>

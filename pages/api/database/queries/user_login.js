@@ -21,7 +21,7 @@ async function loginRoute(req, res) {
 
     if (result) {
       req.session.user = {
-        user_id: user.user_ID,
+        user_id: user.user_id,
         user_name: user.username,
         user_email: user.email,
         user_userSince: user.dateCreated,
@@ -29,6 +29,7 @@ async function loginRoute(req, res) {
       };
 
       await req.session.save();
+
       await res.send({ ok: true, user: req.session.user });
     } else {
       await res.status(200).json({ ok: false });

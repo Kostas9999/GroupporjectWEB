@@ -3,7 +3,7 @@ export const ironOptions = {
   password: "7IkDqh^Ks4z@&wZK1qm8f0DZIEbcAY1MkDR", //process.env.SESSION_KEY,
 
   cookieOptions: {
-    secure: true, // process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production",
     // domain: "montool.vercel.app",
     maxAge: undefined,
   },

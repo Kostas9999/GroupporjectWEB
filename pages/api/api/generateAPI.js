@@ -7,7 +7,7 @@ export default withIronSessionApiRoute(loginRoute, ironOptions);
 
 async function loginRoute(req, res) {
   var password = generator.generate({
-    length: 64,
+    length: 32,
     uppercase: true,
     numbers: true,
     strict: true,

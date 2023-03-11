@@ -169,7 +169,7 @@ export default function Dashboard({ session, devicesTitle }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     const { client } = require("./api/database/connections/connection");
-
+    console.log(req.session.user);
     const rows_devices = await client.query(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`
     );
