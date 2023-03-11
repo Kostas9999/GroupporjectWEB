@@ -556,7 +556,9 @@ export default function Home({ all, currDev }) {
                       size="md"
                       auto
                       shadow
-                      css={{ background: "yellow", width: "15vh" }}
+                      css={{
+                        background: "yellow", width: "15vh"
+                      }}
                       className={styles.thirteen}
                     >
                       Message
@@ -568,6 +570,11 @@ export default function Home({ all, currDev }) {
                     aria-labelledby="modal-title_Reg"
                     open={visible_MSG}
                     onClose={closeHandler_MSG}
+                    css={{
+                      backgroundColor: "White",
+                      background: "transparent",
+                      backdropFilter: "blur(20px)",
+                    }}
                   >
                     <Modal.Header>
                       <Text b size={24} css={{ color: "red" }}>
