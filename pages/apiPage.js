@@ -15,7 +15,7 @@ let api_output = "";
 let message = "";
 //http://localhost:3000/api/api/serveAPI?key=<api_key>&device=<device>&table=<table>
 let api_link_template =
-  "http://localhost:3000/api/api/serveAPI?key=<api_key>&device=<device>&table=<table>";
+  "https://montool.vercel.app/api/api/serveAPI?key=<api_key>&device=<device>&table=<table>";
 let api_link = api_link_template;
 export default function Home({ session }) {
   session = JSON.parse(session);
