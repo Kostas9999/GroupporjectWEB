@@ -125,274 +125,281 @@ export default function App({ user }) {
 
   return (
     <SSRProvider>
-      <Navbar
-        isCompact
-        isBordered
-        variant="sticky"
-        css={{
-          $$navbarBackgroundColor: "transparent",
-          $$navbarBlurBackgroundColor: "transparent",
-        }}
-      >
-        <Navbar.Brand
+      <Layout>
+        <Navbar
+          isCompact
+          isBordered
+          variant="sticky"
           css={{
-            "@xs": {
-              w: "12%",
-            },
+            $$navbarBackgroundColor: "transparent",
+            $$navbarBlurBackgroundColor: "transparent",
           }}
         >
-          <Link href="./">
-            <Image width={120} height={120} src="/img/ico.png" alt="monTool" />
-            <Text
-              size={30}
-              css={{
-                textGradient: "45deg, $black -20%, $blue600 80%",
-              }}
-            >
-              monTool
-            </Text>
-          </Link>
-        </Navbar.Brand>
-        <Navbar.Content
-          id="navbarLinks"
-          css={{
-            display: user?.user !== undefined ? "block" : "none",
-          }}
-          enableCursorHighlight
-          activeColor="warning"
-          hideIn="xs"
-          variant="highlight"
-        >
-          <Link href="./Dashboard" block color="primary">
-            Dashboard
-          </Link>
-          <Link href="./apiPage" block color="primary">
-            API
-          </Link>
-        </Navbar.Content>
-        <Navbar.Content
-          css={{
-            "@xs": {
-              w: "12%",
-              jc: "flex-end",
-            },
-          }}
-        >
-          <Button
-            id="login"
-            auto
-            shadow
-            style={{
-              display: user?.user === undefined ? "block" : "none",
+          <Navbar.Brand
+            css={{
+              "@xs": {
+                w: "12%",
+              },
             }}
-            onClick={handler_Login}
           >
-            Login
-          </Button>
-
-          <Modal
-            closeButton
-            blur
-            aria-labelledby="modal-title"
-            open={visible_Login}
-            onClose={closeHandler_Login}
-          >
-            <Modal.Header>
+            <Link href="./">
+              <Image
+                width={120}
+                height={120}
+                src="/img/ico.png"
+                alt="monTool"
+              />
               <Text
-                id="modal-title"
-                size={18}
+                size={30}
                 css={{
                   textGradient: "45deg, $black -20%, $blue600 80%",
                 }}
               >
-                Login <br></br>
-                <Text b size={24}>
-                  Monitoring Tool
-                </Text>
+                monTool
               </Text>
-            </Modal.Header>
-            <a id="login_Err_message"></a>
-            <form onSubmit={handleSubmit_Login}>
-              <Modal.Body>
-                <Input
-                  aria-label="Username"
-                  id="username"
-                  name="username"
-                  clearable
-                  bordered
-                  fullWidth
-                  color="primary"
-                  size="sm"
-                  placeholder="Username"
-                  contentLeft={<Mail fill="currentColor" />}
-                />
-
-                <Input
-                  aria-label="password"
-                  id="password"
-                  name="password"
-                  type="password"
-                  clearable
-                  bordered
-                  fullWidth
-                  color="primary"
-                  size="sm"
-                  placeholder="Password"
-                  contentLeft={<Password fill="currentColor" />}
-                />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button auto flat color="error" onClick={closeHandler_Login}>
-                  Close
-                </Button>
-
-                <Button type="submit_Login" auto>
-                  Sign in
-                </Button>
-              </Modal.Footer>
-            </form>
-          </Modal>
-          <Navbar.Item>
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Content
+            id="navbarLinks"
+            css={{
+              display: user?.user !== undefined ? "block" : "none",
+            }}
+            enableCursorHighlight
+            activeColor="warning"
+            hideIn="xs"
+            variant="highlight"
+          >
+            <Link href="./Dashboard" block color="primary">
+              Dashboard
+            </Link>
+            <Link href="./apiPage" block color="primary">
+              API
+            </Link>
+          </Navbar.Content>
+          <Navbar.Content
+            css={{
+              "@xs": {
+                w: "12%",
+                jc: "flex-end",
+              },
+            }}
+          >
             <Button
-              id="Register"
+              id="login"
               auto
               shadow
               style={{
                 display: user?.user === undefined ? "block" : "none",
               }}
-              onClick={handler_Reg}
+              onClick={handler_Login}
             >
-              Register
+              Login
             </Button>
-          </Navbar.Item>
-          <Modal
-            closeButton
-            blur
-            aria-labelledby="modal-title_Reg"
-            open={visible_Reg}
-            onClose={closeHandler_Reg}
-          >
-            <Modal.Header>
-              <Text
-                id="modal-title"
-                size={18}
-                css={{
-                  textGradient: "45deg, $black -20%, $blue600 80%",
-                }}
-              >
-                Register <br></br>
-                <Text b size={24}>
-                  Monitoring Tool
+
+            <Modal
+              closeButton
+              blur
+              aria-labelledby="modal-title"
+              open={visible_Login}
+              onClose={closeHandler_Login}
+            >
+              <Modal.Header>
+                <Text
+                  id="modal-title"
+                  size={18}
+                  css={{
+                    textGradient: "45deg, $black -20%, $blue600 80%",
+                  }}
+                >
+                  Login <br></br>
+                  <Text b size={24}>
+                    Monitoring Tool
+                  </Text>
                 </Text>
-                <Text b size={24}></Text>
-              </Text>
-            </Modal.Header>
-            <a id="message"></a>
-            <form onSubmit={handleSubmit_Reg}>
-              <Modal.Body>
-                <Input
-                  aria-label="username_Reg"
-                  id="username_Reg"
-                  name="username_Reg"
-                  clearable
-                  bordered
-                  fullWidth
-                  color="primary"
-                  size="sm"
-                  placeholder="Username"
-                  contentLeft={<Mail fill="currentColor" />}
-                />
+              </Modal.Header>
+              <a id="login_Err_message"></a>
+              <form onSubmit={handleSubmit_Login}>
+                <Modal.Body>
+                  <Input
+                    aria-label="Username"
+                    id="username"
+                    name="username"
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="sm"
+                    placeholder="Username"
+                    contentLeft={<Mail fill="currentColor" />}
+                  />
 
-                <Input
-                  aria-label="email_Reg"
-                  id="email_Reg"
-                  name="email_Reg"
-                  clearable
-                  bordered
-                  fullWidth
-                  color="primary"
-                  size="sm"
-                  placeholder="Email"
-                  contentLeft={<Mail fill="currentColor" />}
-                />
+                  <Input
+                    aria-label="password"
+                    id="password"
+                    name="password"
+                    type="password"
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="sm"
+                    placeholder="Password"
+                    contentLeft={<Password fill="currentColor" />}
+                  />
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button auto flat color="error" onClick={closeHandler_Login}>
+                    Close
+                  </Button>
 
-                <Input
-                  aria-label="password_Reg"
-                  id="password_Reg"
-                  name="password_Reg"
-                  type="password"
-                  clearable
-                  bordered
-                  fullWidth
-                  color="primary"
-                  size="sm"
-                  placeholder="Password"
-                  contentLeft={<Password fill="currentColor" />}
-                />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button auto flat color="error" onClick={closeHandler_Reg}>
-                  Close
-                </Button>
+                  <Button type="submit_Login" auto>
+                    Sign in
+                  </Button>
+                </Modal.Footer>
+              </form>
+            </Modal>
+            <Navbar.Item>
+              <Button
+                id="Register"
+                auto
+                shadow
+                style={{
+                  display: user?.user === undefined ? "block" : "none",
+                }}
+                onClick={handler_Reg}
+              >
+                Register
+              </Button>
+            </Navbar.Item>
+            <Modal
+              closeButton
+              blur
+              aria-labelledby="modal-title_Reg"
+              open={visible_Reg}
+              onClose={closeHandler_Reg}
+            >
+              <Modal.Header>
+                <Text
+                  id="modal-title"
+                  size={18}
+                  css={{
+                    textGradient: "45deg, $black -20%, $blue600 80%",
+                  }}
+                >
+                  Register <br></br>
+                  <Text b size={24}>
+                    Monitoring Tool
+                  </Text>
+                  <Text b size={24}></Text>
+                </Text>
+              </Modal.Header>
+              <a id="message"></a>
+              <form onSubmit={handleSubmit_Reg}>
+                <Modal.Body>
+                  <Input
+                    aria-label="username_Reg"
+                    id="username_Reg"
+                    name="username_Reg"
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="sm"
+                    placeholder="Username"
+                    contentLeft={<Mail fill="currentColor" />}
+                  />
 
-                <Button type="submit_Reg" auto>
-                  Register
-                </Button>
-              </Modal.Footer>
-            </form>
-          </Modal>
+                  <Input
+                    aria-label="email_Reg"
+                    id="email_Reg"
+                    name="email_Reg"
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="sm"
+                    placeholder="Email"
+                    contentLeft={<Mail fill="currentColor" />}
+                  />
 
-          <Navbar.Item
-            css={{
-              display: user?.user !== undefined ? "block" : "none",
-            }}
-          >
-            <Dropdown placement="bottom-right">
-              <Dropdown.Trigger>
-                <User
-                  bordered
-                  name={
-                    <Text b color="White" css={{ d: "flex" }}>
+                  <Input
+                    aria-label="password_Reg"
+                    id="password_Reg"
+                    name="password_Reg"
+                    type="password"
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="sm"
+                    placeholder="Password"
+                    contentLeft={<Password fill="currentColor" />}
+                  />
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button auto flat color="error" onClick={closeHandler_Reg}>
+                    Close
+                  </Button>
+
+                  <Button type="submit_Reg" auto>
+                    Register
+                  </Button>
+                </Modal.Footer>
+              </form>
+            </Modal>
+
+            <Navbar.Item
+              css={{
+                display: user?.user !== undefined ? "block" : "none",
+              }}
+            >
+              <Dropdown placement="bottom-right">
+                <Dropdown.Trigger>
+                  <User
+                    bordered
+                    name={
+                      <Text b color="White" css={{ d: "flex" }}>
+                        {user?.user?.user_name}
+                      </Text>
+                    }
+                    color="primary"
+                  />
+                </Dropdown.Trigger>
+
+                <Dropdown.Menu
+                  disabledKeys={["settings", "system", "configurations"]}
+                  aria-label="User menu actions"
+                  color="warning"
+                  onAction={(actionKey) => {
+                    handleSelect(actionKey);
+                  }}
+                >
+                  <Dropdown.Item key="profile" css={{ height: "$18" }}>
+                    <Text b color="inherit" css={{ d: "flex" }}>
                       {user?.user?.user_name}
                     </Text>
-                  }
-                  color="primary"
-                />
-              </Dropdown.Trigger>
+                    <Text b color="inherit" css={{ d: "flex" }}>
+                      {user?.user?.user_email}
+                    </Text>
+                  </Dropdown.Item>
+                  <Dropdown.Item key="settings" withDivider>
+                    My Settings
+                  </Dropdown.Item>
 
-              <Dropdown.Menu
-                disabledKeys={["settings", "system", "configurations"]}
-                aria-label="User menu actions"
-                color="warning"
-                onAction={(actionKey) => {
-                  handleSelect(actionKey);
-                }}
-              >
-                <Dropdown.Item key="profile" css={{ height: "$18" }}>
-                  <Text b color="inherit" css={{ d: "flex" }}>
-                    {user?.user?.user_name}
-                  </Text>
-                  <Text b color="inherit" css={{ d: "flex" }}>
-                    {user?.user?.user_email}
-                  </Text>
-                </Dropdown.Item>
-                <Dropdown.Item key="settings" withDivider>
-                  My Settings
-                </Dropdown.Item>
+                  <Dropdown.Item key="system">System</Dropdown.Item>
+                  <Dropdown.Item key="configurations">
+                    Configurations
+                  </Dropdown.Item>
 
-                <Dropdown.Item key="system">System</Dropdown.Item>
-                <Dropdown.Item key="configurations">
-                  Configurations
-                </Dropdown.Item>
-
-                <Dropdown.Item key="logout" withDivider color="error">
-                  Log Out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Navbar.Item>
-        </Navbar.Content>
-      </Navbar>
+                  <Dropdown.Item key="logout" withDivider color="error">
+                    Log Out
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Navbar.Item>
+          </Navbar.Content>
+        </Navbar>
+      </Layout>
     </SSRProvider>
   );
 }

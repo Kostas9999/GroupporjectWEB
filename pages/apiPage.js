@@ -1,4 +1,5 @@
 import Navbar from "./templates/navbar/navbar";
+import { useRouter } from "next/router";
 import { Snackbar, Slide } from "@mui/material";
 import { useState } from "react";
 
@@ -14,16 +15,42 @@ export default function Home({ session }) {
   session = JSON.parse(session);
   let user = session.user;
 
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
   function notification(msg) {
     message = msg;
     setOpen(true);
-    navigator.clipboard.writeText(msg);
   }
 
-  function generateKey() {
+  function toClipboard(data) {
+    notification("Copied to clipboard...");
+    navigator.clipboard.writeText(data);
+  }
+
+  async function generateKey() {
     notification("Generating key. Please wait...");
-    console.log(session.user);
+    // console.log(session.user);
+
+    /*
+    const JSONdata = JSON.stringify({
+      param: target.dev_ID.value,
+      currDev,
+      cmd: "MSG",
+    });    
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSONdata,
+    };
+    */
+    const endpoint = `./api/api/generateAPI`;
+    const response = await fetch(endpoint);
+    const result = await response.json();
+    if (result.ok) {
+    }
+    router.push("/apiPage");
   }
 
   function TransitionLeft(props) {
@@ -40,7 +67,7 @@ export default function Home({ session }) {
               <Card.Body>
                 <Row justify="center" align="center">
                   <Button
-                    onPress={(e) => notification("Copied to clipboard")}
+                    onPress={(e) => toClipboard(session.user.user_api_key)}
                     color="primary"
                     auto
                     ghost
@@ -79,7 +106,7 @@ export const getServerSideProps = withIronSessionSsr(
     if (api_key == null) {
       req.session.user.user_api_key = "N/A";
     }
-    console.log(api_key);
+
     return {
       props: {
         session: JSON.stringify(req.session),
