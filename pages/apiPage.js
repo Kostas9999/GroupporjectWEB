@@ -64,11 +64,9 @@ export default function Home({ session }) {
       .replace("<device>", device)
       .replace("<table>", table);
 
-    fetch("https://quotes.toscrape.com/random")
-      .then((response) => response.text())
-      .then((body) => {
-        console.log(body);
-      });
+    const response = await fetch(api_link);
+    const result = await response.json();
+    console.log(result);
 
     router.push("/apiPage");
   }
