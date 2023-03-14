@@ -32,8 +32,8 @@ export default function Home({ session }) {
                   Monitoring Tool
                 </Text>
                 <Image
-                  width={320}
-                  height={180}
+                  width={820}
+                  height={500}
                   src="https://github.com/nextui-org/nextui/blob/next/apps/docs/public/nextui-banner.jpeg?raw=true"
                   alt="Default Image"
                   objectFit="cover"
