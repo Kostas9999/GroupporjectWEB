@@ -1,5 +1,6 @@
 import Navbar from "./templates/navbar/navbar";
 import Footer from "./templates/footer";
+import "@google/model-viewer/dist/model-viewer";
 
 import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
@@ -13,10 +14,9 @@ export default function Home({ session }) {
   let user = session.user;
 
   return (
-    <NextUIProvider>
+    <>
       <main className={styles.main}>
-        <Navbar user={{ user }} />
-
+        <Navbar user={{ user }} />z
         <Container fluid>
           <Card
             css={{ $$cardColor: "transparent", backdropFilter: "blur(5px)" }}
@@ -31,13 +31,18 @@ export default function Home({ session }) {
                 >
                   Monitoring Tool
                 </Text>
-                <Image
-                  width={820}
-                  height={500}
-                  src="https://github.com/nextui-org/nextui/blob/next/apps/docs/public/nextui-banner.jpeg?raw=true"
-                  alt="Default Image"
-                  objectFit="cover"
-                />
+                <div id="card">
+                  <model-viewer
+                    src="/3D/knowledge_network/scene.gltf"
+                    ios-src=""
+                    poster="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b%2Fposter-astronaut.png?v=1599079951717"
+                    alt="A 3D model of an astronaut"
+                    shadow-intensity="1"
+                    camera-controls
+                    auto-rotate
+                    ar
+                  ></model-viewer>
+                </div>
               </Row>
               <Row justify="center" align="center">
                 <Button color="gradient" auto ghost className={styles.thirteen}>
@@ -60,16 +65,7 @@ export default function Home({ session }) {
             css={{ $$cardColor: "transparent", backdropFilter: "blur(5px)" }}
           >
             <Card.Body>
-              <Row justify="center" align="center">
-                <Text
-                  size={40}
-                  css={{
-                    textGradient: "45deg, $black -20%, $blue600 80%",
-                  }}
-                >
-                  Screen shots
-                </Text>
-              </Row>
+              <Row justify="center" align="center"></Row>
             </Card.Body>
           </Card>
         </Container>
@@ -113,7 +109,7 @@ export default function Home({ session }) {
         </Container>
       </main>
       <Footer />
-    </NextUIProvider>
+    </>
   );
 }
 
