@@ -185,6 +185,8 @@ export default function Home({ all, currDev }) {
   //  setInterval(refresh, 10000);
 
   async function refresh() {
+    console.log(window.pageYOffset);
+
     router.push({
       pathname: "/device",
       query: { devID: currDev },
@@ -228,7 +230,7 @@ export default function Home({ all, currDev }) {
     }
   }
 
-  const latencyData = all.devices[`${currDev}`].networkStats;
+  const latencyData = all.devices[`${currDev}`].networkStats.reverse();
   const [visible_Reg, setVisible_Power] = React.useState(false);
   const handler_Power = () => setVisible_Power(true);
 
@@ -261,7 +263,7 @@ export default function Home({ all, currDev }) {
     element.click();
     document.body.removeChild(element);
   }
-
+  //console.log(window.document.getElementById("charts"));
   return (
     <>
       <Head>
@@ -725,7 +727,7 @@ export default function Home({ all, currDev }) {
                         syncId="anyId"
                         width={1150}
                         height={200}
-                        data={latencyData.reverse()}
+                        data={latencyData}
                       >
                         <Line
                           type="monotone"
@@ -757,7 +759,7 @@ export default function Home({ all, currDev }) {
                         syncId="anyId"
                         width={1150}
                         height={200}
-                        data={latencyData.reverse()}
+                        data={latencyData}
                       >
                         <Line
                           type="monotone"
@@ -1149,7 +1151,6 @@ export const getServerSideProps = withIronSessionSsr(
 
     let devices = req.req.session.devices;
     req.req.session.devices[`${id}`].server = server.rows;
-    console.log(req.req.session.devices[`${id}`].server);
 
     await req.req.session.save();
     req.req.session.devices[`${id}`].user = user.rows;
