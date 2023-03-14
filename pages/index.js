@@ -1,6 +1,5 @@
 import Navbar from "./templates/navbar/navbar";
 import Footer from "./templates/footer";
-import "@google/model-viewer/dist/model-viewer";
 
 import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
@@ -8,6 +7,12 @@ import { withIronSessionSsr } from "iron-session/next";
 import styles from "../styles/Home.module.css";
 import { NextUIProvider, Spacer } from "@nextui-org/react";
 import { Text, Container, Card, Row, Button, Image } from "@nextui-org/react";
+import { Canvas } from "@react-three/fiber";
+import Box from "../public/3D/componets/box";
+import { OrbitControls } from "@react-three/drei";
+import React, { Suspense } from "react";
+import Sphere from "../public/3D/componets/AnimatedShape";
+import Model from "../public/3D/componets/Scene";
 
 export default function Home({ session }) {
   session = JSON.parse(session);
@@ -16,7 +21,25 @@ export default function Home({ session }) {
   return (
     <>
       <main className={styles.main}>
-        <Navbar user={{ user }} />z
+        <Navbar user={{ user }} />
+
+        <Canvas size={"1100px"}>
+          <OrbitControls enableZoom={false} />
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[-2, 5, 2]} intensity={0.5} />
+          <Suspense fallback={null}>
+            <Box />
+          </Suspense>
+        </Canvas>
+        <Canvas size={"1100px"}>
+          <OrbitControls enableZoom={false} />
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[-2, 5, 2]} intensity={0.5} />
+          <Suspense fallback={null}>
+            <Sphere />
+          </Suspense>
+        </Canvas>
+
         <Container fluid>
           <Card
             css={{ $$cardColor: "transparent", backdropFilter: "blur(5px)" }}
@@ -31,18 +54,6 @@ export default function Home({ session }) {
                 >
                   Monitoring Tool
                 </Text>
-                <div id="card">
-                  <model-viewer
-                    src="/3D/knowledge_network/scene.gltf"
-                    ios-src=""
-                    poster="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b%2Fposter-astronaut.png?v=1599079951717"
-                    alt="A 3D model of an astronaut"
-                    shadow-intensity="1"
-                    camera-controls
-                    auto-rotate
-                    ar
-                  ></model-viewer>
-                </div>
               </Row>
               <Row justify="center" align="center">
                 <Button color="gradient" auto ghost className={styles.thirteen}>
