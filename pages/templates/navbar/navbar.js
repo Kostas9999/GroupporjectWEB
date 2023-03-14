@@ -5,6 +5,11 @@ import { useRouter } from "next/router";
 import { Avatar, Dropdown } from "@nextui-org/react";
 import { Layout } from "../../../public/templates/navbar/Layout.js";
 
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { Suspense } from "react";
+import Sphere from "../../../public/3D/componets/AnimatedShape";
+
 import { NextUIProvider } from "@nextui-org/react";
 import { SSRProvider } from "react-aria";
 import styles from "../../../styles/Home.module.css";
@@ -355,15 +360,14 @@ export default function App({ user }) {
             >
               <Dropdown placement="bottom-right">
                 <Dropdown.Trigger>
-                  <User
-                    bordered
-                    name={
-                      <Text b color="White" css={{ d: "flex" }}>
-                        {user?.user?.user_name}
-                      </Text>
-                    }
-                    color="primary"
-                  />
+                  <Canvas className="canvas">
+                    <OrbitControls enableZoom={false} />
+
+                    <directionalLight position={[-2, 5, 2]} intensity={1} />
+                    <Suspense fallback={null}>
+                      <Sphere />
+                    </Suspense>
+                  </Canvas>
                 </Dropdown.Trigger>
 
                 <Dropdown.Menu

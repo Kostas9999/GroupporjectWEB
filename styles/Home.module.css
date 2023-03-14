@@ -19,6 +19,8 @@
 
 }
 
+
+
 .description {
   display: inherit;
   justify-content: inherit;
@@ -287,4 +289,10 @@
   to {
     transform: rotate(0deg);
   }
+}
+.canvas {
+  display: inline-block;
+  line-height: 1em;
+  overflow: hidden;
+  height: 18px;
 }

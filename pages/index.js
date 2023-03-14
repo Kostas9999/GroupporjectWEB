@@ -12,7 +12,6 @@ import Box from "../public/3D/componets/box";
 import { OrbitControls } from "@react-three/drei";
 import React, { Suspense } from "react";
 import Sphere from "../public/3D/componets/AnimatedShape";
-import Model from "../public/3D/componets/Scene";
 
 export default function Home({ session }) {
   session = JSON.parse(session);
@@ -22,23 +21,6 @@ export default function Home({ session }) {
     <>
       <main className={styles.main}>
         <Navbar user={{ user }} />
-
-        <Canvas size={"1100px"}>
-          <OrbitControls enableZoom={false} />
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[-2, 5, 2]} intensity={0.5} />
-          <Suspense fallback={null}>
-            <Box />
-          </Suspense>
-        </Canvas>
-        <Canvas size={"1100px"}>
-          <OrbitControls enableZoom={false} />
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[-2, 5, 2]} intensity={0.5} />
-          <Suspense fallback={null}>
-            <Sphere />
-          </Suspense>
-        </Canvas>
 
         <Container fluid>
           <Card
