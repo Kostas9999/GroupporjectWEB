@@ -6,7 +6,15 @@ import { withIronSessionSsr } from "iron-session/next";
 
 import styles from "../styles/Home.module.css";
 import { NextUIProvider, Spacer } from "@nextui-org/react";
-import { Text, Container, Card, Row, Button, Image } from "@nextui-org/react";
+import {
+  Text,
+  Container,
+  Card,
+  Row,
+  Button,
+  Image,
+  Checkbox,
+} from "@nextui-org/react";
 
 import React from "react";
 import { color } from "@mui/system";
@@ -14,6 +22,8 @@ import { color } from "@mui/system";
 export default function Home({ session }) {
   session = JSON.parse(session);
   let user = session.user;
+
+  let checkBoxItems = ["item1", "item2"];
 
   return (
     <NextUIProvider>
@@ -32,16 +42,40 @@ export default function Home({ session }) {
             <Card.Body>
               <Row justify="center" align="center">
                 <Text
+                  justify="center"
+                  align="center"
                   size={50}
                   css={{
                     textGradient: "45deg, $black -20%, $blue600 80%",
+                    marginTop: "100px",
                   }}
                 >
                   We do better than others and other bla bla stuff
                 </Text>
               </Row>
               <Row justify="center" align="center">
-                <Button color="gradient" auto ghost className={styles.thirteen}>
+                <Text
+                  justify="center"
+                  align="center"
+                  size={20}
+                  css={{
+                    textGradient: "45deg, $black -20%, $blue600 80%",
+                    marginTop: "50px",
+                  }}
+                >
+                  "Small bla bla stuff"
+                </Text>
+              </Row>
+              <Row justify="center" align="center">
+                <Button
+                  color="gradient"
+                  auto
+                  ghost
+                  className={styles.thirteen}
+                  css={{
+                    marginTop: "100px",
+                  }}
+                >
                   <Text
                     size={20}
                     css={{
@@ -131,19 +165,50 @@ export default function Home({ session }) {
 
         <Spacer y={1} />
         <Container fluid>
-          <Card
-            css={{ $$cardColor: "transparent", backdropFilter: "blur(5px)" }}
-          >
+          <Card css={{ $$cardColor: "green" }}>
             <Card.Body>
               <Row justify="center" align="center">
-                <Text
-                  size={70}
-                  css={{
-                    textGradient: "45deg, $black -20%, $blue600 80%",
-                  }}
+                <Card
+                  s
+                  css={{ $$cardColor: "red", height: "80vh", margin: "10px" }}
                 >
-                  Info
-                </Text>
+                  <Card.Body>
+                    <Row justify="center" align="center">
+                      <Text
+                        size={50}
+                        css={{
+                          textGradient: "45deg, $black -20%, $blue600 80%",
+                        }}
+                      >
+                        we do that and that stuff
+                      </Text>
+                    </Row>
+                    {checkBoxItems.map((item) => (
+                      <Row justify="center" align="center">
+                        <Checkbox isRounded defaultSelected color="primary">
+                          <Text
+                            size={30}
+                            css={{
+                              textGradient: "45deg, $black -20%, $blue600 80%",
+                            }}
+                          >
+                            {item}
+                          </Text>
+                        </Checkbox>
+                      </Row>
+                    ))}
+                  </Card.Body>
+                </Card>
+                <Card s css={{ $$cardColor: "red", height: "80vh" }}>
+                  <Card.Body>
+                    <Row justify="center" align="center">
+                      <Image
+                        src="https://github.com/nextui-org/nextui/blob/next/apps/docs/public/nextui-banner.jpeg?raw=true"
+                        alt="Default Image"
+                      />
+                    </Row>
+                  </Card.Body>
+                </Card>
               </Row>
             </Card.Body>
           </Card>
@@ -161,7 +226,7 @@ export default function Home({ session }) {
                     textGradient: "45deg, $black -20%, $blue600 80%",
                   }}
                 >
-                  Images
+                  Screenshots carusele
                 </Text>
               </Row>
             </Card.Body>
