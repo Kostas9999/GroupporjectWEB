@@ -362,7 +362,6 @@ export default function App({ user }) {
                 <Dropdown.Trigger>
                   <Canvas className="canvas">
                     <OrbitControls enableZoom={false} />
-
                     <directionalLight position={[-2, 5, 2]} intensity={1} />
                     <Suspense fallback={null}>
                       <Sphere />

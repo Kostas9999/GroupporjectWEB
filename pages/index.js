@@ -17,13 +17,22 @@ import {
 } from "@nextui-org/react";
 
 import React from "react";
-import { color } from "@mui/system";
+import { Hidden } from "@mui/material";
 
 export default function Home({ session }) {
   session = JSON.parse(session);
   let user = session.user;
 
-  let checkBoxItems = ["item1", "item2"];
+  let checkBoxItems = [
+    "API",
+    "Email on Events",
+    "Network Performance",
+    "MultiDevice Monitoring",
+    "Hardware Monitoring",
+
+    "Build and Export Baseline",
+    "Remote Restart/Shutdown",
+  ];
 
   return (
     <NextUIProvider>
@@ -165,16 +174,22 @@ export default function Home({ session }) {
 
         <Spacer y={1} />
         <Container fluid>
-          <Card css={{ $$cardColor: "green" }}>
+          <Card css={{ background: "transparent" }}>
             <Card.Body>
               <Row justify="center" align="center">
                 <Card
-                  s
-                  css={{ $$cardColor: "red", height: "80vh", margin: "10px" }}
+                  css={{
+                    background: "transparent",
+                    minHeight: "80vh",
+
+                    margin: "10px",
+                  }}
                 >
                   <Card.Body>
                     <Row justify="center" align="center">
                       <Text
+                        justify="center"
+                        align="center"
                         size={50}
                         css={{
                           textGradient: "45deg, $black -20%, $blue600 80%",
@@ -183,9 +198,10 @@ export default function Home({ session }) {
                         we do that and that and more of that
                       </Text>
                     </Row>
+
                     {checkBoxItems.map((item) => (
-                      <Row justify="center" align="center">
-                        <Checkbox isRounded defaultSelected color="primary">
+                      <Row fluid justify="left" align="center">
+                        <Checkbox isRounded defaultSelected>
                           <Text
                             size={30}
                             css={{
@@ -197,8 +213,11 @@ export default function Home({ session }) {
                         </Checkbox>
                       </Row>
                     ))}
+
                     <Row justify="center" align="center">
                       <Text
+                        justify="center"
+                        align="center"
                         size={50}
                         css={{
                           textGradient: "45deg, $black -20%, $blue600 80%",
@@ -210,7 +229,7 @@ export default function Home({ session }) {
                   </Card.Body>
                 </Card>
 
-                <Card s css={{ $$cardColor: "red", height: "80vh" }}>
+                <Card css={{ background: "transparent", height: "80vh" }}>
                   <Card.Body>
                     <Row justify="center" align="center">
                       <Image
@@ -232,6 +251,8 @@ export default function Home({ session }) {
             <Card.Body>
               <Row justify="center" align="center">
                 <Text
+                  justify="center"
+                  align="center"
                   size={70}
                   css={{
                     textGradient: "45deg, $black -20%, $blue600 80%",

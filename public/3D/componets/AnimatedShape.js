@@ -12,7 +12,7 @@ export default function AnimatedShape() {
       <MeshDistortMaterial
         color={"#8352fd"}
         attach="material"
-        distort={0.5}
+        distort={0.7}
         speed={1}
         roughness={1}
       />
