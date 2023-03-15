@@ -180,7 +180,7 @@ export default function Home({ session }) {
                           textGradient: "45deg, $black -20%, $blue600 80%",
                         }}
                       >
-                        we do that and that stuff
+                        we do that and that and more of that
                       </Text>
                     </Row>
                     {checkBoxItems.map((item) => (
@@ -197,8 +197,19 @@ export default function Home({ session }) {
                         </Checkbox>
                       </Row>
                     ))}
+                    <Row justify="center" align="center">
+                      <Text
+                        size={50}
+                        css={{
+                          textGradient: "45deg, $black -20%, $blue600 80%",
+                        }}
+                      >
+                        also some of that
+                      </Text>
+                    </Row>
                   </Card.Body>
                 </Card>
+
                 <Card s css={{ $$cardColor: "red", height: "80vh" }}>
                   <Card.Body>
                     <Row justify="center" align="center">
