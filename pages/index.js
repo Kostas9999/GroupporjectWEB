@@ -3,7 +3,7 @@ import Footer from "./templates/footer";
 
 import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
-//test commit
+
 import styles from "../styles/Home.module.css";
 import { NextUIProvider, Spacer } from "@nextui-org/react";
 import {
