@@ -55,8 +55,6 @@ export default function Dashboard({ session, devicesTitle }) {
 
     const JSONdata = JSON.stringify(data);
 
-    console.log(JSONdata);
-
     const endpoint = "/api/database/queries/device_add";
 
     const options = {
@@ -105,6 +103,8 @@ export default function Dashboard({ session, devicesTitle }) {
 
       spinner.style.display = "none";
       dataDiv.style.display = "block";
+
+      dataDiv.textContent = `Public Ip: ${activeData.publicip} CPU: ${activeData.cpu} RAM: ${activeData.memory}`;
     });
   }
 
@@ -191,14 +191,13 @@ export default function Dashboard({ session, devicesTitle }) {
                 }}
               >
                 <Card.Body css={{ color: text_Color }}>
-                  <Row>
+                  <Row justify="center" align="center">
                     {item.hostname} <br></br>
                     {item.version} ({item.build} )
                     <div id={item.id}>
                       <Loading aria-label="spinner" type="points-opacity" />
                       <Container aria-label="data" style={{ display: "none" }}>
                         {" "}
-                        <Text>{activeData?.memory}</Text>
                       </Container>
                     </div>
                     <Dropdown>
