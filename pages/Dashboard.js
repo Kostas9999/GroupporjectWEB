@@ -24,6 +24,7 @@ import { useRouter } from "next/router";
 export default function Dashboard({ session, devicesTitle }) {
   devicesTitle = JSON.parse(devicesTitle);
   session = JSON.parse(session);
+  let activeData;
   let user = session.user;
   //console.log(session.user.user_id);
 
@@ -75,8 +76,6 @@ export default function Dashboard({ session, devicesTitle }) {
   getActiveData();
   async function getActiveData() {
     Object.keys(session.devices).map(async (dev) => {
-      console.log(dev);
-
       const data = {
         currDev: dev,
       };
@@ -95,6 +94,9 @@ export default function Dashboard({ session, devicesTitle }) {
       const result = await response.json();
 
       devicesTitle.data = result.data;
+
+      activeData = result.data[0];
+      console.log(activeData);
 
       let getDiv = document.getElementById(dev);
 
@@ -196,7 +198,7 @@ export default function Dashboard({ session, devicesTitle }) {
                       <Loading aria-label="spinner" type="points-opacity" />
                       <Container aria-label="data" style={{ display: "none" }}>
                         {" "}
-                        <Text>data</Text>
+                        <Text>{activeData?.memory}</Text>
                       </Container>
                     </div>
                     <Dropdown>
