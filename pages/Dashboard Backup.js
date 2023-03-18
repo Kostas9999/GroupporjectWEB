@@ -2,7 +2,7 @@ import { withIronSessionSsr } from "iron-session/next";
 import Navbar from "./templates/navbar/navbar";
 import Header from "./templates/header";
 import { ironOptions } from "./api/session/session_Config";
-import { Container, NextUIProvider, Row } from "@nextui-org/react";
+import { NextUIProvider } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
 
 import {
@@ -13,8 +13,6 @@ import {
   Modal,
   Input,
   Spacer,
-  Loading,
-  Dropdown,
 } from "@nextui-org/react";
 import React from "react";
 import { Router } from "next/router";
@@ -70,40 +68,6 @@ export default function Dashboard({ session, devicesTitle }) {
     if (result.ok) {
       router.push("/Dashboard");
     }
-  }
-
-  getActiveData();
-  async function getActiveData() {
-    Object.keys(session.devices).map(async (dev) => {
-      console.log(dev);
-
-      const data = {
-        currDev: dev,
-      };
-
-      const JSONdata = JSON.stringify(data);
-
-      const endpoint = "/api/database/queries/getActiveData";
-
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSONdata,
-      };
-
-      const response = await fetch(endpoint, options);
-      const result = await response.json();
-
-      devicesTitle.data = result.data;
-
-      let getDiv = document.getElementById(dev);
-
-      let spinner = getDiv.querySelector('[aria-label="spinner"]');
-      let dataDiv = getDiv.querySelector('[aria-label="data"]');
-
-      spinner.style.display = "none";
-      dataDiv.style.display = "block";
-    });
   }
 
   return (
@@ -188,32 +152,10 @@ export default function Dashboard({ session, devicesTitle }) {
                   });
                 }}
               >
+                {}
                 <Card.Body css={{ color: text_Color }}>
-                  <Row>
-                    {item.hostname} <br></br>
-                    {item.version} ({item.build} )
-                    <div id={item.id}>
-                      <Loading aria-label="spinner" type="points-opacity" />
-                      <Container aria-label="data" style={{ display: "none" }}>
-                        {" "}
-                        <Text>data</Text>
-                      </Container>
-                    </div>
-                    <Dropdown>
-                      <Dropdown.Button
-                        flat
-                        size={"sm"}
-                        css={{ marginLeft: "auto" }}
-                      >
-                        Remove*
-                      </Dropdown.Button>
-                      <Dropdown.Menu aria-label="Static Actions">
-                        <Dropdown.Item key="delete" color="error">
-                          Press to remove device*
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Row>
+                  {item.hostname} <br></br>
+                  {item.version} ({item.build} )<br></br>
                 </Card.Body>
               </Card>
             </Grid>
