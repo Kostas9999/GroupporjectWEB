@@ -55,7 +55,8 @@ export default function Dashboard({ session, devicesTitle }) {
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint = "/api/database/queries/device_add";
+    const endpoint =
+      "https://montool.vercel.app/api/database/queries/device_add";
 
     const options = {
       method: "POST",
@@ -80,7 +81,8 @@ export default function Dashboard({ session, devicesTitle }) {
 
       const JSONdata = JSON.stringify(data);
 
-      const endpoint = "/api/database/queries/getActiveData";
+      const endpoint =
+        "https://montool.vercel.app/api/database/queries/getActiveData";
 
       const options = {
         method: "POST",
@@ -98,8 +100,8 @@ export default function Dashboard({ session, devicesTitle }) {
 
       let getDiv = document.getElementById(dev);
 
-      let spinner = getDiv.querySelector('[aria-label="spinner"]');
-      let dataDiv = getDiv.querySelector('[aria-label="data"]');
+      let spinner = getDiv?.querySelector('[aria-label="spinner"]');
+      let dataDiv = getDiv?.querySelector('[aria-label="data"]');
 
       spinner.style.display = "none";
       dataDiv.style.display = "block";
