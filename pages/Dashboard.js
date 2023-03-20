@@ -27,7 +27,7 @@ export default function Dashboard({ session, devicesTitle }) {
   let activeData;
   let user = session.user;
   //console.log(session.user.user_id);
-
+  console.log(session.env.host);
   //
 
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
@@ -55,7 +55,7 @@ export default function Dashboard({ session, devicesTitle }) {
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint = `/api/database/queries/device_add`;
+    const endpoint = `${session.env.host}/api/database/queries/device_add`;
 
     const options = {
       method: "POST",
@@ -80,7 +80,7 @@ export default function Dashboard({ session, devicesTitle }) {
 
       // const JSONdata = JSON.stringify(data);
 
-      const endpoint = `/api/database/queries/getActiveData`;
+      const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
 
       const options = {
         method: "POST",
@@ -228,7 +228,6 @@ export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     const { client } = require("./api/database/connections/connection");
 
-    console.log(process.env.HOST);
     const rows_devices = await client.query(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`
     );
@@ -249,8 +248,9 @@ export const getServerSideProps = withIronSessionSsr(
         dev[`${item.id}`].os = rows.rows[0];
       }
     }
-    req.session.devices = dev;
 
+    req.session.devices = dev;
+    req.session.env = { host: process.env.HOST };
     await req.session.save();
 
     return {
