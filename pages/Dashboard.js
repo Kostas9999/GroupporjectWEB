@@ -55,7 +55,7 @@ export default function Dashboard({ session, devicesTitle }) {
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint = `https://montool.vercel.app/api/database/queries/device_add`;
+    const endpoint = `/api/database/queries/device_add`;
 
     const options = {
       method: "POST",
@@ -80,7 +80,7 @@ export default function Dashboard({ session, devicesTitle }) {
 
       // const JSONdata = JSON.stringify(data);
 
-      const endpoint = `https://montool.vercel.app/api/database/queries/getActiveData`;
+      const endpoint = `/api/database/queries/getActiveData`;
 
       const options = {
         method: "POST",
@@ -228,6 +228,7 @@ export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     const { client } = require("./api/database/connections/connection");
 
+    console.log(process.env.HOST);
     const rows_devices = await client.query(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`
     );
