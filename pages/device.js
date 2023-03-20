@@ -63,8 +63,7 @@ export default function Home({ all, currDev }) {
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
-    if (result.ok) {
-    }
+ 
   }
 
   let disc = all.devices[`${currDev}`].disc;

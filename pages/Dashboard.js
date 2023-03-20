@@ -27,7 +27,7 @@ export default function Dashboard({ session, devicesTitle }) {
   let activeData;
   let user = session.user;
   //console.log(session.user.user_id);
-  console.log(session.env.host);
+
   //
 
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
@@ -42,6 +42,10 @@ export default function Dashboard({ session, devicesTitle }) {
   const closeHandler_getDeviceID = () => {
     setVisible_Login(false);
   };
+
+  function dateTimeFormater(datetime) {
+    return datetime.replaceAll("T", " ").substring(0, 19);
+  }
 
   async function handleSubmit_Add_Device(event) {
     event.preventDefault();
@@ -95,15 +99,21 @@ export default function Dashboard({ session, devicesTitle }) {
 
       activeData = result.data[0];
 
-      let getDiv = document.getElementById(dev);
+      if (document) {
+        let getDiv = document.getElementById(dev);
 
-      let spinner = getDiv?.querySelector('[aria-label="spinner"]');
-      let dataDiv = getDiv?.querySelector('[aria-label="data"]');
+        let spinner = getDiv?.querySelector('[aria-label="spinner"]');
+        let dataDiv = getDiv?.querySelector('[aria-label="data"]');
 
-      spinner.style.display = "none";
-      dataDiv.style.display = "block";
+        spinner.style.display = "none";
+        dataDiv.style.display = "block";
 
-      dataDiv.textContent = `Public Ip: ${activeData.publicip} CPU: ${activeData.cpu} RAM: ${activeData.memory} Last Seen: ${activeData.created}`;
+        dataDiv.textContent = `Public Ip: ${activeData.publicip} CPU: ${
+          activeData.cpu
+        } RAM: ${activeData.memory} Last Seen: ${dateTimeFormater(
+          activeData.created
+        )}`;
+      }
     });
   }
 
@@ -192,7 +202,7 @@ export default function Dashboard({ session, devicesTitle }) {
                 <Card.Body css={{ color: text_Color }}>
                   <Row justify="center" align="center">
                     {item.hostname} <br></br>
-                    {item.version} ({item.build} )
+                    {item.version} ({item.build})
                     <div id={item.id}>
                       <Loading aria-label="spinner" type="points-opacity" />
                       <Container aria-label="data" style={{ display: "none" }}>
