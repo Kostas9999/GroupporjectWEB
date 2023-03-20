@@ -55,7 +55,7 @@ export default function Dashboard({ session, devicesTitle }) {
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint = `${process.env.HOST}/api/database/queries/device_add`;
+    const endpoint = `https://montool.vercel.app/api/database/queries/device_add`;
 
     const options = {
       method: "POST",
@@ -80,7 +80,7 @@ export default function Dashboard({ session, devicesTitle }) {
 
       // const JSONdata = JSON.stringify(data);
 
-      const endpoint = `${process.env.HOST}/api/database/queries/getActiveData`;
+      const endpoint = `https://montool.vercel.app/api/database/queries/getActiveData`;
 
       const options = {
         method: "POST",
