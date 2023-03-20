@@ -568,7 +568,7 @@ export default function Home({ all, currDev }) {
                     onClose={closeHandler_MSG}
                     css={{
                       backgroundColor: "White",
-                      background: "transparent",
+
                       backdropFilter: "blur(20px)",
                     }}
                   >
