@@ -993,22 +993,22 @@ export default function Home({ all, currDev }) {
                           <Card.Body>
                             <Row justify="Left" align="right">
                               <Text color={text_Color}>
-                                IPv4: {dateTimeFormater(baseline.ipv4)}{" "}
+                                IPv4: {baseline.ipv4}
                               </Text>
                             </Row>
                             <Row justify="Left" align="right">
                               <Text color={text_Color}>
-                                IPv4 Mask: {dateTimeFormater(baseline.ipv4sub)}{" "}
+                                IPv4 Mask: {baseline.ipv4sub}
                               </Text>
                             </Row>
                             <Row justify="Left" align="right">
                               <Text color={text_Color}>
-                                IPv6: {baseline.ipv6} ms
+                                IPv6: {baseline.ipv6}
                               </Text>
                             </Row>
                             <Row justify="Left" align="right">
                               <Text color={text_Color}>
-                                IPv6 Mask: {dateTimeFormater(baseline.ipv6sub)}{" "}
+                                IPv6 Mask: {baseline.ipv6sub}
                               </Text>
                             </Row>
                           </Card.Body>
@@ -1039,13 +1039,12 @@ export default function Home({ all, currDev }) {
                           <Card.Body>
                             <Row justify="Left" align="right">
                               <Text color={text_Color}>
-                                Gateway:{" "}
-                                {dateTimeFormater(baseline.defaultgateway)}{" "}
+                                Gateway: {baseline.defaultgateway}{" "}
                               </Text>
                             </Row>
                             <Row justify="Left" align="right">
                               <Text color={text_Color}>
-                                Public IP: {dateTimeFormater(baseline.publicip)}{" "}
+                                Public IP: {baseline.publicip}{" "}
                               </Text>
                             </Row>
                             <Row justify="Left" align="right">

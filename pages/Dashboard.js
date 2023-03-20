@@ -55,8 +55,7 @@ export default function Dashboard({ session, devicesTitle }) {
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint =
-      "https://montool.vercel.app/api/database/queries/device_add";
+    const endpoint = `${process.env.HOST}/api/database/queries/device_add`;
 
     const options = {
       method: "POST",
@@ -75,19 +74,19 @@ export default function Dashboard({ session, devicesTitle }) {
   getActiveData();
   async function getActiveData() {
     Object.keys(session.devices).map(async (dev) => {
-      const data = {
-        currDev: dev,
-      };
+      // const data = {
+      //    currDev: dev,
+      //  };
 
-      const JSONdata = JSON.stringify(data);
+      // const JSONdata = JSON.stringify(data);
 
       const endpoint =
-        "https://montool.vercel.app/api/database/queries/getActiveData";
+        "http://127.0.0.1:3000/api/database/queries/getActiveData";
 
       const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSONdata,
+        body: JSON.stringify({ currDev: dev }),
       };
 
       const response = await fetch(endpoint, options);
@@ -96,7 +95,6 @@ export default function Dashboard({ session, devicesTitle }) {
       devicesTitle.data = result.data;
 
       activeData = result.data[0];
-      console.log(activeData);
 
       let getDiv = document.getElementById(dev);
 
@@ -106,7 +104,7 @@ export default function Dashboard({ session, devicesTitle }) {
       spinner.style.display = "none";
       dataDiv.style.display = "block";
 
-      dataDiv.textContent = `Public Ip: ${activeData.publicip} CPU: ${activeData.cpu} RAM: ${activeData.memory}`;
+      dataDiv.textContent = `Public Ip: ${activeData.publicip} CPU: ${activeData.cpu} RAM: ${activeData.memory} Last Seen: ${activeData.created}`;
     });
   }
 
