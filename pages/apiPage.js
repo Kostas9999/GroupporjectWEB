@@ -23,11 +23,7 @@ export default function Home({ session }) {
 
   const router = useRouter();
 
-  const [open, setOpen] = useState(false);
-  function notification(msg) {
-    message = msg;
-    setOpen(true);
-  }
+ 
 
   let device_arr = Object.keys(session.devices);
   let tables = [
@@ -88,6 +84,12 @@ export default function Home({ session }) {
     if (result.ok) {
     }
     router.push("/apiPage");
+  }
+
+  const [open, setOpen] = useState(false);
+  function notification(msg) {
+    message = msg;
+    setOpen(true);
   }
 
   function TransitionLeft(props) {

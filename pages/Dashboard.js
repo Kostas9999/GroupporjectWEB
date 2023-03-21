@@ -4,6 +4,9 @@ import Header from "./templates/header";
 import { ironOptions } from "./api/session/session_Config";
 import { Container, NextUIProvider, Row } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
+import { useState } from "react";
+
+import { Snackbar, Slide } from "@mui/material";
 
 import {
   Card,
@@ -20,6 +23,8 @@ import React from "react";
 import { Router } from "next/router";
 
 import { useRouter } from "next/router";
+
+let message = ""
 
 export default function Dashboard({ session, devicesTitle }) {
   devicesTitle = JSON.parse(devicesTitle);
@@ -45,6 +50,37 @@ export default function Dashboard({ session, devicesTitle }) {
 
   function dateTimeFormater(datetime) {
     return datetime.replaceAll("T", " ").substring(0, 19);
+  }
+
+
+
+  async function handleDeleteDev(id){
+
+
+    const data = {
+      user_id: session.user.user_id,
+      dev_id: id,
+    };
+
+    const JSONdata = JSON.stringify(data);
+
+    const endpoint = `${session.env.host}/api/database/queries/device_remove`;
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSONdata,
+    };
+
+    const response = await fetch(endpoint, options);
+    const result = await response.json();
+
+    
+
+    if (result.ok) {
+      router.push("/Dashboard");
+    }
+  
   }
 
   async function handleSubmit_Add_Device(event) {
@@ -107,14 +143,30 @@ export default function Dashboard({ session, devicesTitle }) {
 
         spinner.style.display = "none";
         dataDiv.style.display = "block";
+        
+        const toTimestamp = (strDate) => {
+          const dt = Date.parse(strDate);
+
+          return Date.now() - dt ;
+        }
 
         dataDiv.textContent = `Public Ip: ${activeData.publicip} CPU: ${
           activeData.cpu
         } RAM: ${activeData.memory} Last Seen: ${dateTimeFormater(
           activeData.created
-        )}`;
+        )} diff ${  toTimestamp(activeData.created)}`;
       }
     });
+  }
+
+  const [open, setOpen] = useState(false);
+  function notification(msg) {
+    message = msg;
+    setOpen(true);
+  }
+
+  function TransitionLeft(props) {
+    return <Slide {...props} direction="right" />;
   }
 
   return (
@@ -206,7 +258,7 @@ export default function Dashboard({ session, devicesTitle }) {
                     <div id={item.id}>
                       <Loading aria-label="spinner" type="points-opacity" />
                       <Container aria-label="data" style={{ display: "none" }}>
-                        {" "}
+               
                       </Container>
                     </div>
                     <Dropdown>
@@ -217,7 +269,11 @@ export default function Dashboard({ session, devicesTitle }) {
                       >
                         Remove*
                       </Dropdown.Button>
-                      <Dropdown.Menu aria-label="Static Actions">
+                      <Dropdown.Menu aria-label="Static Actions"
+                        onAction={(actionKey) => {
+                          handleDeleteDev(item.id);
+                        }}
+                      >
                         <Dropdown.Item key="delete" color="error">
                           Press to remove device*
                         </Dropdown.Item>
@@ -228,6 +284,15 @@ export default function Dashboard({ session, devicesTitle }) {
               </Card>
             </Grid>
           ))}
+
+<Snackbar
+          TransitionComponent={TransitionLeft}
+          open={open}
+          onClose={() => setOpen(false)}
+          autoHideDuration={3000}
+          message={message}
+          color="warning"
+        ></Snackbar>
         </Grid.Container>
       </main>
     </NextUIProvider>

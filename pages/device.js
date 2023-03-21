@@ -3,9 +3,12 @@ import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
 
 import Navbar from "./templates/navbar/navbar";
-import React, { PureComponent } from "react";
+import React, { PureComponent, } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { NotificationIcon } from "../public/img/js/notification";
+import { useState } from "react";
+
+import { Snackbar, Slide } from "@mui/material";
 
 import { useRouter } from "next/router";
 
@@ -13,6 +16,8 @@ import { NextUIProvider } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
 
 const json2csv = require("json2csv");
+
+
 
 import {
   Collapse,
@@ -29,21 +34,37 @@ import {
   Grid,
   Button,
 } from "@nextui-org/react";
-
+let message =""
 export default function Home({ all, currDev }) {
   all = JSON.parse(all);
 
   let user = all.user;
   //console.log(all.devices[`${currDev}`].baseline)
-
-  const handler_getDeviceID = () => setVisible_Login(true);
-  const [visible_getDeviceID, setVisible_Login] = React.useState(false);
-  const closeHandler_getDeviceID = () => {
-    setVisible_Login(false);
+/*
+  const handler_sendMsg= () => setVisible_sendMsg(true);
+  const [visible_sendMsg, setVisible_sendMsg] = React.useState(false);
+  const closeHandler_sendMsg = () => {
+    console.log("here")
+    setVisible_sendMsg(false);
   };
+  */
 
-  async function handleSubmit_Add_Device(event) {
+ 
+
+  const [open, setOpen] = useState(false);
+  function notification(msg) {
+    message = msg;
+    setOpen(true);
+  }
+
+  function TransitionLeft(props) {
+    return <Slide {...props} direction="right" />;
+  }
+
+  async function send_MSG(event) {
     event.preventDefault();
+    closeHandler_MSG();
+    notification("Message sent..")
 
     console.log(event.target.dev_ID);
 
@@ -238,11 +259,9 @@ export default function Home({ all, currDev }) {
   };
 
   const [visible_MSG, setVisible_MSG] = React.useState(false);
-  const handler_MSG = () => setVisible_MSG(true);
+  const openHandler_MSG = () => setVisible_MSG(true);
+  const closeHandler_MSG = () => setVisible_MSG(false);
 
-  const closeHandler_MSG = () => {
-    setVisible_Power(false);
-  };
 
   //==================================================== export
 
@@ -416,12 +435,13 @@ export default function Home({ all, currDev }) {
           {/* ========================================================= Start second row SIDEBAR
            Start second row         
           */}
-          <Grid xs={2}>
+          <Grid xs={3}>
             <Container hidden>
               <Card
                 css={{
                   $$cardColor: btn_back,
                   h: "100%",
+                  w:"100%"
                 }}
               >
                 <Row justify="center">
@@ -546,7 +566,7 @@ export default function Home({ all, currDev }) {
                   <Spacer y={1}></Spacer>
                   <Row justify="center" align="right">
                     <Button
-                      onClick={handler_MSG}
+                      onClick={openHandler_MSG}
                       size="md"
                       auto
                       shadow
@@ -579,7 +599,7 @@ export default function Home({ all, currDev }) {
                     <Card.Divider />
                     <Modal.Body>
                       {" "}
-                      <form onSubmit={handleSubmit_Add_Device}>
+                      <form onSubmit={send_MSG}>
                         <Modal.Body>
                           <Input
                             aria-label="dev_ID"
@@ -595,7 +615,7 @@ export default function Home({ all, currDev }) {
                             auto
                             flat
                             color="error"
-                            onPress={closeHandler_getDeviceID}
+                            onPress={closeHandler_MSG}
                           >
                             Close
                           </Button>
@@ -667,21 +687,25 @@ export default function Home({ all, currDev }) {
                   </Modal>
 
                   <Spacer y={1}></Spacer>
+
+           {/*
+           
+                  
                   <Modal
                     scroll
                     blur
                     width="30%"
                     aria-labelledby="modal-title"
                     aria-describedby="modal-description"
-                    open={visible_getDeviceID}
-                    onClose={closeHandler_getDeviceID}
+                    open={visible_sendMsg}
+                    onClose={closeHandler_sendMsg}
                   >
                     <Modal.Header>
                       <Text id="modal-title" size={18}>
                         Device
                       </Text>
                     </Modal.Header>
-                    <form onSubmit={handleSubmit_Add_Device}>
+                    <form onSubmit={send_MSG}>
                       <Modal.Body>
                         <Input
                           aria-label="dev_ID"
@@ -697,7 +721,7 @@ export default function Home({ all, currDev }) {
                           auto
                           flat
                           color="error"
-                          onPress={closeHandler_getDeviceID}
+                          onPress={closeHandler_sendMsg}
                         >
                           Close
                         </Button>
@@ -707,6 +731,8 @@ export default function Home({ all, currDev }) {
                       </Modal.Footer>
                     </form>
                   </Modal>
+           
+           */}
                 </Card.Body>
               </Card>
             </Container>
@@ -716,7 +742,7 @@ export default function Home({ all, currDev }) {
            Start chart row     
                
           */}
-          <div id="charts" style={{ width: "80%" }}>
+          <div id="charts" style={{ width: "70%" }}>
             <Grid xs={12}>
               <Container>
                 <Card css={{ $$cardColor: btn_back, h: "75vh" }}>
@@ -1103,6 +1129,14 @@ export default function Home({ all, currDev }) {
               </Grid.Container>
             ))}
           </div>
+          <Snackbar
+          TransitionComponent={TransitionLeft}
+          open={open}
+          onClose={() => setOpen(false)}
+          autoHideDuration={3000}
+          message={message}
+          color="warning"
+        ></Snackbar>
         </Grid.Container>
       </main>
     </>
