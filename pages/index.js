@@ -16,11 +16,25 @@ import {
   Checkbox,
 } from "@nextui-org/react";
 
-import React from "react";
+import React, { useState } from "react";
 
 export default function Home({ session }) {
   session = JSON.parse(session);
   let user = session.user;
+
+  const [showComponent, setShowComponent] = useState(false);
+
+  const toggleComponent = () => {
+    setShowComponent(!showComponent);
+  };
+
+  function ComponentOne() {
+    return <h1>Component One</h1>;
+  }
+
+  function ComponentTwo() {
+    return <h1>Component Two</h1>;
+  }
 
   let checkBoxItems = [
     "API",
@@ -263,7 +277,12 @@ export default function Home({ session }) {
             </Card.Body>
           </Card>
         </Container>
+        <div>
+          <button onClick={toggleComponent}></button>
+          {showComponent ? <ComponentOne /> : <ComponentTwo />}
+        </div>
       </main>
+
       <Footer />
     </NextUIProvider>
   );
