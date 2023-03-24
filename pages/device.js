@@ -3,7 +3,7 @@ import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
 
 import Navbar from "./templates/navbar/navbar";
-import React, { PureComponent, } from "react";
+import React, { PureComponent } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { NotificationIcon } from "../public/img/js/notification";
 import { useState } from "react";
@@ -16,8 +16,6 @@ import { NextUIProvider } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
 
 const json2csv = require("json2csv");
-
-
 
 import {
   Collapse,
@@ -34,13 +32,13 @@ import {
   Grid,
   Button,
 } from "@nextui-org/react";
-let message =""
-export default function Home({ all, currDev }) {
-  all = JSON.parse(all);
+let message = "";
+export default function Home({ session, currDev }) {
+  let all = JSON.parse(session);
 
   let user = all.user;
   //console.log(all.devices[`${currDev}`].baseline)
-/*
+  /*
   const handler_sendMsg= () => setVisible_sendMsg(true);
   const [visible_sendMsg, setVisible_sendMsg] = React.useState(false);
   const closeHandler_sendMsg = () => {
@@ -48,8 +46,6 @@ export default function Home({ all, currDev }) {
     setVisible_sendMsg(false);
   };
   */
-
- 
 
   const [open, setOpen] = useState(false);
   function notification(msg) {
@@ -64,7 +60,7 @@ export default function Home({ all, currDev }) {
   async function send_MSG(event) {
     event.preventDefault();
     closeHandler_MSG();
-    notification("Message sent..")
+    notification("Message sent..");
 
     console.log(event.target.dev_ID);
 
@@ -84,7 +80,6 @@ export default function Home({ all, currDev }) {
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
- 
   }
 
   let disc = all.devices[`${currDev}`].disc;
@@ -261,7 +256,6 @@ export default function Home({ all, currDev }) {
   const [visible_MSG, setVisible_MSG] = React.useState(false);
   const openHandler_MSG = () => setVisible_MSG(true);
   const closeHandler_MSG = () => setVisible_MSG(false);
-
 
   //==================================================== export
 
@@ -441,7 +435,7 @@ export default function Home({ all, currDev }) {
                 css={{
                   $$cardColor: btn_back,
                   h: "100%",
-                  w:"100%"
+                  w: "100%",
                 }}
               >
                 <Row justify="center">
@@ -688,7 +682,7 @@ export default function Home({ all, currDev }) {
 
                   <Spacer y={1}></Spacer>
 
-           {/*
+                  {/*
            
                   
                   <Modal
@@ -1130,13 +1124,13 @@ export default function Home({ all, currDev }) {
             ))}
           </div>
           <Snackbar
-          TransitionComponent={TransitionLeft}
-          open={open}
-          onClose={() => setOpen(false)}
-          autoHideDuration={3000}
-          message={message}
-          color="warning"
-        ></Snackbar>
+            TransitionComponent={TransitionLeft}
+            open={open}
+            onClose={() => setOpen(false)}
+            autoHideDuration={3000}
+            message={message}
+            color="warning"
+          ></Snackbar>
         </Grid.Container>
       </main>
     </>
@@ -1146,7 +1140,7 @@ export default function Home({ all, currDev }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps(req) {
     const { client, pool } = require("./api/database/connections/connection");
-
+    //console.log(req.req.session.devices);
     const id = req.query.devID;
 
     let ports = await client.query(
@@ -1185,6 +1179,7 @@ export const getServerSideProps = withIronSessionSsr(
     req.req.session.devices[`${id}`].server = server.rows;
 
     await req.req.session.save();
+
     req.req.session.devices[`${id}`].user = user.rows;
     req.req.session.devices[`${id}`].hardware = hardware.rows;
     req.req.session.devices[`${id}`].iface = iface.rows;
@@ -1197,7 +1192,7 @@ export const getServerSideProps = withIronSessionSsr(
 
     return {
       props: {
-        all: JSON.stringify(req.req.session),
+        session: JSON.stringify(req.req.session),
         currDev: id,
         // hardware: JSON.stringify(hardware.rows[0]),
         // iface: JSON.stringify(iface.rows[0]),

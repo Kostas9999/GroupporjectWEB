@@ -156,7 +156,7 @@ export default function Dashboard({ session }) {
   }
 */
   // setInterval(getActiveData, 10000);
-  getActiveData();
+  // getActiveData();
   async function getActiveData() {
     Object.keys(session.devices).map(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
@@ -236,7 +236,7 @@ export default function Dashboard({ session }) {
       arr.push(result);
     });
     setItems(arr);
-    console.log(arr);
+
     notification("Loading..");
   }, []);
 
@@ -383,10 +383,9 @@ export const getServerSideProps = withIronSessionSsr(
     // adding list of decices ids to the list
     let dev = {};
     rows_devices.rows.forEach((data) => {
-      dev[`${data.id}`] = { data };
+      dev[data.id] = { data };
     });
 
-    let devicesTitle = [];
     /*
 
     if (rows_devices.rowCount > 0) {
