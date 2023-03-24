@@ -435,7 +435,7 @@ export default function Home({ all, currDev }) {
           {/* ========================================================= Start second row SIDEBAR
            Start second row         
           */}
-          <Grid xs={3}>
+          <Grid xs={2}>
             <Container hidden>
               <Card
                 css={{

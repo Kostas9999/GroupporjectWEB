@@ -27,9 +27,17 @@ import { useRouter } from "next/router";
 
 let message = "";
 
-export default function Dashboard({ session, devicesTitle }) {
-  devicesTitle = JSON.parse(devicesTitle);
+
+export default function Dashboard({ session }) {
   session = JSON.parse(session);
+
+
+  let devicesTitle = session?.devices?.os;
+
+if(typeof devicesTitle === "undefined"){devicesTitle=[]}
+
+// throw new Error(`${devicesTitle.os}`);
+
   let activeData;
   let user = session.user;
   //console.log(session.user.user_id);
@@ -125,9 +133,32 @@ export default function Dashboard({ session, devicesTitle }) {
       router.push("/Dashboard");
     }
   }
+  getOsData()
+  async function getOsData() {
+    
+    Object.keys(session.devices).map(async (dev) => {
+     
+      const endpoint = `${session.env.host}/api/database/queries/getOs`;
 
-  setInterval(getActiveData, 10000);
-  getActiveData();
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currDev: dev }),
+      };
+
+      const response = await fetch(endpoint, options);
+      const result = await response.json();
+      console.log(session)
+
+    
+        devicesTitle.push(result.os)
+    
+  
+    });
+  }
+
+ // setInterval(getActiveData, 10000);
+  //getActiveData();
   async function getActiveData() {
     Object.keys(session.devices).map(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
@@ -144,12 +175,15 @@ export default function Dashboard({ session, devicesTitle }) {
       devicesTitle.data = result.data;
 
       activeData = result.data[0];
+   
 
-      if (typeof document !== undefined) {
-        let getDiv = document?.getElementById(dev);
+    
+      if (typeof document !== "undefined") {
+    
+        let getDiv = document.getElementById(dev);
 
-        let spinner = getDiv?.querySelector('[aria-label="spinner"]');
-        let dataDiv = getDiv?.querySelector('[aria-label="data"]');
+        let spinner = getDiv.querySelector('[aria-label="spinner"]');
+        let dataDiv = getDiv.querySelector('[aria-label="data"]');
 
         spinner.style.display = "none";
         dataDiv.style.display = "block";
@@ -160,7 +194,7 @@ export default function Dashboard({ session, devicesTitle }) {
           activeData.created
         )} diff ${toTimestamp(activeData.created)}`;
 
-        console.log(toTimestamp(activeData.created));
+       
         if (toTimestamp(activeData.created) < 20000) {
           dataDiv.innerHTML = `<strong> Online</strong>`;
           dataDiv.style.color = "green";
@@ -328,23 +362,30 @@ export const getServerSideProps = withIronSessionSsr(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`
     );
 
+   // adding list of decices ids to the list
     let dev = {};
     rows_devices.rows.forEach((data) => {
       dev[`${data.id}`] = { data };
     });
 
     let devicesTitle = [];
+  /*
+
     if (rows_devices.rowCount > 0) {
       const devices = rows_devices.rows;
 
       for (const item of devices) {
-        const rows = await client.query(`SELECT * FROM "${item.id}"."os" ;`);
-        rows.rows[0].id = item.id;
-        devicesTitle.push(rows.rows[0]);
-        dev[`${item.id}`].os = rows.rows[0];
+   //     const rows = await client.query(`SELECT * FROM "${item.id}"."os" ;`);
+
+   //    console.log(req.session.devices[`${item.id}`])
+  //     throw new Error("Something went badly wrong!");
+   //   let  rows = req.session.devices;
+   req.session.devices[`${item.id}`].id = item.id;
+        devicesTitle.push(req.session.devices[`${item.id}`]);
+        dev[`${item.id}`].os = req.session.devices[`${item.id}`].os;
       }
     }
-
+*/
     req.session.devices = dev;
     req.session.env = { host: process.env.HOST };
     await req.session.save();
@@ -352,7 +393,7 @@ export const getServerSideProps = withIronSessionSsr(
     return {
       props: {
         session: JSON.stringify(req.session),
-        devicesTitle: JSON.stringify(devicesTitle),
+      //  devicesTitle: JSON.stringify(devicesTitle),
       },
     };
   },
