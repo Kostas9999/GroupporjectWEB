@@ -4,7 +4,7 @@ import Header from "./templates/header";
 import { ironOptions } from "./api/session/session_Config";
 import { Container, NextUIProvider, Row, Badge } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
 import { Snackbar, Slide } from "@mui/material";
@@ -27,16 +27,16 @@ import { useRouter } from "next/router";
 
 let message = "";
 
-
 export default function Dashboard({ session }) {
   session = JSON.parse(session);
 
-
   let devicesTitle = session?.devices?.os;
 
-if(typeof devicesTitle === "undefined"){devicesTitle=[]}
+  if (typeof devicesTitle === "undefined") {
+    devicesTitle = [];
+  }
 
-// throw new Error(`${devicesTitle.os}`);
+  // throw new Error(`${devicesTitle.os}`);
 
   let activeData;
   let user = session.user;
@@ -133,11 +133,10 @@ if(typeof devicesTitle === "undefined"){devicesTitle=[]}
       router.push("/Dashboard");
     }
   }
-  getOsData()
+  /*
+  getOsData();
   async function getOsData() {
-    
     Object.keys(session.devices).map(async (dev) => {
-     
       const endpoint = `${session.env.host}/api/database/queries/getOs`;
 
       const options = {
@@ -148,17 +147,16 @@ if(typeof devicesTitle === "undefined"){devicesTitle=[]}
 
       const response = await fetch(endpoint, options);
       const result = await response.json();
-      console.log(session)
+      session.devices[dev].data.os = result.os;
 
-    
-        devicesTitle.push(result.os)
-    
-  
+      devicesTitle.push(result.os);
     });
-  }
 
- // setInterval(getActiveData, 10000);
-  //getActiveData();
+    return devicesTitle;
+  }
+*/
+  // setInterval(getActiveData, 10000);
+  // getActiveData();
   async function getActiveData() {
     Object.keys(session.devices).map(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
@@ -175,11 +173,8 @@ if(typeof devicesTitle === "undefined"){devicesTitle=[]}
       devicesTitle.data = result.data;
 
       activeData = result.data[0];
-   
 
-    
       if (typeof document !== "undefined") {
-    
         let getDiv = document.getElementById(dev);
 
         let spinner = getDiv.querySelector('[aria-label="spinner"]');
@@ -194,7 +189,6 @@ if(typeof devicesTitle === "undefined"){devicesTitle=[]}
           activeData.created
         )} diff ${toTimestamp(activeData.created)}`;
 
-       
         if (toTimestamp(activeData.created) < 20000) {
           dataDiv.innerHTML = `<strong> Online</strong>`;
           dataDiv.style.color = "green";
@@ -221,6 +215,28 @@ if(typeof devicesTitle === "undefined"){devicesTitle=[]}
   function TransitionLeft(props) {
     return <Slide {...props} direction="right" />;
   }
+
+  let [state, setState] = useState(devicesTitle);
+  let [items, setItems] = useState([]);
+
+  useEffect(() => {
+    let arr = [];
+    Object.keys(session.devices).map(async (dev) => {
+      const endpoint = `${session.env.host}/api/database/queries/getOs`;
+
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currDev: dev }),
+      };
+
+      const response = await fetch(endpoint, options);
+      const result = await response.json();
+      arr.push(result);
+    });
+    setItems(arr);
+    console.log(arr);
+  }, []);
 
   return (
     <NextUIProvider>
@@ -289,55 +305,57 @@ if(typeof devicesTitle === "undefined"){devicesTitle=[]}
         </Modal>
 
         <Grid.Container gap={2} justify="flex-start">
-          {devicesTitle.map((item, index) => (
-            <Grid xs={60} sm={30}>
-              <Card
-                isPressable
-                isHoverable
-                css={{ background: card_back }}
-                shadow
-                variant="bordered"
-                onPress={(event) => {
-                  router.push({
-                    pathname: "/device",
-                    query: { devID: item.id },
-                  });
-                }}
-              >
-                <Card.Body css={{ color: text_Color }}>
-                  <Row justify="center" align="center">
-                    {item.hostname} <br></br>
-                    {item.version} ({item.build})
-                    <div id={item.id}>
-                      <Loading aria-label="spinner" type="points-opacity" />
-                      <Container
-                        aria-label="data"
-                        style={{ display: "none" }}
-                      ></Container>
-                    </div>
-                    <Dropdown>
-                      <Dropdown.Button
-                        flat
-                        size={"sm"}
-                        css={{ marginLeft: "auto" }}
-                      >
-                        Remove*
-                      </Dropdown.Button>
-                      <Dropdown.Menu
-                        aria-label="Static Actions"
-                        onAction={(actionKey) => {
-                          handleDeleteDev(item.id);
-                        }}
-                      >
-                        <Dropdown.Item key="delete" color="error">
-                          Press to remove device*
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Grid>
+          {items.map((item, index) => (
+            <pre>
+              <Grid xs={60} sm={30}>
+                <Card
+                  isPressable
+                  isHoverable
+                  css={{ background: card_back }}
+                  shadow
+                  variant="bordered"
+                  onPress={(event) => {
+                    router.push({
+                      pathname: "/device",
+                      query: { devID: item.id },
+                    });
+                  }}
+                >
+                  <Card.Body css={{ color: text_Color }}>
+                    <Row justify="center" align="center">
+                      {item.hostname} <br></br>
+                      {item.version} ({item.build})
+                      <div id={item.id}>
+                        <Loading aria-label="spinner" type="points-opacity" />
+                        <Container
+                          aria-label="data"
+                          style={{ display: "none" }}
+                        ></Container>
+                      </div>
+                      <Dropdown>
+                        <Dropdown.Button
+                          flat
+                          size={"sm"}
+                          css={{ marginLeft: "auto" }}
+                        >
+                          Remove*
+                        </Dropdown.Button>
+                        <Dropdown.Menu
+                          aria-label="Static Actions"
+                          onAction={(actionKey) => {
+                            handleDeleteDev(item.id);
+                          }}
+                        >
+                          <Dropdown.Item key="delete" color="error">
+                            Press to remove device*
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </Row>
+                  </Card.Body>
+                </Card>
+              </Grid>
+            </pre>
           ))}
 
           <Snackbar
@@ -362,14 +380,14 @@ export const getServerSideProps = withIronSessionSsr(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`
     );
 
-   // adding list of decices ids to the list
+    // adding list of decices ids to the list
     let dev = {};
     rows_devices.rows.forEach((data) => {
       dev[`${data.id}`] = { data };
     });
 
     let devicesTitle = [];
-  /*
+    /*
 
     if (rows_devices.rowCount > 0) {
       const devices = rows_devices.rows;
@@ -393,7 +411,7 @@ export const getServerSideProps = withIronSessionSsr(
     return {
       props: {
         session: JSON.stringify(req.session),
-      //  devicesTitle: JSON.stringify(devicesTitle),
+        //  devicesTitle: JSON.stringify(devicesTitle),
       },
     };
   },
