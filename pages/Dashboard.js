@@ -156,7 +156,7 @@ export default function Dashboard({ session }) {
   }
 */
   // setInterval(getActiveData, 10000);
-  // getActiveData();
+  getActiveData();
   async function getActiveData() {
     Object.keys(session.devices).map(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
@@ -177,30 +177,32 @@ export default function Dashboard({ session }) {
       if (typeof document !== "undefined") {
         let getDiv = document.getElementById(dev);
 
-        let spinner = getDiv.querySelector('[aria-label="spinner"]');
-        let dataDiv = getDiv.querySelector('[aria-label="data"]');
+        if (getDiv != null) {
+          let spinner = getDiv.querySelector('[aria-label="spinner"]');
+          let dataDiv = getDiv.querySelector('[aria-label="data"]');
 
-        spinner.style.display = "none";
-        dataDiv.style.display = "block";
+          spinner.style.display = "none";
+          dataDiv.style.display = "block";
 
-        dataDiv.textContent = ` ${activeData.publicip} CPU: ${
-          activeData.cpu
-        } RAM: ${activeData.memory} Last Seen: ${dateTimeFormater(
-          activeData.created
-        )} diff ${toTimestamp(activeData.created)}`;
-
-        if (toTimestamp(activeData.created) < 20000) {
-          dataDiv.innerHTML = `<strong> Online</strong>`;
-          dataDiv.style.color = "green";
-          dataDiv.innerHTML += `<br> <span style="color:white", padding:"10px">  ${activeData.publicip}<br> <h5>CPU: ${activeData.cpu}% <br>RAM:  ${activeData.memory}%</h5>  </span>`;
-        } else {
-          dataDiv.innerHTML = `<strong> Offline</strong>`;
-
-          dataDiv.innerHTML += `<br> <span style="color:white", padding:"10px">  Last seen: ${dateTimeFormater(
+          dataDiv.textContent = ` ${activeData.publicip} CPU: ${
+            activeData.cpu
+          } RAM: ${activeData.memory} Last Seen: ${dateTimeFormater(
             activeData.created
-          )} </span>`;
+          )} diff ${toTimestamp(activeData.created)}`;
 
-          dataDiv.style.color = "red";
+          if (toTimestamp(activeData.created) < 20000) {
+            dataDiv.innerHTML = `<strong> Online</strong>`;
+            dataDiv.style.color = "green";
+            dataDiv.innerHTML += `<br> <span style="color:white", padding:"10px">  ${activeData.publicip}<br> <h5>CPU: ${activeData.cpu}% <br>RAM:  ${activeData.memory}%</h5>  </span>`;
+          } else {
+            dataDiv.innerHTML = `<strong> Offline</strong>`;
+
+            dataDiv.innerHTML += `<br> <span style="color:white", padding:"10px">  Last seen: ${dateTimeFormater(
+              activeData.created
+            )} </span>`;
+
+            dataDiv.style.color = "red";
+          }
         }
       }
     });
@@ -216,8 +218,7 @@ export default function Dashboard({ session }) {
     return <Slide {...props} direction="right" />;
   }
 
-  let [state, setState] = useState(devicesTitle);
-  let [items, setItems] = useState([]);
+  let [items, setItems] = useState(devicesTitle);
 
   useEffect(() => {
     let arr = [];
@@ -236,6 +237,7 @@ export default function Dashboard({ session }) {
     });
     setItems(arr);
     console.log(arr);
+    notification("Loading..");
   }, []);
 
   return (
@@ -306,63 +308,61 @@ export default function Dashboard({ session }) {
 
         <Grid.Container gap={2} justify="flex-start">
           {items.map((item, index) => (
-            <pre>
-              <Grid xs={60} sm={30}>
-                <Card
-                  isPressable
-                  isHoverable
-                  css={{ background: card_back }}
-                  shadow
-                  variant="bordered"
-                  onPress={(event) => {
-                    router.push({
-                      pathname: "/device",
-                      query: { devID: item.id },
-                    });
-                  }}
-                >
-                  <Card.Body css={{ color: text_Color }}>
-                    <Row justify="center" align="center">
-                      {item.hostname} <br></br>
-                      {item.version} ({item.build})
-                      <div id={item.id}>
-                        <Loading aria-label="spinner" type="points-opacity" />
-                        <Container
-                          aria-label="data"
-                          style={{ display: "none" }}
-                        ></Container>
-                      </div>
-                      <Dropdown>
-                        <Dropdown.Button
-                          flat
-                          size={"sm"}
-                          css={{ marginLeft: "auto" }}
-                        >
-                          Remove*
-                        </Dropdown.Button>
-                        <Dropdown.Menu
-                          aria-label="Static Actions"
-                          onAction={(actionKey) => {
-                            handleDeleteDev(item.id);
-                          }}
-                        >
-                          <Dropdown.Item key="delete" color="error">
-                            Press to remove device*
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Row>
-                  </Card.Body>
-                </Card>
-              </Grid>
-            </pre>
+            <Grid xs={60} sm={30}>
+              <Card
+                isPressable
+                isHoverable
+                css={{ background: card_back }}
+                shadow
+                variant="bordered"
+                onPress={(event) => {
+                  router.push({
+                    pathname: "/device",
+                    query: { devID: item.os.id },
+                  });
+                }}
+              >
+                <Card.Body css={{ color: text_Color }}>
+                  <Row justify="center" align="center">
+                    {item.os.hostname} <br></br>
+                    {item.os.version} ({item.os.build})
+                    <div id={item.os.id}>
+                      <Loading aria-label="spinner" type="points-opacity" />
+                      <Container
+                        aria-label="data"
+                        style={{ display: "none" }}
+                      ></Container>
+                    </div>
+                    <Dropdown>
+                      <Dropdown.Button
+                        flat
+                        size={"sm"}
+                        css={{ marginLeft: "auto" }}
+                      >
+                        Remove*
+                      </Dropdown.Button>
+                      <Dropdown.Menu
+                        aria-label="Static Actions"
+                        onAction={(actionKey) => {
+                          handleDeleteDev(item.os.id);
+                        }}
+                      >
+                        <Dropdown.Item key="delete" color="error">
+                          Press to remove device*
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Grid>
           ))}
 
           <Snackbar
             TransitionComponent={TransitionLeft}
             open={open}
             onClose={() => setOpen(false)}
-            autoHideDuration={3000}
+            autoHideDuration={2000}
             message={message}
             color="warning"
           ></Snackbar>
