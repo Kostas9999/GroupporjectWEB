@@ -382,8 +382,8 @@ export const getServerSideProps = withIronSessionSsr(
 
     // adding list of decices ids to the list
     let dev = {};
-    rows_devices.rows.forEach((data) => {
-      dev[data.id] = { data };
+    rows_devices.rows.forEach((device) => {
+      dev[device.id] = { device };
     });
 
     /*
