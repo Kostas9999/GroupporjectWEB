@@ -28,13 +28,8 @@ import { useRouter } from "next/router";
 let message = "";
 
 export default function Dashboard({ session }) {
-  session = JSON.parse(session);
-
-  let devicesTitle = session?.devices?.os;
-
-  if (typeof devicesTitle === "undefined") {
-    devicesTitle = [];
-  }
+  let devices = session.devices;
+  console.log(devices);
 
   // throw new Error(`${devicesTitle.os}`);
 
@@ -218,7 +213,7 @@ export default function Dashboard({ session }) {
     return <Slide {...props} direction="right" />;
   }
 
-  let [items, setItems] = useState(devicesTitle);
+  let [items, setItems] = useState(arr);
 
   useEffect(() => {
     let arr = [];
@@ -234,8 +229,8 @@ export default function Dashboard({ session }) {
       const response = await fetch(endpoint, options);
       const result = await response.json();
       arr.push(result);
+      setItems();
     });
-    setItems(arr);
 
     notification("Loading..");
   }, []);
@@ -383,7 +378,7 @@ export const getServerSideProps = withIronSessionSsr(
     // adding list of decices ids to the list
     let dev = {};
     rows_devices.rows.forEach((device) => {
-      dev[device.id] = { device };
+      dev[device.id] = {};
     });
 
     /*
@@ -404,12 +399,13 @@ export const getServerSideProps = withIronSessionSsr(
     }
 */
     req.session.devices = dev;
+
     req.session.env = { host: process.env.HOST };
     await req.session.save();
 
     return {
       props: {
-        session: JSON.stringify(req.session),
+        session: req.session,
         //  devicesTitle: JSON.stringify(devicesTitle),
       },
     };
