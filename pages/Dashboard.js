@@ -26,10 +26,13 @@ import { Router } from "next/router";
 import { useRouter } from "next/router";
 
 let message = "";
+let devicesTitle = [];
 
 export default function Dashboard({ session }) {
+  session = JSON.parse(session);
   let devices = session.devices;
-  console.log(devices);
+
+  let [os, setOs] = useState([]);
 
   // throw new Error(`${devicesTitle.os}`);
 
@@ -128,10 +131,10 @@ export default function Dashboard({ session }) {
       router.push("/Dashboard");
     }
   }
-  /*
+
   getOsData();
   async function getOsData() {
-    Object.keys(session.devices).map(async (dev) => {
+    Object.keys(devices).map(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getOs`;
 
       const options = {
@@ -142,16 +145,30 @@ export default function Dashboard({ session }) {
 
       const response = await fetch(endpoint, options);
       const result = await response.json();
-      session.devices[dev].data.os = result.os;
+      session.devices[dev].os = result.os;
+      console.log(result.os);
+
+      if (typeof document !== "undefined") {
+        let getDiv = document.getElementById(dev);
+
+        if (getDiv != null) {
+          let hostname = getDiv.querySelector('[aria-label="hostname"]');
+          let version = getDiv.querySelector('[aria-label="version"]');
+
+          hostname.textContent = result.os.hostname;
+          version.textContent = result.os.version;
+        }
+      }
 
       devicesTitle.push(result.os);
     });
 
     return devicesTitle;
+    setOs(devicesTitle);
   }
-*/
-  // setInterval(getActiveData, 10000);
-  // getActiveData();
+
+  setInterval(getActiveData, 10000);
+  getActiveData();
   async function getActiveData() {
     Object.keys(session.devices).map(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
@@ -212,28 +229,6 @@ export default function Dashboard({ session }) {
   function TransitionLeft(props) {
     return <Slide {...props} direction="right" />;
   }
-
-  let [items, setItems] = useState(arr);
-
-  useEffect(() => {
-    let arr = [];
-    Object.keys(session.devices).map(async (dev) => {
-      const endpoint = `${session.env.host}/api/database/queries/getOs`;
-
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currDev: dev }),
-      };
-
-      const response = await fetch(endpoint, options);
-      const result = await response.json();
-      arr.push(result);
-      setItems();
-    });
-
-    notification("Loading..");
-  }, []);
 
   return (
     <NextUIProvider>
@@ -302,7 +297,7 @@ export default function Dashboard({ session }) {
         </Modal>
 
         <Grid.Container gap={2} justify="flex-start">
-          {items.map((item, index) => (
+          {Object.keys(devices).map((item, index) => (
             <Grid xs={60} sm={30}>
               <Card
                 isPressable
@@ -313,41 +308,47 @@ export default function Dashboard({ session }) {
                 onPress={(event) => {
                   router.push({
                     pathname: "/device",
-                    query: { devID: item.os.id },
+                    query: { devID: item },
                   });
                 }}
               >
                 <Card.Body css={{ color: text_Color }}>
-                  <Row justify="center" align="center">
-                    {item.os.hostname} <br></br>
-                    {item.os.version} ({item.os.build})
-                    <div id={item.os.id}>
+                  <div id={item}>
+                    <Row justify="center" align="center">
+                      <Text size={25} aria-label="hostname" color="white">
+                        {item}
+                      </Text>
+                      <Spacer y={0}></Spacer>
+                      <Row>
+                        <Text aria-label="version" color="white"></Text>
+                      </Row>
                       <Loading aria-label="spinner" type="points-opacity" />
                       <Container
                         aria-label="data"
                         style={{ display: "none" }}
                       ></Container>
-                    </div>
-                    <Dropdown>
-                      <Dropdown.Button
-                        flat
-                        size={"sm"}
-                        css={{ marginLeft: "auto" }}
-                      >
-                        Remove*
-                      </Dropdown.Button>
-                      <Dropdown.Menu
-                        aria-label="Static Actions"
-                        onAction={(actionKey) => {
-                          handleDeleteDev(item.os.id);
-                        }}
-                      >
-                        <Dropdown.Item key="delete" color="error">
-                          Press to remove device*
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Row>
+
+                      <Dropdown>
+                        <Dropdown.Button
+                          flat
+                          size={"sm"}
+                          css={{ marginLeft: "auto" }}
+                        >
+                          Remove*
+                        </Dropdown.Button>
+                        <Dropdown.Menu
+                          aria-label="Static Actions"
+                          onAction={(actionKey) => {
+                            handleDeleteDev(item);
+                          }}
+                        >
+                          <Dropdown.Item key="delete" color="error">
+                            Press to remove device*
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </Row>
+                  </div>
                 </Card.Body>
               </Card>
             </Grid>
@@ -378,26 +379,9 @@ export const getServerSideProps = withIronSessionSsr(
     // adding list of decices ids to the list
     let dev = {};
     rows_devices.rows.forEach((device) => {
-      dev[device.id] = {};
+      dev[device.id] = { device };
     });
 
-    /*
-
-    if (rows_devices.rowCount > 0) {
-      const devices = rows_devices.rows;
-
-      for (const item of devices) {
-   //     const rows = await client.query(`SELECT * FROM "${item.id}"."os" ;`);
-
-   //    console.log(req.session.devices[`${item.id}`])
-  //     throw new Error("Something went badly wrong!");
-   //   let  rows = req.session.devices;
-   req.session.devices[`${item.id}`].id = item.id;
-        devicesTitle.push(req.session.devices[`${item.id}`]);
-        dev[`${item.id}`].os = req.session.devices[`${item.id}`].os;
-      }
-    }
-*/
     req.session.devices = dev;
 
     req.session.env = { host: process.env.HOST };
@@ -405,7 +389,7 @@ export const getServerSideProps = withIronSessionSsr(
 
     return {
       props: {
-        session: req.session,
+        session: JSON.stringify(req.session),
         //  devicesTitle: JSON.stringify(devicesTitle),
       },
     };

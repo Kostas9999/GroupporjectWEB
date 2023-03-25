@@ -9,18 +9,9 @@ async function handler(req, res) {
   let device_Id = req.body.currDev;
 
   try {
-    const row = await client.query(
-      `SELECT * FROM "${device_Id}"."os" LIMIT 1;`
-    );
+    const row = await client.query(`SELECT * FROM "${device_Id}".os ;`);
 
-    let os = {
-      id: device_Id,
-      hostname: row.rows[0].hostname,
-      version: row.rows[0].version,
-      build: row.rows[0].build,
-    };
-
-    req.session.devices[device_Id].data.os = {
+    req.session.devices[device_Id] = {
       id: device_Id,
       hostname: row.rows[0].hostname,
       version: row.rows[0].version,
@@ -28,11 +19,14 @@ async function handler(req, res) {
     };
 
     await req.session.save();
-    console.log(req.session.devices);
+
     await res.status(200).json({
-      os,
+      os: {
+        id: device_Id,
+        hostname: row.rows[0].hostname,
+        version: row.rows[0].version,
+        build: row.rows[0].build,
+      },
     });
-  } catch (error) {
-    console.log("error in getOs api", error);
-  }
+  } catch (error) {}
 }
