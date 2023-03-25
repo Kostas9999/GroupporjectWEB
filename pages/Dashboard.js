@@ -25,13 +25,15 @@ import React from "react";
 import { Router } from "next/router";
 
 import { useRouter } from "next/router";
+import { fontSize } from "@mui/system";
 
 let message = "";
 let devicesTitle = [];
 let activeData_intervar = [];
 export default function Dashboard({ session }) {
   session = JSON.parse(session);
-  let devices = session.devices;
+
+  //console.log(session.devices);
 
   let [os, setOs] = useState([]);
 
@@ -132,42 +134,13 @@ export default function Dashboard({ session }) {
     }
   }
 
-  getOsData();
-  async function getOsData() {
-    let arr = Object.keys(devices);
+  // clearInterval(activeData_intervar);
+  // clearInterval(activeData_intervar);
 
-    Object.keys(devices).forEach(async (dev) => {
-      const endpoint = `${session.env.host}/api/database/queries/getOs`;
-
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currDev: dev }),
-      };
-
-      const response = await fetch(endpoint, options);
-      const result = await response.json();
-
-      if (typeof document !== "undefined") {
-        let getDiv = document.getElementById(dev);
-
-        if (getDiv != null) {
-          let hostname = getDiv.querySelector('[aria-label="hostname"]');
-          let version = getDiv.querySelector('[aria-label="version"]');
-
-          hostname.textContent = result.os.hostname;
-          version.textContent = result.os.version;
-        }
-      }
-    });
-  }
-  clearInterval(activeData_intervar);
-  clearInterval(activeData_intervar);
-
-  activeData_intervar = setInterval(getActiveData, 10000);
+  // activeData_intervar = setInterval(getActiveData, 10000);
   getActiveData();
   async function getActiveData() {
-    Object.keys(devices).forEach(async (dev) => {
+    Object.keys(session.devices).forEach(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
 
       const options = {
@@ -293,7 +266,7 @@ export default function Dashboard({ session }) {
           </Modal>
 
           <Grid.Container gap={2} justify="flex-start">
-            {Object.keys(devices).map((item, index) => (
+            {Object.keys(session.devices).map((item, index) => (
               <Grid xs={60} sm={30}>
                 <Card
                   isPressable
@@ -310,14 +283,13 @@ export default function Dashboard({ session }) {
                 >
                   <Card.Body css={{ color: text_Color }}>
                     <div id={item}>
-                      <Row justify="center" align="center">
-                        <Text size={25} aria-label="hostname" color="white">
-                          {item}
+                      <Row justify="center" align="center" width="200px">
+                        <Text size={20} aria-label="hostname" color="white">
+                          <h3>{session.devices[item].os.hostname}</h3>
+
+                          {session.devices[item].os.version}
                         </Text>
-                        <Spacer y={0}></Spacer>
-                        <Row>
-                          <Text aria-label="version" color="white"></Text>
-                        </Row>
+
                         <Loading aria-label="spinner" type="points-opacity" />
                         <Container
                           aria-label="data"
@@ -373,20 +345,31 @@ export const getServerSideProps = withIronSessionSsr(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`
     );
 
-    // adding list of decices ids to the list
     let dev = {};
-    rows_devices.rows.forEach((device) => {
-      dev[device.id] = { device };
+    rows_devices.rows.forEach((data) => {
+      dev[`${data.id}`] = { data };
     });
 
-    req.session.devices = dev;
+    let devicesTitle = [];
+    if (rows_devices.rowCount > 0) {
+      const devices = rows_devices.rows;
 
+      for (const item of devices) {
+        const rows = await client.query(`SELECT * FROM "${item.id}"."os" ;`);
+        rows.rows[0].id = item.id;
+        devicesTitle.push(rows.rows[0]);
+        dev[`${item.id}`].os = rows.rows[0];
+      }
+    }
+
+    req.session.devices = dev;
     req.session.env = { host: process.env.HOST };
     await req.session.save();
 
     return {
       props: {
         session: JSON.stringify(req.session),
+        // devicesTitle: JSON.stringify(devicesTitle),
       },
     };
   },
