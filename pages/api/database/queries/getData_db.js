@@ -17,7 +17,7 @@ async function handler(req, res) {
     await res.status(200).json({ ok: false });
   } else {
     try {
-      const rows = await client.query(
+      const rows = await pool.query(
         `select * from "${device_Id}"."${table}" ORDER BY created DESC LIMIT 1;   `
       );
       res.status(200).json({
