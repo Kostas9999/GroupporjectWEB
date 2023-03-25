@@ -16,13 +16,18 @@ async function handler(req, res) {
   ) {
     await res.status(200).json({ ok: false });
   } else {
-    const rows = await pool.query(
-      `select * from "${device_Id}"."${table}" ORDER BY created DESC LIMIT 1;   `
-    );
-
-    res.status(200).json({
-      ok: true,
-      hw: rows.rows[0],
-    });
+    try {
+      const rows = await client.query(
+        `select * from "${device_Id}"."${table}" ORDER BY created DESC LIMIT 1;   `
+      );
+      res.status(200).json({
+        ok: true,
+        hw: rows.rows[0],
+      });
+    } catch (error) {
+      res.status(200).json({
+        ok: false,
+      });
+    }
   }
 }
