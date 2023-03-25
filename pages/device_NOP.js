@@ -12,7 +12,7 @@ import { Snackbar, Slide } from "@mui/material";
 
 import { useRouter } from "next/router";
 
-import { NextUIProvider } from "@nextui-org/react";
+import { NextUIProvider, Loading } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
 
 const json2csv = require("json2csv");
@@ -32,20 +32,64 @@ import {
   Grid,
   Button,
 } from "@nextui-org/react";
+import { padding } from "@mui/system";
 let message = "";
-export default function Home({ all, currDev, hw }) {
-  all = JSON.parse(all);
+export default function Home({ session, currDev }) {
+  session = JSON.parse(session);
+  console.log(session);
 
-  let user = all.user;
-  //console.log(all.devices[`${currDev}`].baseline)
-  /*
-  const handler_sendMsg= () => setVisible_sendMsg(true);
-  const [visible_sendMsg, setVisible_sendMsg] = React.useState(false);
-  const closeHandler_sendMsg = () => {
-    console.log("here")
-    setVisible_sendMsg(false);
-  };
-  */
+  let user = session.user;
+  let table = "hardware";
+  getData(table);
+  async function getData() {
+    const endpoint = `${session.env.host}/api/database/queries/getData_db`;
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ currDev, table }),
+    };
+
+    const response = await fetch(endpoint, options);
+    const result = await response.json();
+    if (hw.title === "") {
+      let spinner = (document.querySelector(
+        `[aria-label="${table}-spinner"]`
+      ).style.display = "none");
+      setHw({ title: result.hw.title, totalmemory: result.hw.totalmemory });
+    }
+    /*
+    if (typeof document !== "undefined") {
+      let getDiv = document.getElementById("hw");
+
+      if (getDiv != null) {
+        let title = getDiv.querySelector('[aria-label="hw-title"]');
+        let ram = getDiv.querySelector('[aria-label="hw-ram"]');
+        let spinner = getDiv.querySelector('[aria-label="spinner-hw"]').style.display = "none";
+
+        spinner.style.display = "none";
+
+        title.textContent = result.hw.title;
+
+        ram.textContent =
+          "RAM: " + formatBytes(Math.ceil(result.hw.totalmemory));
+      }
+     
+    }
+     */
+  }
+
+  const [hw, setHw] = useState({ title: "", totalmemory: "" });
+
+  const [iface, setIface] = useState({
+    iface: "",
+    ipv4: "",
+    ipv4sub: "",
+    ipv6: "",
+    ipv6sub: "",
+    mac: "",
+    speed: "",
+  });
 
   const [open, setOpen] = useState(false);
   function notification(msg) {
@@ -82,9 +126,9 @@ export default function Home({ all, currDev, hw }) {
     const result = await response.json();
   }
 
-  let disc = all.devices[`${currDev}`].disc;
-  let arp = all.devices[`${currDev}`].arp;
-  let ports = all.devices[`${currDev}`].ports;
+  let disc = session.devices[`${currDev}`].disc;
+  let arp = session.devices[`${currDev}`].arp;
+  let ports = session.devices[`${currDev}`].ports;
 
   const router = useRouter();
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
@@ -162,7 +206,7 @@ export default function Home({ all, currDev, hw }) {
   );
 
   let keys;
-  all.devices[`${currDev}`].events.map(
+  session.devices[`${currDev}`].events.map(
     (item, index) => (keys = Object.keys(item))
   );
 
@@ -179,7 +223,7 @@ export default function Home({ all, currDev, hw }) {
   );
 
   const rows_events = [];
-  all.devices[`${currDev}`].events.map((item, index) =>
+  session.devices[`${currDev}`].events.map((item, index) =>
     rows_events.push({
       key: item.event_id,
       event_id: item.event_id,
@@ -245,7 +289,7 @@ export default function Home({ all, currDev, hw }) {
     }
   }
 
-  const latencyData = all.devices[`${currDev}`].networkStats.reverse();
+  const latencyData = session.devices[`${currDev}`].networkStats.reverse();
   const [visible_Reg, setVisible_Power] = React.useState(false);
   const handler_Power = () => setVisible_Power(true);
 
@@ -301,15 +345,15 @@ export default function Home({ all, currDev, hw }) {
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
                       Last Seen:{" "}
                       {dateTimeFormater(
-                        all.devices[`${currDev}`].networkStats[0].created
+                        session.devices[`${currDev}`].networkStats[0].created
                       )}
                       <Spacer y={0}></Spacer>
-                      {all.devices[`${currDev}`].os.hostname}
+                      {session.devices[`${currDev}`].os.hostname}
                       <Spacer y={0}></Spacer>
-                      {all.devices[`${currDev}`].os.version}
+                      {session.devices[`${currDev}`].os.version}
                       <Spacer y={0}></Spacer>
-                      {all.devices[`${currDev}`].os.relese} (
-                      {all.devices[`${currDev}`].os.build})
+                      {session.devices[`${currDev}`].os.relese} (
+                      {session.devices[`${currDev}`].os.build})
                     </Text>
                   </Row>
                 </Card.Body>
@@ -320,9 +364,13 @@ export default function Home({ all, currDev, hw }) {
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      {hw[0].title}
-                      <Spacer y={0}></Spacer>
-                      RAM: {formatBytes(Math.ceil(hw[0].totalmemory))}
+                      <Loading
+                        aria-label="hardware-spinner"
+                        type="points-opacity"
+                      />
+                      {hw.title}
+                      <br></br>
+                      RAM: {formatBytes(hw.totalmemory)}
                       <Spacer y={0}></Spacer>
                     </Text>
                   </Row>
@@ -334,19 +382,19 @@ export default function Home({ all, currDev, hw }) {
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      {all.devices[`${currDev}`].iface[0].iface}
+                      {session.devices[`${currDev}`].iface[0].iface}
                       {"   \t "}
-                      {all.devices[`${currDev}`].iface[0].speed}(mb/s)
+                      {session.devices[`${currDev}`].iface[0].speed}(mb/s)
                       <Spacer y={0}></Spacer>
-                      MAC: {all.devices[`${currDev}`].iface[0].mac}
+                      MAC: {session.devices[`${currDev}`].iface[0].mac}
                       <Spacer y={0}></Spacer>
-                      IPv4: {all.devices[`${currDev}`].iface[0].ipv4}
+                      IPv4: {session.devices[`${currDev}`].iface[0].ipv4}
                       <Spacer y={0}></Spacer>
-                      IPv4Sub: {all.devices[`${currDev}`].iface[0].ipv4sub}
+                      IPv4Sub: {session.devices[`${currDev}`].iface[0].ipv4sub}
                       <Spacer y={0}></Spacer>
-                      IPv6: {all.devices[`${currDev}`].iface[0].ipv6}
+                      IPv6: {session.devices[`${currDev}`].iface[0].ipv6}
                       <Spacer y={0}></Spacer>
-                      IPv6Sub: {all.devices[`${currDev}`].iface[0].ipv6sub}
+                      IPv6Sub: {session.devices[`${currDev}`].iface[0].ipv6sub}
                     </Text>
                   </Row>
                 </Card.Body>
@@ -359,32 +407,32 @@ export default function Home({ all, currDev, hw }) {
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
                       rx_total:{" "}
                       {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].rx_total
+                        session.devices[`${currDev}`].networkStats[0].rx_total
                       )}
                       <Spacer y={0}></Spacer>
                       rx_error:{" "}
                       {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].rx_error
+                        session.devices[`${currDev}`].networkStats[0].rx_error
                       )}
                       <Spacer y={0}></Spacer>
                       rx_dropped:{" "}
                       {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].rx_dropped
+                        session.devices[`${currDev}`].networkStats[0].rx_dropped
                       )}
                       <Spacer y={0}></Spacer>
                       tx_total:{" "}
                       {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].tx_total
+                        session.devices[`${currDev}`].networkStats[0].tx_total
                       )}
                       <Spacer y={0}></Spacer>
                       tx_error:{" "}
                       {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].tx_error
+                        session.devices[`${currDev}`].networkStats[0].tx_error
                       )}
                       <Spacer y={0}></Spacer>
                       tx_dropped:{" "}
                       {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].tx_dropped
+                        session.devices[`${currDev}`].networkStats[0].tx_dropped
                       )}
                     </Text>
                   </Row>
@@ -397,20 +445,30 @@ export default function Home({ all, currDev, hw }) {
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
                       Local Latency:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].locallatency}ms
+                      {
+                        session.devices[`${currDev}`].networkStats[0]
+                          .locallatency
+                      }
+                      ms
                       <Spacer y={0}></Spacer>
                       Public Latency:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].publiclatency}
+                      {
+                        session.devices[`${currDev}`].networkStats[0]
+                          .publiclatency
+                      }
                       ms
                       <Spacer y={0}></Spacer>
                       Gateway:
-                      {all.devices[`${currDev}`].networkStats[0].defaultgateway}
+                      {
+                        session.devices[`${currDev}`].networkStats[0]
+                          .defaultgateway
+                      }
                       <Spacer y={0}></Spacer>
                       Gateway MAC:
-                      {all.devices[`${currDev}`].networkStats[0].dgmac}
+                      {session.devices[`${currDev}`].networkStats[0].dgmac}
                       <Spacer y={0}></Spacer>
-                      Server: {all.devices[`${currDev}`]?.server[0]?.ip} (
-                      {all.devices[`${currDev}`]?.server[0]?.port})
+                      Server: {session.devices[`${currDev}`]?.server[0]?.ip} (
+                      {session.devices[`${currDev}`]?.server[0]?.port})
                     </Text>
                   </Row>
                 </Card.Body>
@@ -424,7 +482,7 @@ export default function Home({ all, currDev, hw }) {
           {/* ========================================================= Start second row SIDEBAR
            Start second row         
           */}
-          <Grid xs={3}>
+          <Grid xs={2}>
             <Container hidden>
               <Card
                 css={{
@@ -451,9 +509,9 @@ export default function Home({ all, currDev, hw }) {
                           handleSelect(actionKey);
                         }}
                       >
-                        {Object.keys(all.devices).map((device) => (
+                        {Object.keys(session.devices).map((device) => (
                           <Dropdown.Item key={device}>
-                            {all.devices[`${device}`].os.hostname}
+                            {session.devices[`${device}`].os.hostname}
                           </Dropdown.Item>
                         ))}
                       </Dropdown.Menu>
@@ -957,7 +1015,7 @@ export default function Home({ all, currDev, hw }) {
           </div>
           {/*=========================================================================================  Baseline */}
           <div id="baseline" style={{ display: "none", width: "80%" }}>
-            {all.devices[`${currDev}`].baseline.map((baseline) => (
+            {session.devices[`${currDev}`].baseline.map((baseline) => (
               <Grid.Container>
                 <Grid xs={12}>
                   <Card
@@ -979,8 +1037,7 @@ export default function Home({ all, currDev, hw }) {
                           <Card.Body>
                             <Row justify="Left" align="right">
                               <Text color={text_Color}>
-                                Total:{" "}
-                                {formatBytes(Math.ceil(hw[0].totalmemory))}
+                                Total: {formatBytes(hw.totalmemory)}
                               </Text>{" "}
                             </Row>
                             <Row justify="Left" align="right">
@@ -1133,45 +1190,45 @@ export const getServerSideProps = withIronSessionSsr(
 
     const id = req.query.devID;
 
-    let ports = await client.query(
+    let ports = await pool.query(
       `select * from "${id}"."ports" ORDER BY created DESC; `
     );
-    let events = await client.query(
+    let events = await pool.query(
       `select * from "${id}"."events" ORDER BY created DESC LIMIT 100;  `
     );
 
     let networkstats = await pool.query(
       `select * from "${id}"."networkstats" ORDER BY created DESC LIMIT 1000 ; `
     );
-
+    /*
     let hardware = await pool.query(
       `select * from "${id}"."hardware" ORDER BY created DESC LIMIT 1;   `
     );
-
-    let iface = await client.query(
+*/
+    let iface = await pool.query(
       `select * from "${id}"."networkinterface" ORDER BY created DESC LIMIT 1; `
     );
 
-    let arp = await client.query(
+    let arp = await pool.query(
       `select * from "${id}"."arp" ORDER BY created DESC; `
     );
-    let baseline = await client.query(`select * from "${id}"."baseline"; `);
+    let baseline = await pool.query(`select * from "${id}"."baseline"; `);
 
-    let disc = await client.query(
+    let disc = await pool.query(
       `select * from "${id}"."disc" ORDER BY created ASC; `
     );
-    let server = await client.query(
+    let server = await pool.query(
       `select * from "${id}"."server" ORDER BY created DESC LIMIT 1; `
     );
-    let user = await client.query(`select * from "${id}"."user"  LIMIT 1; `);
 
     let devices = req.req.session.devices;
     req.req.session.devices[`${id}`].server = server.rows;
 
     await req.req.session.save();
-    req.req.session.devices[`${id}`].user = user.rows;
-    //  req.req.session.devices[`${id}`].hardware = hardware.rows;
+
+    // req.req.session.devices[`${id}`].hardware = hardware.rows;
     req.req.session.devices[`${id}`].iface = iface.rows;
+
     req.req.session.devices[`${id}`].networkStats = networkstats.rows;
     req.req.session.devices[`${id}`].events = events.rows;
     req.req.session.devices[`${id}`].arp = arp.rows;
@@ -1179,12 +1236,10 @@ export const getServerSideProps = withIronSessionSsr(
     req.req.session.devices[`${id}`].disc = disc.rows;
     req.req.session.devices[`${id}`].ports = ports.rows;
 
-    delete hardware.rows[0].created;
     return {
       props: {
-        all: JSON.stringify(req.req.session),
+        session: JSON.stringify(req.req.session),
         currDev: id,
-        hw: hardware.rows,
         // hardware: JSON.stringify(hardware.rows[0]),
         // iface: JSON.stringify(iface.rows[0]),
         //  events: JSON.stringify(events.rows[0]),
