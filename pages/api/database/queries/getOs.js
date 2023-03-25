@@ -9,24 +9,35 @@ async function handler(req, res) {
   let device_Id = req.body.currDev;
 
   try {
-    const row = await client.query(`SELECT * FROM "${device_Id}".os ;`);
+    const row = await client
+      .query(`SELECT * FROM "${device_Id}".os ;`)
+      .then(async (row) => {
+        let os = {
+          id: device_Id,
+          hostname: row.rows[0].hostname,
+          version: row.rows[0].version,
+          build: row.rows[0].build,
+        };
 
-    req.session.devices[device_Id] = {
-      id: device_Id,
-      hostname: row.rows[0].hostname,
-      version: row.rows[0].version,
-      build: row.rows[0].build,
-    };
+        addSession(req.session, os);
 
-    await req.session.save();
+        await res.status(200).json({
+          os: {
+            id: device_Id,
+            hostname: row.rows[0].hostname,
+            version: row.rows[0].version,
+            build: row.rows[0].build,
+          },
+        });
+      });
+  } catch (error) {
+    console.log(error);
+    await res.status(200).json({});
+  }
+}
 
-    await res.status(200).json({
-      os: {
-        id: device_Id,
-        hostname: row.rows[0].hostname,
-        version: row.rows[0].version,
-        build: row.rows[0].build,
-      },
-    });
-  } catch (error) {}
+function addSession(session, os) {
+  session.devices[os.id].os = { os };
+  console.log(session);
+  session.save();
 }

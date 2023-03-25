@@ -36,6 +36,8 @@ let message = "";
 export default function Home({ session, currDev }) {
   let all = JSON.parse(session);
 
+  //console.log(all.devices);
+
   let user = all.user;
   //console.log(all.devices[`${currDev}`].baseline)
   /*
@@ -1140,7 +1142,7 @@ export default function Home({ session, currDev }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps(req) {
     const { client, pool } = require("./api/database/connections/connection");
-    //console.log(req.req.session.devices);
+    console.log(req.req.session.devices);
     const id = req.query.devID;
 
     let ports = await client.query(

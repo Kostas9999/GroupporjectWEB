@@ -129,8 +129,8 @@ export default function App({ user }) {
   const collapseItems = ["Dashboard"];
 
   return (
-    <Layout>
-      <SSRProvider>
+    <SSRProvider>
+      <Layout>
         <Navbar
           isCompact
           isBordered
@@ -402,7 +402,7 @@ export default function App({ user }) {
             </Navbar.Item>
           </Navbar.Content>
         </Navbar>
-      </SSRProvider>
-    </Layout>
+      </Layout>
+    </SSRProvider>
   );
 }

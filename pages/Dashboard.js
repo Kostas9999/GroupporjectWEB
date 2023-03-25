@@ -6,6 +6,7 @@ import { Container, NextUIProvider, Row, Badge } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { SSRProvider } from "@react-aria/ssr";
 
 import { Snackbar, Slide } from "@mui/material";
 
@@ -38,7 +39,6 @@ export default function Dashboard({ session }) {
 
   let activeData;
   let user = session.user;
-  //console.log(session.user.user_id);
 
   const [showComponent, setShowComponent] = useState(false);
 
@@ -134,7 +134,9 @@ export default function Dashboard({ session }) {
 
   getOsData();
   async function getOsData() {
-    Object.keys(devices).map(async (dev) => {
+    let arr = Object.keys(devices);
+
+    Object.keys(devices).forEach(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getOs`;
 
       const options = {
@@ -145,8 +147,7 @@ export default function Dashboard({ session }) {
 
       const response = await fetch(endpoint, options);
       const result = await response.json();
-      session.devices[dev].os = result.os;
-      console.log(result.os);
+      console.log(result);
 
       if (typeof document !== "undefined") {
         let getDiv = document.getElementById(dev);
@@ -159,18 +160,15 @@ export default function Dashboard({ session }) {
           version.textContent = result.os.version;
         }
       }
-
-      devicesTitle.push(result.os);
     });
-
-    return devicesTitle;
-    setOs(devicesTitle);
   }
 
-  setInterval(getActiveData, 10000);
+  let ActiveData_intervar;
+  clearInterval(ActiveData_intervar);
+  ActiveData_intervar = setInterval(getActiveData, 10000);
   getActiveData();
   async function getActiveData() {
-    Object.keys(session.devices).map(async (dev) => {
+    Object.keys(devices).forEach(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
 
       const options = {
@@ -181,8 +179,6 @@ export default function Dashboard({ session }) {
 
       const response = await fetch(endpoint, options);
       const result = await response.json();
-
-      devicesTitle.data = result.data;
 
       activeData = result.data[0];
 
@@ -231,140 +227,142 @@ export default function Dashboard({ session }) {
   }
 
   return (
-    <NextUIProvider>
-      <main className={styles.main}>
-        <Navbar user={{ user }} />
-        <Header />
-        <Spacer y={1}></Spacer>
+    <SSRProvider>
+      <NextUIProvider>
+        <main className={styles.main}>
+          <Navbar user={{ user }} />
+          <Header />
+          <Spacer y={1}></Spacer>
 
-        <Button
-          shadow
-          size="md"
-          id="getDeviceID"
-          auto
-          css={{ background: btn_back }}
-          onPress={handler_getDeviceID}
-        >
-          <Text
-            h6
-            size={14}
-            color={text_Color}
-            css={{ m: 0, "line-height": "1rem" }}
+          <Button
+            shadow
+            size="md"
+            id="getDeviceID"
+            auto
+            css={{ background: btn_back }}
+            onPress={handler_getDeviceID}
           >
-            Add Device
-          </Text>
-        </Button>
-        <Spacer y={1}></Spacer>
-        <Modal
-          scroll
-          blur
-          width="30%"
-          aria-labelledby="modal-title"
-          aria-describedby="modal-description"
-          open={visible_getDeviceID}
-          onClose={closeHandler_getDeviceID}
-        >
-          <Modal.Header>
-            <Text id="modal-title" size={18}>
-              Device
+            <Text
+              h6
+              size={14}
+              color={text_Color}
+              css={{ m: 0, "line-height": "1rem" }}
+            >
+              Add Device
             </Text>
-          </Modal.Header>
-          <form onSubmit={handleSubmit_Add_Device}>
-            <Modal.Body>
-              <Input
-                aria-label="dev_ID"
-                id="dev_ID"
-                name="dev_ID"
-                bordered
-                color="primary"
-              />
-            </Modal.Body>
+          </Button>
+          <Spacer y={1}></Spacer>
+          <Modal
+            scroll
+            blur
+            width="30%"
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+            open={visible_getDeviceID}
+            onClose={closeHandler_getDeviceID}
+          >
+            <Modal.Header>
+              <Text id="modal-title" size={18}>
+                Device
+              </Text>
+            </Modal.Header>
+            <form onSubmit={handleSubmit_Add_Device}>
+              <Modal.Body>
+                <Input
+                  aria-label="dev_ID"
+                  id="dev_ID"
+                  name="dev_ID"
+                  bordered
+                  color="primary"
+                />
+              </Modal.Body>
 
-            <Modal.Footer>
-              <Button
-                auto
-                flat
-                color="error"
-                onPress={closeHandler_getDeviceID}
-              >
-                Close
-              </Button>
-              <Button type="submit_dev_ID" auto>
-                OK
-              </Button>
-            </Modal.Footer>
-          </form>
-        </Modal>
+              <Modal.Footer>
+                <Button
+                  auto
+                  flat
+                  color="error"
+                  onPress={closeHandler_getDeviceID}
+                >
+                  Close
+                </Button>
+                <Button type="submit_dev_ID" auto>
+                  OK
+                </Button>
+              </Modal.Footer>
+            </form>
+          </Modal>
 
-        <Grid.Container gap={2} justify="flex-start">
-          {Object.keys(devices).map((item, index) => (
-            <Grid xs={60} sm={30}>
-              <Card
-                isPressable
-                isHoverable
-                css={{ background: card_back }}
-                shadow
-                variant="bordered"
-                onPress={(event) => {
-                  router.push({
-                    pathname: "/device",
-                    query: { devID: item },
-                  });
-                }}
-              >
-                <Card.Body css={{ color: text_Color }}>
-                  <div id={item}>
-                    <Row justify="center" align="center">
-                      <Text size={25} aria-label="hostname" color="white">
-                        {item}
-                      </Text>
-                      <Spacer y={0}></Spacer>
-                      <Row>
-                        <Text aria-label="version" color="white"></Text>
+          <Grid.Container gap={2} justify="flex-start">
+            {Object.keys(devices).map((item, index) => (
+              <Grid xs={60} sm={30}>
+                <Card
+                  isPressable
+                  isHoverable
+                  css={{ background: card_back }}
+                  shadow
+                  variant="bordered"
+                  onPress={(event) => {
+                    router.push({
+                      pathname: "/device",
+                      query: { devID: item },
+                    });
+                  }}
+                >
+                  <Card.Body css={{ color: text_Color }}>
+                    <div id={item}>
+                      <Row justify="center" align="center">
+                        <Text size={25} aria-label="hostname" color="white">
+                          {item}
+                        </Text>
+                        <Spacer y={0}></Spacer>
+                        <Row>
+                          <Text aria-label="version" color="white"></Text>
+                        </Row>
+                        <Loading aria-label="spinner" type="points-opacity" />
+                        <Container
+                          aria-label="data"
+                          style={{ display: "none" }}
+                        ></Container>
+
+                        <Dropdown>
+                          <Dropdown.Button
+                            flat
+                            size={"sm"}
+                            css={{ marginLeft: "auto" }}
+                          >
+                            Remove*
+                          </Dropdown.Button>
+                          <Dropdown.Menu
+                            aria-label="Static Actions"
+                            onAction={(actionKey) => {
+                              handleDeleteDev(item);
+                            }}
+                          >
+                            <Dropdown.Item key="delete" color="error">
+                              Press to remove device*
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
                       </Row>
-                      <Loading aria-label="spinner" type="points-opacity" />
-                      <Container
-                        aria-label="data"
-                        style={{ display: "none" }}
-                      ></Container>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Grid>
+            ))}
 
-                      <Dropdown>
-                        <Dropdown.Button
-                          flat
-                          size={"sm"}
-                          css={{ marginLeft: "auto" }}
-                        >
-                          Remove*
-                        </Dropdown.Button>
-                        <Dropdown.Menu
-                          aria-label="Static Actions"
-                          onAction={(actionKey) => {
-                            handleDeleteDev(item);
-                          }}
-                        >
-                          <Dropdown.Item key="delete" color="error">
-                            Press to remove device*
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Row>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Grid>
-          ))}
-
-          <Snackbar
-            TransitionComponent={TransitionLeft}
-            open={open}
-            onClose={() => setOpen(false)}
-            autoHideDuration={2000}
-            message={message}
-            color="warning"
-          ></Snackbar>
-        </Grid.Container>
-      </main>
-    </NextUIProvider>
+            <Snackbar
+              TransitionComponent={TransitionLeft}
+              open={open}
+              onClose={() => setOpen(false)}
+              autoHideDuration={2000}
+              message={message}
+              color="warning"
+            ></Snackbar>
+          </Grid.Container>
+        </main>
+      </NextUIProvider>
+    </SSRProvider>
   );
 }
 
@@ -379,7 +377,7 @@ export const getServerSideProps = withIronSessionSsr(
     // adding list of decices ids to the list
     let dev = {};
     rows_devices.rows.forEach((device) => {
-      dev[device.id] = { device };
+      dev[device.id] = device;
     });
 
     req.session.devices = dev;
@@ -390,7 +388,6 @@ export const getServerSideProps = withIronSessionSsr(
     return {
       props: {
         session: JSON.stringify(req.session),
-        //  devicesTitle: JSON.stringify(devicesTitle),
       },
     };
   },
