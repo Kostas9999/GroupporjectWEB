@@ -4,9 +4,17 @@ import { withIronSessionSsr } from "iron-session/next";
 
 import Navbar from "./templates/navbar/navbar";
 import React, { PureComponent } from "react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid,
+} from "recharts";
 import { NotificationIcon } from "../public/img/js/notification";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Snackbar, Slide } from "@mui/material";
 
@@ -33,10 +41,38 @@ import {
   Button,
 } from "@nextui-org/react";
 let message = "";
+let arr = {};
 export default function Home({ all, currDev, hw }) {
   all = JSON.parse(all);
 
   let user = all.user;
+
+  async function getActiveData() {
+    const endpoint = `${all.env.host}/api/database/queries/getActiveData`;
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ currDev: currDev }),
+    };
+
+    const response = await fetch(endpoint, options);
+    const result = await response.json();
+    arr = result.data;
+  }
+
+  const [data, setData] = useState(all.devices[currDev].networkStats);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getActiveData();
+      const newData = all.devices[currDev].networkStats;
+      setData([...data, { arr }]);
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [data]);
+
   //console.log(all.devices[`${currDev}`].baseline)
   /*
   const handler_sendMsg= () => setVisible_sendMsg(true);
@@ -61,8 +97,6 @@ export default function Home({ all, currDev, hw }) {
     event.preventDefault();
     closeHandler_MSG();
     notification("Message sent..");
-
-    console.log(event.target.dev_ID);
 
     const JSONdata = JSON.stringify({
       param: event.target.dev_ID.value,
@@ -200,8 +234,6 @@ export default function Home({ all, currDev, hw }) {
   //  setInterval(refresh, 10000);
 
   async function refresh() {
-    console.log(window.pageYOffset);
-
     router.push({
       pathname: "/device",
       query: { devID: currDev },
@@ -741,7 +773,7 @@ export default function Home({ all, currDev, hw }) {
                         syncId="anyId"
                         width={1150}
                         height={200}
-                        data={latencyData}
+                        data={data}
                       >
                         <Line
                           type="monotone"

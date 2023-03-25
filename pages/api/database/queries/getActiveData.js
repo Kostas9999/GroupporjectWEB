@@ -5,11 +5,11 @@ export default async function handler(req, res) {
   try {
     const rows = await client
       .query(
-        `SELECT * FROM "${device_Id}".networkstats ORDER BY created DESC  LIMIT 1;`
+        `SELECT * FROM "${device_Id}".networkstats ORDER BY created DESC LIMIT 1;`
       )
       .then(async (rows) => {
         await res.status(200).json({
-          data: rows.rows,
+          data: rows.rows[0],
         });
       });
   } catch (error) {

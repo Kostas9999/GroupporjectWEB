@@ -152,7 +152,7 @@ export default function Dashboard({ session }) {
       const response = await fetch(endpoint, options);
       const result = await response.json();
 
-      activeData = result.data[0];
+      activeData = result.data;
 
       if (typeof document !== "undefined") {
         let getDiv = document.getElementById(dev);
