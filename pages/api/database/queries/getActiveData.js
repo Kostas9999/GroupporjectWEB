@@ -1,7 +1,7 @@
 const { client } = require("../connections/connection");
 export default async function handler(req, res) {
   const device_Id = req.body.currDev;
-
+  console.log(device_Id);
   try {
     const rows = await client
       .query(

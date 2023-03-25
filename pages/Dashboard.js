@@ -28,7 +28,7 @@ import { useRouter } from "next/router";
 
 let message = "";
 let devicesTitle = [];
-
+let activeData_intervar = [];
 export default function Dashboard({ session }) {
   session = JSON.parse(session);
   let devices = session.devices;
@@ -147,7 +147,6 @@ export default function Dashboard({ session }) {
 
       const response = await fetch(endpoint, options);
       const result = await response.json();
-      console.log(result);
 
       if (typeof document !== "undefined") {
         let getDiv = document.getElementById(dev);
@@ -162,10 +161,10 @@ export default function Dashboard({ session }) {
       }
     });
   }
+  clearInterval(activeData_intervar);
+  clearInterval(activeData_intervar);
 
-  let ActiveData_intervar;
-  clearInterval(ActiveData_intervar);
-  ActiveData_intervar = setInterval(getActiveData, 10000);
+  activeData_intervar = setInterval(getActiveData, 10000);
   getActiveData();
   async function getActiveData() {
     Object.keys(devices).forEach(async (dev) => {
@@ -377,7 +376,7 @@ export const getServerSideProps = withIronSessionSsr(
     // adding list of decices ids to the list
     let dev = {};
     rows_devices.rows.forEach((device) => {
-      dev[device.id] = device;
+      dev[device.id] = { device };
     });
 
     req.session.devices = dev;
