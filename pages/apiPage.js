@@ -23,8 +23,6 @@ export default function Home({ session }) {
 
   const router = useRouter();
 
- 
-
   let device_arr = Object.keys(session.devices);
   let tables = [
     "arp",
@@ -203,7 +201,7 @@ export default function Home({ session }) {
                 <Row justify="center" align="center">
                   <div id="output">
                     <Text h6 size={15} color="white">
-                      {JSON.stringify(api_output)}
+                      <pre> {JSON.stringify(api_output, undefined, 2)}</pre>
                     </Text>
                   </div>
                 </Row>
