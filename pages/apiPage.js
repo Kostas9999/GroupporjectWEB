@@ -61,7 +61,7 @@ export default function Home({ session }) {
 
     const response = await fetch(api_link);
     const result = await response.json().then((d) => {
-      api_output = d;
+      api_output = d[0];
     });
     console.log(result);
 
