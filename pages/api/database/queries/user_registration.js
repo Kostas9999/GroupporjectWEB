@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 var validator = require("validator");
 import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "../../session/session_Config";
-const { client } = require("../connections/connection");
+const { pool, client } = require("../connections/connection");
 
 export default withIronSessionApiRoute(loginRoute, ironOptions);
 
@@ -15,7 +15,7 @@ async function loginRoute(req, res) {
   let rows_user = null;
 
   try {
-    rows_user = await client.query(
+    rows_user = await pool.query(
       `INSERT INTO "groupproject"."user" (username, email, password) VALUES ('${username}', '${email}', '${hash}');`
     );
 

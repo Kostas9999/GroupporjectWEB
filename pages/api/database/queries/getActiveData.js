@@ -1,9 +1,9 @@
-const { client } = require("../connections/connection");
+const { pool, client } = require("../connections/connection");
 export default async function handler(req, res) {
   const device_Id = req.body.currDev;
 
   try {
-    const rows = await client
+    const rows = await pool
       .query(
         `SELECT * FROM "${device_Id}".networkstats ORDER BY created DESC LIMIT 1;`
       )

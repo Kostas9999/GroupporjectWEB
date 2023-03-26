@@ -1,7 +1,6 @@
 const fs = require("fs");
 const { Client, Pool } = require("pg");
 
-
 const config = {
   connectionString:
     "postgresql://MGproject:YP4rEujgDgdEcuUUE2e6xA@cluster-4036.6zw.cockroachlabs.cloud:26257/groupproject?sslmode=verify-full",
