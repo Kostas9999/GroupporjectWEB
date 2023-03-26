@@ -16,7 +16,7 @@ import {
 import { NotificationIcon } from "../public/img/js/notification";
 import { useState, useEffect } from "react";
 
-import { Snackbar, Slide } from "@mui/material";
+import { Snackbar, Slide, Alert } from "@mui/material";
 
 import { useRouter } from "next/router";
 
@@ -1156,8 +1156,12 @@ export default function Home({ all, currDev, hw }) {
             onClose={() => setOpen(false)}
             autoHideDuration={3000}
             message={message}
-            color="warning"
-          ></Snackbar>
+            severity="success"
+          >
+            <Alert severity="error" sx={{ width: "100%" }}>
+              {message}
+            </Alert>
+          </Snackbar>
         </Grid.Container>
       </main>
     </>
