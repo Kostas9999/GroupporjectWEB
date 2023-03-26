@@ -41,11 +41,34 @@ import {
   Button,
 } from "@nextui-org/react";
 let message = "";
-let arr = {};
+let newActiveData = {};
+let lastKnownEvent = 0;
 export default function Home({ all, currDev, hw }) {
   all = JSON.parse(all);
+  if (lastKnownEvent == 0) {
+    lastKnownEvent = all.devices[currDev].events[0].event_id;
+  }
 
   let user = all.user;
+  isNewEvents();
+  async function isNewEvents() {
+    const endpoint = `${all.env.host}/api/database/queries/getLastEvent`;
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ currDev }),
+    };
+
+    const response = await fetch(endpoint, options);
+    const result = await response.json();
+
+    if (result.event.event_id !== lastKnownEvent) {
+      notification(`Event: ${result.event.type} Value:${result.event.value} `);
+
+      lastKnownEvent = result.event.event_id;
+    }
+  }
 
   async function getActiveData() {
     const endpoint = `${all.env.host}/api/database/queries/getActiveData`;
@@ -53,21 +76,20 @@ export default function Home({ all, currDev, hw }) {
     const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ currDev: currDev }),
+      body: JSON.stringify({ currDev }),
     };
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
-    arr = result.data;
+    newActiveData = result.data;
   }
 
   const [data, setData] = useState(all.devices[currDev].networkStats);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      getActiveData();
-      const newData = all.devices[currDev].networkStats;
-      setData([...data, { arr }]);
+    const intervalId = setInterval(async () => {
+      await getActiveData();
+      setData([...data, newActiveData]);
     }, 10000);
 
     return () => clearInterval(intervalId);
@@ -331,10 +353,9 @@ export default function Home({ all, currDev, hw }) {
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      Last Seen:{" "}
-                      {dateTimeFormater(
-                        all.devices[`${currDev}`].networkStats[0].created
-                      )}
+                      Last Seen: {dateTimeFormater(data.slice(-1)[0].created)}
+                      <Spacer y={0}></Spacer>
+                      {data.created}
                       <Spacer y={0}></Spacer>
                       {all.devices[`${currDev}`].os.hostname}
                       <Spacer y={0}></Spacer>
@@ -389,35 +410,17 @@ export default function Home({ all, currDev, hw }) {
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      rx_total:{" "}
-                      {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].rx_total
-                      )}
+                      rx_total: {formatBytes(data.slice(-1)[0].rx_total)}
                       <Spacer y={0}></Spacer>
-                      rx_error:{" "}
-                      {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].rx_error
-                      )}
+                      rx_error: {formatBytes(data.slice(-1)[0].rx_error)}
                       <Spacer y={0}></Spacer>
-                      rx_dropped:{" "}
-                      {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].rx_dropped
-                      )}
+                      rx_dropped: {formatBytes(data.slice(-1)[0].rx_dropped)}
                       <Spacer y={0}></Spacer>
-                      tx_total:{" "}
-                      {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].tx_total
-                      )}
+                      tx_total: {formatBytes(data.slice(-1)[0].tx_total)}
                       <Spacer y={0}></Spacer>
-                      tx_error:{" "}
-                      {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].tx_error
-                      )}
+                      tx_error: {formatBytes(data.slice(-1)[0].tx_error)}
                       <Spacer y={0}></Spacer>
-                      tx_dropped:{" "}
-                      {formatBytes(
-                        all.devices[`${currDev}`].networkStats[0].tx_dropped
-                      )}
+                      tx_dropped: {formatBytes(data.slice(-1)[0].tx_dropped)}
                     </Text>
                   </Row>
                 </Card.Body>
@@ -428,18 +431,16 @@ export default function Home({ all, currDev, hw }) {
                 <Card.Body>
                   <Row justify="center" align="right">
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      Local Latency:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].locallatency}ms
+                      Local Latency: {data.slice(-1)[0].locallatency}ms
                       <Spacer y={0}></Spacer>
-                      Public Latency:{" "}
-                      {all.devices[`${currDev}`].networkStats[0].publiclatency}
+                      Public Latency: {data.slice(-1)[0].publiclatency}
                       ms
                       <Spacer y={0}></Spacer>
                       Gateway:
-                      {all.devices[`${currDev}`].networkStats[0].defaultgateway}
+                      {data.slice(-1)[0].defaultgateway}
                       <Spacer y={0}></Spacer>
                       Gateway MAC:
-                      {all.devices[`${currDev}`].networkStats[0].dgmac}
+                      {data.slice(-1)[0].dgmac}
                       <Spacer y={0}></Spacer>
                       Server: {all.devices[`${currDev}`]?.server[0]?.ip} (
                       {all.devices[`${currDev}`]?.server[0]?.port})
@@ -456,7 +457,7 @@ export default function Home({ all, currDev, hw }) {
           {/* ========================================================= Start second row SIDEBAR
            Start second row         
           */}
-          <Grid xs={3}>
+          <Grid xs={2}>
             <Container hidden>
               <Card
                 css={{
@@ -776,6 +777,7 @@ export default function Home({ all, currDev, hw }) {
                         data={data}
                       >
                         <Line
+                          isAnimationActive={false}
                           type="monotone"
                           dataKey="locallatency"
                           stroke="red"
@@ -783,6 +785,7 @@ export default function Home({ all, currDev, hw }) {
                           legendType="triangle"
                         />
                         <Line
+                          isAnimationActive={false}
                           type="monotone"
                           dataKey="publiclatency"
                           stroke="#8884d8"
@@ -808,12 +811,14 @@ export default function Home({ all, currDev, hw }) {
                         data={latencyData}
                       >
                         <Line
+                          isAnimationActive={false}
                           type="monotone"
                           dataKey="cpu"
                           stroke="red"
                           dot={false}
                         />
                         <Line
+                          isAnimationActive={false}
                           type="monotone"
                           dataKey="memory"
                           stroke="#8884d8"
@@ -1173,7 +1178,7 @@ export const getServerSideProps = withIronSessionSsr(
     );
 
     let networkstats = await pool.query(
-      `select * from "${id}"."networkstats" ORDER BY created DESC LIMIT 1000 ; `
+      `select * FROM "${id}"."networkstats" ORDER BY created DESC LIMIT 500 ; `
     );
 
     let hardware = await pool.query(
