@@ -11,7 +11,7 @@ import {
   YAxis,
   Tooltip,
   Legend,
-  CartesianGrid,
+  ResponsiveContainer,
 } from "recharts";
 import { NotificationIcon } from "../public/img/js/notification";
 import { useState, useEffect } from "react";
@@ -20,7 +20,7 @@ import { Snackbar, Slide, Alert } from "@mui/material";
 
 import { useRouter } from "next/router";
 
-import { NextUIProvider } from "@nextui-org/react";
+import { NextUIProvider, useModal } from "@nextui-org/react";
 import styles from "../styles/Home.module.css";
 
 const json2csv = require("json2csv");
@@ -45,6 +45,7 @@ import {
 let message = "";
 let newActiveData = {};
 let lastKnownEvent = 0;
+let event_data = [];
 export default function Home({ all, currDev, hw }) {
   all = JSON.parse(all);
   if (lastKnownEvent == 0) {
@@ -92,20 +93,10 @@ export default function Home({ all, currDev, hw }) {
     const intervalId = setInterval(async () => {
       await getActiveData();
       setData([...data, newActiveData]);
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(intervalId);
   }, [data]);
-
-  //console.log(all.devices[`${currDev}`].baseline)
-  /*
-  const handler_sendMsg= () => setVisible_sendMsg(true);
-  const [visible_sendMsg, setVisible_sendMsg] = React.useState(false);
-  const closeHandler_sendMsg = () => {
-    console.log("here")
-    setVisible_sendMsg(false);
-  };
-  */
 
   const [open, setOpen] = useState(false);
   function notification(msg) {
@@ -160,6 +151,9 @@ export default function Home({ all, currDev, hw }) {
   }
 
   function dateTimeFormater(datetime) {
+    if (datetime === undefined) {
+      return "";
+    }
     return datetime.replaceAll("T", " ").substring(0, 19);
   }
 
@@ -227,6 +221,7 @@ export default function Home({ all, currDev, hw }) {
   if (keys === undefined) {
     keys = ["none"];
   }
+  keys.push("action");
 
   const columns_events = [];
   keys.map((item, index) =>
@@ -245,8 +240,43 @@ export default function Home({ all, currDev, hw }) {
       value: item.value,
       baseline: item.baseline,
       created: dateTimeFormater(item.created),
+      action: (
+        <Button
+          onPress={(e) => {
+            getEventData(item);
+            setVisible(true);
+          }}
+          auto
+          ghost
+          color="error"
+          bordered
+        >
+          *Details
+        </Button>
+      ),
     })
   );
+
+  function getEventData(item) {
+    let plusSecods = new Date(item.created).getTime() - 4000;
+
+    var result = all.devices[currDev].networkStats.filter((obj) => {
+      if (obj.created < item.created) {
+        let netStatDate = new Date(obj.created).getTime();
+        if (netStatDate > plusSecods) {
+          return obj;
+        }
+      }
+    });
+
+    setEvent_data2({ result, item });
+
+    console.log(result, item);
+    // event_data[(result, item)];
+    return { result, item };
+  }
+
+  const [event_data2, setEvent_data2] = useState([]);
 
   const handleSelect = (e) => {
     router.push({
@@ -313,6 +343,8 @@ export default function Home({ all, currDev, hw }) {
   const openHandler_MSG = () => setVisible_MSG(true);
   const closeHandler_MSG = () => setVisible_MSG(false);
 
+  const { setVisible, bindings } = useModal();
+
   //==================================================== export
 
   function downloadCsv() {
@@ -348,7 +380,71 @@ export default function Home({ all, currDev, hw }) {
           {/* ========================================================= Start First row
            Start first row         
           */}
-
+          <div>
+            <Modal
+              scroll
+              width="600px"
+              aria-labelledby="modal-title"
+              aria-describedby="modal-description"
+              {...bindings}
+            >
+              <Modal.Header>
+                <Text id="modal-title" size={20}>
+                  Type: {event_data2?.item?.type} {" | "}
+                  Value:
+                  {event_data2?.item?.value}
+                  {" | "}
+                  Baseline:
+                  {event_data2?.item?.baseline}
+                  {" | "}
+                  <br></br>
+                  Date:
+                  {dateTimeFormater(event_data2?.item?.created)}
+                </Text>
+              </Modal.Header>
+              <Modal.Body>
+                <Text justify="center" id="modal-title" size={18}>
+                  Interface: {event_data2?.result[0]?.iface}
+                  {" | "}
+                  Public IP: {event_data2?.result[0]?.publicip}
+                  {" | "}
+                  defaultgateway: {event_data2?.result[0]?.defaultgateway}
+                  <br></br>
+                  locallatency: {event_data2?.result[0]?.locallatency}
+                  {" | "}
+                  publiclatency: {event_data2?.result[0]?.publiclatency}
+                  {" | "}
+                  <br></br>
+                  CPU: {event_data2?.result[0]?.cpu}
+                  {" | "}
+                  RAM: {event_data2?.result[0]?.memory}
+                  {" | "}
+                  <br></br>
+                  rx_dropped: {event_data2?.result[0]?.rx_dropped}
+                  {" | "}
+                  rx_error: {event_data2?.result[0]?.rx_error}
+                  {" | "}
+                  tx_dropped: {event_data2?.result[0]?.tx_dropped}
+                  {" | "}
+                  tx_dropped: {event_data2?.result[0]?.tx_error}
+                  {" | "}
+                </Text>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  auto
+                  flat
+                  color="error"
+                  onPress={() => setVisible(false)}
+                >
+                  Close
+                </Button>
+                <Button auto onPress={() => setVisible(false)}>
+                  Agree
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </div>
           <Grid xs={12}>
             <Container>
               <Card css={{ $$cardColor: btn_back }} className={styles.thirteen}>
@@ -651,6 +747,7 @@ export default function Home({ all, currDev, hw }) {
                     </Modal.Body>
                     <Modal.Footer></Modal.Footer>
                   </Modal>
+
                   <Spacer y={1}></Spacer>
                   <Row justify="center" align="right">
                     <Button
@@ -766,82 +863,63 @@ export default function Home({ all, currDev, hw }) {
            Start chart row     
                
           */}
-          <div id="charts" style={{ width: "80%" }}>
-            <Grid xs={10}>
-              <Container>
-                <Card css={{ $$cardColor: btn_back, h: "100%" }}>
-                  <Card.Body>
-                    <Row justify="center" align="right">
-                      <LineChart
-                        syncId="anyId"
-                        width={800}
-                        height={300}
-                        data={data}
-                      >
-                        <Line
-                          isAnimationActive={false}
-                          type="monotone"
-                          dataKey="locallatency"
-                          stroke="red"
-                          dot={false}
-                          legendType="triangle"
-                        />
-                        <Line
-                          isAnimationActive={false}
-                          type="monotone"
-                          dataKey="publiclatency"
-                          stroke="#8884d8"
-                          dot={false}
-                        />
+          <div id="charts" style={{ width: "80%", height: "30vh" }}>
+            <ResponsiveContainer>
+              <LineChart syncId="anyId" data={data}>
+                <Line
+                  isAnimationActive={false}
+                  type="monotone"
+                  dataKey="locallatency"
+                  stroke="red"
+                  dot={false}
+                  legendType="triangle"
+                />
+                <Line
+                  isAnimationActive={false}
+                  type="monotone"
+                  dataKey="publiclatency"
+                  stroke="#8884d8"
+                  dot={false}
+                />
 
-                        <XAxis dataKey="created" tick={false} />
-                        <YAxis dataKey="publiclatency" domain={[0, 100]} />
-                        <Tooltip />
-                        <Legend
-                          layout="horizontal"
-                          verticalAlign="top"
-                          align="center"
-                        />
-                      </LineChart>
-                    </Row>
+                <XAxis dataKey="created" tick={false} />
+                <YAxis dataKey="publiclatency" domain={[0, 100]} />
+                <Tooltip />
+                <Legend
+                  layout="horizontal"
+                  verticalAlign="top"
+                  align="center"
+                />
+              </LineChart>
+            </ResponsiveContainer>
 
-                    <Row justify="center" align="right">
-                      <LineChart
-                        syncId="anyId"
-                        width={800}
-                        height={300}
-                        data={latencyData}
-                      >
-                        <Line
-                          isAnimationActive={false}
-                          type="monotone"
-                          dataKey="cpu"
-                          stroke="red"
-                          dot={false}
-                        />
-                        <Line
-                          isAnimationActive={false}
-                          type="monotone"
-                          dataKey="memory"
-                          stroke="#8884d8"
-                          dot={false}
-                        />
+            <ResponsiveContainer>
+              <LineChart syncId="anyId" width={800} height={300} data={data}>
+                <Line
+                  isAnimationActive={false}
+                  type="monotone"
+                  dataKey="cpu"
+                  stroke="red"
+                  dot={false}
+                />
+                <Line
+                  isAnimationActive={false}
+                  type="monotone"
+                  dataKey="memory"
+                  stroke="#8884d8"
+                  dot={false}
+                />
 
-                        <XAxis dataKey="created" tick={false} />
-                        <YAxis dataKey="publiclatency" domain={[0, 100]} />
-                        <Tooltip />
-                        <Legend
-                          layout="horizontal"
-                          verticalAlign="top"
-                          align="center"
-                        />
-                      </LineChart>
-                    </Row>
-                  </Card.Body>
-                </Card>
-                <Spacer y={1}></Spacer>
-              </Container>
-            </Grid>
+                <XAxis dataKey="created" tick={false} />
+                <YAxis dataKey="publiclatency" domain={[0, 100]} />
+                <Tooltip />
+                <Legend
+                  layout="horizontal"
+                  verticalAlign="top"
+                  align="center"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
 
           {/* ========================================================= End chart row
