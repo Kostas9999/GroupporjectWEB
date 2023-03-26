@@ -39,6 +39,8 @@ import {
   Card,
   Grid,
   Button,
+  Popover,
+  Trigger,
 } from "@nextui-org/react";
 let message = "";
 let newActiveData = {};
@@ -764,16 +766,16 @@ export default function Home({ all, currDev, hw }) {
            Start chart row     
                
           */}
-          <div id="charts" style={{ width: "70%" }}>
-            <Grid xs={12}>
+          <div id="charts" style={{ width: "80%" }}>
+            <Grid xs={10}>
               <Container>
-                <Card css={{ $$cardColor: btn_back, h: "75vh" }}>
+                <Card css={{ $$cardColor: btn_back, h: "100%" }}>
                   <Card.Body>
                     <Row justify="center" align="right">
                       <LineChart
                         syncId="anyId"
-                        width={1150}
-                        height={200}
+                        width={800}
+                        height={300}
                         data={data}
                       >
                         <Line
@@ -806,8 +808,8 @@ export default function Home({ all, currDev, hw }) {
                     <Row justify="center" align="right">
                       <LineChart
                         syncId="anyId"
-                        width={1150}
-                        height={200}
+                        width={800}
+                        height={300}
                         data={latencyData}
                       >
                         <Line
@@ -871,9 +873,8 @@ export default function Home({ all, currDev, hw }) {
             <Grid xs={12}>
               <Card
                 css={{
-                  h: "100vh",
                   $$cardColor: btn_back,
-                  width: "100%",
+
                   overflowY: "visible",
                 }}
               >
@@ -891,7 +892,12 @@ export default function Home({ all, currDev, hw }) {
                         <Table.Row key={item.key}>
                           {(columnKey) => (
                             <Table.Cell>
-                              <Text color={text_Color}> {item[columnKey]}</Text>
+                              <Text color={text_Color}>
+                                {" "}
+                                {item[columnKey].length > 30
+                                  ? ""
+                                  : item[columnKey]}
+                              </Text>
                             </Table.Cell>
                           )}
                         </Table.Row>
@@ -954,7 +960,7 @@ export default function Home({ all, currDev, hw }) {
             <Grid xs={12}>
               <Card
                 css={{
-                  h: "100vh",
+                  h: "100%",
                   $$cardColor: btn_back,
                   width: "100%",
                   overflowY: "visible",
@@ -974,7 +980,23 @@ export default function Home({ all, currDev, hw }) {
                         <Table.Row key={item.key}>
                           {(columnKey) => (
                             <Table.Cell>
-                              <Text color={text_Color}> {item[columnKey]}</Text>
+                              <Text color={text_Color}>
+                                {" "}
+                                {item[columnKey].length > 80 ? (
+                                  <Popover>
+                                    <Popover.Trigger>
+                                      <Button auto ghost size="xs">
+                                        view path
+                                      </Button>
+                                    </Popover.Trigger>
+                                    <Popover.Content>
+                                      <Text size={20}>{item[columnKey]}</Text>
+                                    </Popover.Content>
+                                  </Popover>
+                                ) : (
+                                  item[columnKey]
+                                )}
+                              </Text>
                             </Table.Cell>
                           )}
                         </Table.Row>
