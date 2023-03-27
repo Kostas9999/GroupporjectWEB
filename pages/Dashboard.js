@@ -135,10 +135,67 @@ export default function Dashboard({ session }) {
   }
 
   // clearInterval(activeData_intervar);
-  // clearInterval(activeData_intervar);
+
+ // getActiveDataAll()
+  async function getActiveDataAll() {
+
+      const endpoint = `${session.env.host}/api/database/queries/getActiveDataAll`;
+
+      let deviceIdList = Object.keys( session.devices)
+
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify( deviceIdList),
+      };
+
+      const response = await fetch(endpoint, options);
+      const result = await response.json();
+
+      activeData = result.data;
+
+      console.log(result)
+/*
+      if (typeof document !== "undefined") {
+        let getDiv = document.getElementById(dev);
+
+        if (getDiv != null) {
+          let spinner = getDiv.querySelector('[aria-label="spinner"]');
+          let dataDiv = getDiv.querySelector('[aria-label="data"]');
+
+          spinner.style.display = "none";
+          dataDiv.style.display = "block";
+
+          dataDiv.textContent = ` ${activeData.publicip} CPU: ${
+            activeData.cpu
+          } RAM: ${activeData.memory} Last Seen: ${dateTimeFormater(
+            activeData.created
+          )} diff ${toTimestamp(activeData.created)}`;
+
+          if (toTimestamp(activeData.created) < 20000) {
+            dataDiv.innerHTML = `<strong> Online</strong>`;
+            dataDiv.style.color = "green";
+            dataDiv.innerHTML += `<br> <span style="color:white", padding:"10px">  ${activeData.publicip}<br> <h5>CPU: ${activeData.cpu}% <br>RAM:  ${activeData.memory}%</h5>  </span>`;
+          } else {
+            dataDiv.innerHTML = `<strong> Offline</strong>`;
+
+            dataDiv.innerHTML += `<br> <span style="color:white", padding:"10px">  Last seen: ${dateTimeFormater(
+              activeData.created
+            )} </span>`;
+
+            dataDiv.style.color = "red";
+          }
+        }
+      }
+      */
+
+  }
+
+
+    // clearInterval(activeData_intervar);
 
   // activeData_intervar = setInterval(getActiveData, 10000);
-  getActiveData();
+  getActiveData()
   async function getActiveData() {
     Object.keys(session.devices).forEach(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
