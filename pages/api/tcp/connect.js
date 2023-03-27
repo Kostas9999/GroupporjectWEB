@@ -30,10 +30,11 @@ async function handler(req, res) {
 
   const tls_client = await tls.connect(options, async () => {
     tls_client.write(JSON.stringify({ type: "EXEC", data: data }));
+    await res.send({ ok: true });
   });
 
-  tls_client.on("error", (e) => {
-    console.log(e);
+  tls_client.on("error", async (e) => {
+    await res.send({ ok: false });
   });
   //await tls_client.write(JSON.stringify({ type: "MSG", data:pid })).then(()=>{
   //  tls_client.destroy()

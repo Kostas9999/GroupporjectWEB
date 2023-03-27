@@ -129,6 +129,10 @@ export default function Home({ all, currDev, hw }) {
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
+
+    if(result.ok){ notification("Message sent..");}
+    else{ notification("Message NOT sent..");}
+
   }
 
   let disc = all.devices[`${currDev}`].disc;
@@ -401,7 +405,7 @@ export default function Home({ all, currDev, hw }) {
                   {event_data2?.item?.baseline}
                   {" | "}
                   <br></br>
-                  Date:
+               
                   {dateTimeFormater(event_data2?.item?.created)}
                 </Text>
               </Modal.Header>
