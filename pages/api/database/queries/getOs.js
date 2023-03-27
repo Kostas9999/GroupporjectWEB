@@ -15,7 +15,7 @@ async function handler(req, res) {
   ) {
     await res.status(200).json({ ok: false });
   } else {
-    const rows = await pool.query(`SELECT * FROM "${device_Id}"."os" ;`);
+    const rows = await client.query(`SELECT * FROM "${device_Id}"."os" ;`);
 
     res.status(200).json({
       ok: true,
