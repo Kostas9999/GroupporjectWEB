@@ -251,7 +251,7 @@ export default function Home({ all, currDev, hw }) {
           color="error"
           bordered
         >
-          *Details
+          Details
         </Button>
       ),
     })
@@ -416,12 +416,12 @@ export default function Home({ all, currDev, hw }) {
                   locallatency: {event_data2?.result?.locallatency}
                   {" | "}
                   publiclatency: {event_data2?.result?.publiclatency}
-                  {" | "}
+                 
                   <br></br>
                   CPU: {event_data2?.result?.cpu}
                   {" | "}
                   RAM: {event_data2?.result?.memory}
-                  {" | "}
+                 
                   <br></br>
                   rx_dropped: {event_data2?.result?.rx_dropped}
                   {" | "}
@@ -430,7 +430,7 @@ export default function Home({ all, currDev, hw }) {
                   tx_dropped: {event_data2?.result?.tx_dropped}
                   {" | "}
                   tx_dropped: {event_data2?.result?.tx_error}
-                  {" | "}
+                 
                 </Text>
               </Modal.Body>
               <Modal.Footer>
@@ -442,9 +442,7 @@ export default function Home({ all, currDev, hw }) {
                 >
                   Close
                 </Button>
-                <Button auto onPress={() => setVisible(false)}>
-                  Agree
-                </Button>
+              
               </Modal.Footer>
             </Modal>
           </div>
