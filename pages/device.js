@@ -264,7 +264,7 @@ export default function Home({ all, currDev, hw }) {
       if (obj.created < item.created) {
         let netStatDate = new Date(obj.created).getTime();
         if (netStatDate > plusSecods) {
-          return obj;
+          return obj[0];
         }
       }
     });
@@ -404,29 +404,29 @@ export default function Home({ all, currDev, hw }) {
               </Modal.Header>
               <Modal.Body>
                 <Text justify="center" id="modal-title" size={18}>
-                  Interface: {event_data2?.result[0]?.iface}
+                  Interface: {event_data2?.result?.iface}
                   {" | "}
-                  Public IP: {event_data2?.result[0]?.publicip}
+                  Public IP: {event_data2?.result?.publicip}
                   {" | "}
-                  defaultgateway: {event_data2?.result[0]?.defaultgateway}
+                  defaultgateway: {event_data2?.result?.defaultgateway}
                   <br></br>
-                  locallatency: {event_data2?.result[0]?.locallatency}
+                  locallatency: {event_data2?.result?.locallatency}
                   {" | "}
-                  publiclatency: {event_data2?.result[0]?.publiclatency}
-                  {" | "}
-                  <br></br>
-                  CPU: {event_data2?.result[0]?.cpu}
-                  {" | "}
-                  RAM: {event_data2?.result[0]?.memory}
+                  publiclatency: {event_data2?.result?.publiclatency}
                   {" | "}
                   <br></br>
-                  rx_dropped: {event_data2?.result[0]?.rx_dropped}
+                  CPU: {event_data2?.result?.cpu}
                   {" | "}
-                  rx_error: {event_data2?.result[0]?.rx_error}
+                  RAM: {event_data2?.result?.memory}
                   {" | "}
-                  tx_dropped: {event_data2?.result[0]?.tx_dropped}
+                  <br></br>
+                  rx_dropped: {event_data2?.result?.rx_dropped}
                   {" | "}
-                  tx_dropped: {event_data2?.result[0]?.tx_error}
+                  rx_error: {event_data2?.result?.rx_error}
+                  {" | "}
+                  tx_dropped: {event_data2?.result?.tx_dropped}
+                  {" | "}
+                  tx_dropped: {event_data2?.result?.tx_error}
                   {" | "}
                 </Text>
               </Modal.Body>
