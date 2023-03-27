@@ -264,10 +264,13 @@ export default function Home({ all, currDev, hw }) {
       if (obj.created < item.created) {
         let netStatDate = new Date(obj.created).getTime();
         if (netStatDate > plusSecods) {
-          return obj[0];
+          return obj;
         }
       }
     });
+
+    result = result[0];
+
 
     setEvent_data2({ result, item });
 
