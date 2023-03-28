@@ -7,6 +7,15 @@ import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { SSRProvider } from "@react-aria/ssr";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 import { Snackbar, Slide } from "@mui/material";
 
@@ -20,6 +29,7 @@ import {
   Spacer,
   Loading,
   Dropdown,
+  Progress,
 } from "@nextui-org/react";
 import React from "react";
 import { Router } from "next/router";
@@ -59,7 +69,7 @@ export default function Dashboard({ session }) {
 
   const text_Color = "rgba(255, 255, 255, 0.9)"; // white smoke
   const btn_top_back = "rgba(255, 0, 0, 0.6)"; //red
-  const btn_back = "rgba(0, 0, 0, .6)"; // black
+  const btn_back = "rgba(50, 50, 50, .6)"; // black
   const card_back = "rgba(100, 100, 100, .6)"; // blue
 
   const router = useRouter();
@@ -82,9 +92,9 @@ export default function Dashboard({ session }) {
     const dt = Date.parse(strDate) + timeOfset;
 
     if (Date.now() - dt > 2000) {
-      return 1;
-    } else {
       return 0;
+    } else {
+      return 1;
     }
 
     // return Date.now() - dt > 2000;
@@ -175,10 +185,6 @@ export default function Dashboard({ session }) {
       const result = await response.json();
 
       newActiveDataAll = result.activeData;
-
-      let getDiv = (document.querySelector(
-        '[aria-label="online"]'
-      ).style.display = "block");
 
       setDataActiveAll(newActiveDataAll);
     }, 5000);
@@ -322,9 +328,13 @@ export default function Dashboard({ session }) {
             {Object.keys(session.devices).map((item, index) => (
               <Grid xs={60} sm={30}>
                 <Card
+                  css={{
+                    $$cardColor: btn_back,
+                    h: "100%",
+                    w: "100%",
+                  }}
                   isPressable
                   isHoverable
-                  css={{ background: card_back }}
                   shadow
                   variant="bordered"
                   onPress={(event) => {
@@ -343,24 +353,67 @@ export default function Dashboard({ session }) {
                           {session.devices[item].os.version}
                         </Text>
 
-                        <Container
-                          aria-label="data"
-                          style={{ display: "none" }}
-                        ></Container>
                         <Text style={{ marginLeft: "20px" }}>
                           {" "}
-                          {isOnline(dataActiveAll[item]?.created) != 1 ? (
-                            <div
-                              aria-label="online"
-                              style={{ display: "none" }}
-                            >
-                              <Badge
-                                enableShadow
-                                disableOutline
-                                color="success"
+                          {isOnline(dataActiveAll[item]?.created) == 1 ? (
+                            <div aria-label="online">
+                              <Card
+                                css={{
+                                  $$cardColor: "transparent",
+                                }}
                               >
-                                Online
-                              </Badge>
+                                <Card.Body>
+                                  <Badge
+                                    enableShadow
+                                    disableOutline
+                                    color="success"
+                                  >
+                                    Online
+                                  </Badge>
+                                </Card.Body>
+                              </Card>
+
+                              <Card
+                                css={{
+                                  w: "500px",
+                                  h: "20%",
+                                  $$cardColor: "transparent",
+                                }}
+                              >
+                                <Card.Body>
+                                  <Grid>
+                                    <Text h4 color="white" css={{ m: 0 }}>
+                                      CPU: {dataActiveAll[item]?.cpu}%
+                                    </Text>
+                                    <Progress
+                                      value={dataActiveAll[item]?.cpu}
+                                      className={styles.thirteen}
+                                      css={{ display: "block" }}
+                                      shadow
+                                    ></Progress>
+                                  </Grid>
+                                </Card.Body>
+                              </Card>
+
+                              <Card
+                                css={{
+                                  w: "500px",
+                                  h: "50%",
+                                  $$cardColor: "transparent",
+                                }}
+                              >
+                                <Card.Body>
+                                  <Text h4 color="white" css={{ m: 0 }}>
+                                    RAM: {dataActiveAll[item]?.memory}%
+                                  </Text>
+                                  <Progress
+                                    className={styles.thirteen}
+                                    css={{ display: "block" }}
+                                    shadow
+                                    value={dataActiveAll[item]?.memory}
+                                  ></Progress>
+                                </Card.Body>
+                              </Card>
                             </div>
                           ) : (
                             <div>
@@ -377,6 +430,7 @@ export default function Dashboard({ session }) {
                             </div>
                           )}
                         </Text>
+
                         <Dropdown>
                           <Dropdown.Button
                             flat
