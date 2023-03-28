@@ -30,6 +30,7 @@ import { fontSize } from "@mui/system";
 let message = "";
 let devicesTitle = [];
 let activeData_intervar = [];
+let newActiveDataAll = {};
 export default function Dashboard({ session }) {
   session = JSON.parse(session);
 
@@ -76,11 +77,18 @@ export default function Dashboard({ session }) {
       return "";
     }
   }
-  const toTimestamp = (strDate) => {
-    const dt = Date.parse(strDate);
+  function isOnline(strDate) {
+    let timeOfset = 7200000;
+    const dt = Date.parse(strDate) + timeOfset;
 
-    return Date.now() - dt;
-  };
+    if (Date.now() - dt > 2000) {
+      return 1;
+    } else {
+      return 0;
+    }
+
+    // return Date.now() - dt > 2000;
+  }
 
   async function handleDeleteDev(id) {
     const data = {
@@ -135,35 +143,55 @@ export default function Dashboard({ session }) {
   }
 
   // clearInterval(activeData_intervar);
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    const intervalId = setInterval(async () => {
-      await getActiveDataAll();
-      setData([...data, newActiveDataAll]);
-    }, 5000);
 
-    return () => clearInterval(intervalId);
-  }, [data]);
-  
   async function getActiveDataAll() {
     const endpoint = `${session.env.host}/api/database/queries/getActiveDataAll`;
 
     const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ devices:session.devices }),
+      body: JSON.stringify({ devices: session.devices }),
     };
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
-console.log(result)
-  }
-//
 
-    // clearInterval(activeData_intervar);
+    newActiveDataAll = result.activeData;
+    console.log(result.activeData);
+  }
+
+  const [dataActiveAll, setDataActiveAll] = useState([]);
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      const endpoint = `${session.env.host}/api/database/queries/getActiveDataAll`;
+
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ devices: session.devices }),
+      };
+
+      const response = await fetch(endpoint, options);
+      const result = await response.json();
+
+      newActiveDataAll = result.activeData;
+
+      let getDiv = (document.querySelector(
+        '[aria-label="online"]'
+      ).style.display = "block");
+
+      setDataActiveAll(newActiveDataAll);
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [dataActiveAll]);
+  //
+
+  // clearInterval(activeData_intervar);
 
   // activeData_intervar = setInterval(getActiveData, 10000);
- // getActiveData()
+  // getActiveData()
+  /*
   async function getActiveData() {
     Object.keys(session.devices).forEach(async (dev) => {
       const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
@@ -212,7 +240,7 @@ console.log(result)
       }
     });
   }
-
+*/
   const [open, setOpen] = useState(false);
   function notification(msg) {
     message = msg;
@@ -315,12 +343,40 @@ console.log(result)
                           {session.devices[item].os.version}
                         </Text>
 
-                        <Loading aria-label="spinner" type="points-opacity" />
                         <Container
                           aria-label="data"
                           style={{ display: "none" }}
                         ></Container>
-
+                        <Text style={{ marginLeft: "20px" }}>
+                          {" "}
+                          {isOnline(dataActiveAll[item]?.created) != 1 ? (
+                            <div
+                              aria-label="online"
+                              style={{ display: "none" }}
+                            >
+                              <Badge
+                                enableShadow
+                                disableOutline
+                                color="success"
+                              >
+                                Online
+                              </Badge>
+                            </div>
+                          ) : (
+                            <div>
+                              <Badge enableShadow disableOutline color="error">
+                                Offline
+                              </Badge>
+                              <Text
+                                style={{ marginTop: "10px" }}
+                                color="warning"
+                              >
+                                Last Seen:{" "}
+                                {dateTimeFormater(dataActiveAll[item]?.created)}
+                              </Text>
+                            </div>
+                          )}
+                        </Text>
                         <Dropdown>
                           <Dropdown.Button
                             flat
