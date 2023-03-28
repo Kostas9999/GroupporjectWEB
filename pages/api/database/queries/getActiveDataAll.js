@@ -1,21 +1,41 @@
 const { pool, client } = require("../connections/connection");
-let responses = [];
+
+
+
 export default async function handler(req, res) {
-  const devices = req.body;
+  const devices = req.body.devices;
+
+  let devKeys = Object.keys( devices);
 
 
-devices.forEach(async (device_Id) => {
-    const rows = await pool
+
+  let responses = [];
+
+  for (let i = 0; i < devKeys.length; i++) {
+
+    const rows =  await client
       .query(
-        `SELECT * FROM "${device_Id}".networkstats ORDER BY created DESC LIMIT 1;`
-      ).then(rows => {
-        responses.push(rows.rows[0])
-      })
-      
-      
-    })
-  
+        `SELECT * FROM "${devKeys[i]}".networkstats ORDER BY created DESC LIMIT 1;`
+      )   
 
-    await res.status(200).json(responses)
+      responses[devKeys[i]]= (rows.rows[0])
+
+     
+    } 
+ 
+    console.log(responses);
+  
+return responses;
+
+
+
+ 
+
+}
+
+
+async function getData(device)
+{
+
 
 }
