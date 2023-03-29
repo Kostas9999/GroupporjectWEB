@@ -258,7 +258,8 @@ export default function Home({ all, currDev, hw }) {
   );
 
   function getEventData(item) {
-    let plusSecods = new Date(item.created).getTime() - 4000;
+    let timeOfset = 7200000;
+    let plusSecods = new Date(item.created).getTime() - 5000;
 
     var result = all.devices[currDev].networkStats.filter((obj) => {
       if (obj.created < item.created) {
@@ -269,10 +270,11 @@ export default function Home({ all, currDev, hw }) {
       }
     });
 
-    setEvent_data2({ result, item });
+    let singleRes = result[0];
 
-    // event_data[(result, item)];
-    return { result, item };
+    setEvent_data2({ singleRes, item });
+
+    return { singleRes, item };
   }
 
   const [event_data2, setEvent_data2] = useState([]);
@@ -403,29 +405,29 @@ export default function Home({ all, currDev, hw }) {
               </Modal.Header>
               <Modal.Body>
                 <Text justify="center" id="modal-title" size={18}>
-                  Interface: {event_data2?.result?.iface}
+                  Interface: {event_data2?.singleRes?.iface}
                   {" | "}
-                  Public IP: {event_data2?.result?.publicip}
+                  Public IP: {event_data2?.singleRes?.publicip}
                   {" | "}
-                  defaultgateway: {event_data2?.result?.defaultgateway}
+                  defaultgateway: {event_data2?.singleRes?.defaultgateway}
                   <br></br>
-                  locallatency: {event_data2?.result?.locallatency}
+                  locallatency: {event_data2?.singleRes?.locallatency}
                   {" | "}
-                  publiclatency: {event_data2?.result?.publiclatency}
-                  {" | "}
-                  <br></br>
-                  CPU: {event_data2?.result?.cpu}
-                  {" | "}
-                  RAM: {event_data2?.result?.memory}
+                  publiclatency: {event_data2?.singleRes?.publiclatency}
                   {" | "}
                   <br></br>
-                  rx_dropped: {event_data2?.result?.rx_dropped}
+                  CPU: {event_data2?.singleRes?.cpu}
                   {" | "}
-                  rx_error: {event_data2?.result?.rx_error}
+                  RAM: {event_data2?.singleRes?.memory}
                   {" | "}
-                  tx_dropped: {event_data2?.result?.tx_dropped}
+                  <br></br>
+                  rx_dropped: {event_data2?.singleRes?.rx_dropped}
                   {" | "}
-                  tx_dropped: {event_data2?.result?.tx_error}
+                  rx_error: {event_data2?.singleRes?.rx_error}
+                  {" | "}
+                  tx_dropped: {event_data2?.singleRes?.tx_dropped}
+                  {" | "}
+                  tx_dropped: {event_data2?.singleRes?.tx_error}
                   {" | "}
                 </Text>
               </Modal.Body>
