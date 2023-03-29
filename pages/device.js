@@ -129,10 +129,6 @@ export default function Home({ all, currDev, hw }) {
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
-
-    if(result.ok){ notification("Message sent..");}
-    else{ notification("Message NOT sent..");}
-
   }
 
   let disc = all.devices[`${currDev}`].disc;
@@ -255,7 +251,7 @@ export default function Home({ all, currDev, hw }) {
           color="error"
           bordered
         >
-          Details
+          *Details
         </Button>
       ),
     })
@@ -272,9 +268,6 @@ export default function Home({ all, currDev, hw }) {
         }
       }
     });
-
-    result = result[0];
-
 
     setEvent_data2({ result, item });
 
@@ -405,36 +398,36 @@ export default function Home({ all, currDev, hw }) {
                   {event_data2?.item?.baseline}
                   {" | "}
                   <br></br>
-               
+                  Date:
                   {dateTimeFormater(event_data2?.item?.created)}
                 </Text>
               </Modal.Header>
               <Modal.Body>
                 <Text justify="center" id="modal-title" size={18}>
-                  Interface: {event_data2?.result?.iface}
+                  Interface: {event_data2?.result[0]?.iface}
                   {" | "}
-                  Public IP: {event_data2?.result?.publicip}
+                  Public IP: {event_data2?.result[0]?.publicip}
                   {" | "}
-                  defaultgateway: {event_data2?.result?.defaultgateway}
+                  defaultgateway: {event_data2?.result[0]?.defaultgateway}
                   <br></br>
-                  locallatency: {event_data2?.result?.locallatency}
+                  locallatency: {event_data2?.result[0]?.locallatency}
                   {" | "}
-                  publiclatency: {event_data2?.result?.publiclatency}
-                 
+                  publiclatency: {event_data2?.result[0]?.publiclatency}
+                  {" | "}
                   <br></br>
-                  CPU: {event_data2?.result?.cpu}
+                  CPU: {event_data2?.result[0]?.cpu}
                   {" | "}
-                  RAM: {event_data2?.result?.memory}
-                 
+                  RAM: {event_data2?.result[0]?.memory}
+                  {" | "}
                   <br></br>
-                  rx_dropped: {event_data2?.result?.rx_dropped}
+                  rx_dropped: {event_data2?.result[0]?.rx_dropped}
                   {" | "}
-                  rx_error: {event_data2?.result?.rx_error}
+                  rx_error: {event_data2?.result[0]?.rx_error}
                   {" | "}
-                  tx_dropped: {event_data2?.result?.tx_dropped}
+                  tx_dropped: {event_data2?.result[0]?.tx_dropped}
                   {" | "}
-                  tx_dropped: {event_data2?.result?.tx_error}
-                 
+                  tx_dropped: {event_data2?.result[0]?.tx_error}
+                  {" | "}
                 </Text>
               </Modal.Body>
               <Modal.Footer>
@@ -446,7 +439,9 @@ export default function Home({ all, currDev, hw }) {
                 >
                   Close
                 </Button>
-              
+                <Button auto onPress={() => setVisible(false)}>
+                  Agree
+                </Button>
               </Modal.Footer>
             </Modal>
           </div>

@@ -40,7 +40,9 @@ import { fontSize } from "@mui/system";
 let message = "";
 let devicesTitle = [];
 let activeData_intervar = [];
-let newActiveDataAll = {};
+let arr = [];
+
+let session;
 export default function Dashboard({ session }) {
   session = JSON.parse(session);
 
@@ -153,7 +155,7 @@ export default function Dashboard({ session }) {
   }
 
   // clearInterval(activeData_intervar);
-
+  /*
   async function getActiveDataAll() {
     const endpoint = `${session.env.host}/api/database/queries/getActiveDataAll`;
 
@@ -167,9 +169,34 @@ export default function Dashboard({ session }) {
     const result = await response.json();
 
     newActiveDataAll = result.activeData;
-    console.log(result.activeData);
+  
   }
+*/
 
+  const [activeAll, setActiveAll] = useState({});
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      Object.keys(session.devices).forEach(async (dev) => {
+        const endpoint = `${session.env.host}/api/database/queries/getActiveData`;
+
+        const options = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ currDev: dev }),
+        };
+
+        const response = await fetch(endpoint, options);
+        const result = await response.json();
+        arr[0] = result.data;
+      });
+
+      setActiveAll([...arr, arr]);
+      console.log(arr);
+    }, 5000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  /*
   const [dataActiveAll, setDataActiveAll] = useState([]);
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -180,6 +207,7 @@ export default function Dashboard({ session }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ devices: session.devices }),
       };
+      console.log(options.body);
 
       const response = await fetch(endpoint, options);
       const result = await response.json();
@@ -191,6 +219,7 @@ export default function Dashboard({ session }) {
 
     return () => clearInterval(intervalId);
   }, [dataActiveAll]);
+  */
   //
 
   // clearInterval(activeData_intervar);
@@ -355,7 +384,7 @@ export default function Dashboard({ session }) {
 
                         <Text style={{ marginLeft: "20px" }}>
                           {" "}
-                          {isOnline(dataActiveAll[item]?.created) == 1 ? (
+                          {isOnline(activeAll[item]?.created) == 1 ? (
                             <div aria-label="online">
                               <Card
                                 css={{
@@ -383,10 +412,10 @@ export default function Dashboard({ session }) {
                                 <Card.Body>
                                   <Grid>
                                     <Text h4 color="white" css={{ m: 0 }}>
-                                      CPU: {dataActiveAll[item]?.cpu}%
+                                      CPU: {JSON.stringify(activeAll)}%
                                     </Text>
                                     <Progress
-                                      value={dataActiveAll[item]?.cpu}
+                                      value={activeAll[item]?.cpu}
                                       className={styles.thirteen}
                                       css={{ display: "block" }}
                                       shadow
@@ -404,13 +433,13 @@ export default function Dashboard({ session }) {
                               >
                                 <Card.Body>
                                   <Text h4 color="white" css={{ m: 0 }}>
-                                    RAM: {dataActiveAll[item]?.memory}%
+                                    RAM: {activeAll[item]?.iface}%
                                   </Text>
                                   <Progress
                                     className={styles.thirteen}
                                     css={{ display: "block" }}
                                     shadow
-                                    value={dataActiveAll[item]?.memory}
+                                    value={activeAll[item]?.memory}
                                   ></Progress>
                                 </Card.Body>
                               </Card>
@@ -425,7 +454,7 @@ export default function Dashboard({ session }) {
                                 color="warning"
                               >
                                 Last Seen:{" "}
-                                {dateTimeFormater(dataActiveAll[item]?.created)}
+                                {dateTimeFormater(activeAll[item]?.created)}
                               </Text>
                             </div>
                           )}
