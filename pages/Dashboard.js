@@ -401,11 +401,12 @@ export default function Dashboard({ session }) {
                                   >
                                     Online
                                   </Badge>
+                                  <Text h4 color="white" css={{ m: 0 }}>
+                                    {activeAll[item]?.publicip}
+                                  </Text>
                                 </Card.Body>
                               </Card>
-                              <Text h4 color="white" css={{ m: 0 }}>
-                                {activeAll[item]?.publicip}
-                              </Text>
+
                               <Card
                                 css={{
                                   w: "500px",

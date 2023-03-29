@@ -191,6 +191,7 @@ export default function App({ user }) {
           >
             <Button
               id="login"
+              aria-label="login_btn"
               auto
               shadow
               style={{
