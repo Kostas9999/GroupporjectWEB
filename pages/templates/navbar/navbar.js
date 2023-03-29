@@ -237,6 +237,9 @@ export default function App({ user }) {
                     size="sm"
                     placeholder="Username"
                     contentLeft={<Mail fill="currentColor" />}
+                    required
+                    minLength={6}
+                    maxLength={20}
                   />
 
                   <Input
@@ -251,6 +254,9 @@ export default function App({ user }) {
                     size="sm"
                     placeholder="Password"
                     contentLeft={<Password fill="currentColor" />}
+                    required
+                    minLength={6}
+                    maxLength={20}
                   />
                 </Modal.Body>
                 <Modal.Footer>
@@ -313,6 +319,9 @@ export default function App({ user }) {
                     size="sm"
                     placeholder="Username"
                     contentLeft={<Mail fill="currentColor" />}
+                    required
+                    minLength={6}
+                    maxLength={20}
                   />
 
                   <Input
@@ -326,6 +335,11 @@ export default function App({ user }) {
                     size="sm"
                     placeholder="Email"
                     contentLeft={<Mail fill="currentColor" />}
+                    required
+                    minLength={6}
+                    maxLength={30}
+                    type="email"
+                    pattern="[a-z0-9\@{1,20}]"
                   />
 
                   <Input
@@ -340,6 +354,9 @@ export default function App({ user }) {
                     size="sm"
                     placeholder="Password"
                     contentLeft={<Password fill="currentColor" />}
+                    required
+                    minLength={6}
+                    maxLength={20}
                   />
                 </Modal.Body>
                 <Modal.Footer>
