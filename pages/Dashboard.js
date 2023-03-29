@@ -40,8 +40,8 @@ import { fontSize } from "@mui/system";
 let message = "";
 let devicesTitle = [];
 let activeData_intervar = [];
-let arr = [];
-
+let arr = {};
+let interval = 1000;
 let session;
 export default function Dashboard({ session }) {
   session = JSON.parse(session);
@@ -187,13 +187,15 @@ export default function Dashboard({ session }) {
 
         const response = await fetch(endpoint, options);
         const result = await response.json();
-        arr[0] = result.data;
+
+        setActiveAll({ ...activeAll }, (activeAll[`${dev}`] = result.data));
       });
 
-      setActiveAll([...arr, arr]);
-      console.log(arr);
-    }, 5000);
-    return () => clearInterval(intervalId);
+      interval = 10000;
+    }, interval);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   /*
@@ -401,7 +403,9 @@ export default function Dashboard({ session }) {
                                   </Badge>
                                 </Card.Body>
                               </Card>
-
+                              <Text h4 color="white" css={{ m: 0 }}>
+                                {activeAll[item]?.publicip}
+                              </Text>
                               <Card
                                 css={{
                                   w: "500px",
@@ -412,7 +416,7 @@ export default function Dashboard({ session }) {
                                 <Card.Body>
                                   <Grid>
                                     <Text h4 color="white" css={{ m: 0 }}>
-                                      CPU: {JSON.stringify(activeAll)}%
+                                      CPU: {activeAll[item]?.cpu}%
                                     </Text>
                                     <Progress
                                       value={activeAll[item]?.cpu}
@@ -433,7 +437,7 @@ export default function Dashboard({ session }) {
                               >
                                 <Card.Body>
                                   <Text h4 color="white" css={{ m: 0 }}>
-                                    RAM: {activeAll[item]?.iface}%
+                                    RAM: {activeAll[item]?.memory}%
                                   </Text>
                                   <Progress
                                     className={styles.thirteen}
