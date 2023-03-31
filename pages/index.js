@@ -6,6 +6,7 @@ import { withIronSessionSsr } from "iron-session/next";
 
 import styles from "../styles/Home.module.css";
 import { NextUIProvider, Spacer } from "@nextui-org/react";
+
 import {
   Text,
   Container,
@@ -15,6 +16,22 @@ import {
   Image,
   Checkbox,
 } from "@nextui-org/react";
+
+
+import {
+  createTheme,
+  Link,
+  styled,
+
+} from "@nextui-org/react";
+
+
+const darkTheme = createTheme({
+  type: "dark",
+  theme: {
+    colors: {}
+  }
+});
 
 import React, { useState } from "react";
 
@@ -48,7 +65,7 @@ export default function Home({ session }) {
   ];
 
   return (
-    <NextUIProvider>
+    <NextUIProvider >
       <main className={styles.main}>
         <Navbar user={{ user }} />
 
@@ -88,20 +105,27 @@ export default function Home({ session }) {
                   "Small bla bla stuff"
                 </Text>
               </Row>
-              <Row justify="center" align="center">
+              <Row justify="center" align="center" 
+              
+            
+              >
                 <Button
                   color="gradient"
+                 
                   auto
                   ghost
                   className={styles.thirteen}
                   css={{
                     marginTop: "100px",
+                  
                   }}
                 >
                   <Text
                     size={20}
+                    
                     css={{
                       textGradient: "45deg, $black -20%, $blue600 80%",
+                     
                     }}
                   >
                     Download app
@@ -115,11 +139,20 @@ export default function Home({ session }) {
             <Card
               css={{
                 bottom: "100px",
-                m: "50px",
+                m: "50px",               
+                backgroundColor: "$primary",              
+           
               }}
               className={styles.thirteen}
+            
+             
+             
             >
-              <Card.Body>
+              <Card.Body
+              css={{ 
+                 margin:"1px",  backgroundColor: "black",
+             }}
+               >
                 <Row justify="center" align="center">
                   <Text h6 color="white" css={{ m: 0 }}>
                     Latency
@@ -141,10 +174,14 @@ export default function Home({ session }) {
               css={{
                 bottom: "100px",
                 m: "50px",
+                backgroundColor: "$primary",  
               }}
               className={styles.thirteen}
             >
-              <Card.Body>
+              <Card.Body
+                 css={{ 
+                  margin:"1px",  backgroundColor: "black",
+              }}>
                 <Row justify="center" align="center">
                   <Text h6 size={15} color="white" css={{ m: 0 }}>
                     NetStats
@@ -156,10 +193,14 @@ export default function Home({ session }) {
               css={{
                 bottom: "100px",
                 m: "50px",
+                backgroundColor: "$primary",  
               }}
               className={styles.thirteen}
             >
-              <Card.Body>
+              <Card.Body
+                 css={{ 
+                  margin:"1px",  backgroundColor: "black",
+              }}>
                 <Row justify="center" align="center">
                   <Text h6 size={15} color="white" css={{ m: 0 }}>
                     NetStats
@@ -171,13 +212,26 @@ export default function Home({ session }) {
               css={{
                 bottom: "100px",
                 m: "50px",
+                backgroundColor: "$primary",  
               }}
               className={styles.thirteen}
             >
-              <Card.Body>
+              <Card.Body   css={{ 
+                 margin:"1px",  backgroundColor: "black",
+             }}>
                 <Row justify="center" align="center">
-                  <Text h6 size={15} color="white" css={{ m: 0 }}>
-                    NetStats4
+                  <Text h6 color="white" css={{ m: 0 }}>
+                    Latency
+                  </Text>
+                </Row>
+                <Row justify="center" align="center">
+                  <Text h5 color="white" css={{ m: 0 }}>
+                    Public 33ms/s
+                  </Text>
+                </Row>
+                <Row justify="center" align="center">
+                  <Text h5 color="white" css={{ m: 0 }}>
+                    Local 1ms/s
                   </Text>
                 </Row>
               </Card.Body>

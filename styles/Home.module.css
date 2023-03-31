@@ -151,23 +151,37 @@
   animation: 6s rotate linear infinite;
   width: 150%;
   height: 150%;
-  background: var(--tile-border);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 /* Inner Square */
+
 .thirteen::after {
   inset: 0;
   padding: 1px;
   border-radius: var(--border-radius);
+
+
   background: linear-gradient(
     to bottom right,
+
+    rgba(0, 0, 0, 1),
+    rgba(0, 0, 0, 1)
+  );
+
+
+  /*
+  background: linear-gradient(
+    to bottom right,
+
     rgba(var(--tile-start-rgb), 1),
     rgba(var(--tile-end-rgb), 1)
   );
+*/
   background-clip: content-box;
 }
 
-/* Enable hover only on non-touch devices */
+
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
     background: rgba(var(--card-rgb), 0.1);
@@ -189,7 +203,7 @@
   }
 }
 
-/* Mobile */
+
 @media (max-width: 700px) {
   .content {
     padding: 4rem;
@@ -283,6 +297,7 @@
     filter: invert(1) drop-shadow(0 0 0.3rem #ffffff70);
   }
 }
+
 
 @keyframes rotate {
   from {
