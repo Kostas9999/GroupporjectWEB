@@ -12,6 +12,7 @@ import {
   Line,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
@@ -48,7 +49,50 @@ export default function Dashboard({ session }) {
 
   let [os, setOs] = useState([]);
 
-  // throw new Error(`${devicesTitle.os}`);
+  const data = [
+    {
+      name: "Page A",
+      uv: 100,
+      pv: 24,
+      amt: 2400,
+    },
+    {
+      name: "Page B",
+      uv: 30,
+      pv: 18,
+      amt: 2210,
+    },
+    {
+      name: "Page C",
+      uv: 20,
+      pv: 98,
+      amt: 2290,
+    },
+    {
+      name: "Page D",
+      uv: 27,
+      pv: 39,
+      amt: 2000,
+    },
+    {
+      name: "Page E",
+      uv: 18,
+      pv: 48,
+      amt: 2181,
+    },
+    {
+      name: "Page F",
+      uv: 20,
+      pv: 38,
+      amt: 2500,
+    },
+    {
+      name: "Page G",
+      uv: 30,
+      pv: 43,
+      amt: 2100,
+    },
+  ];
 
   let activeData;
   let user = session.user;
@@ -294,111 +338,167 @@ export default function Dashboard({ session }) {
                         <Text style={{ marginLeft: "20px" }}>
                           {isOnline(activeAll[item]?.created) == 1 ? (
                             <div aria-label="online">
-                              <Card
-                                css={{
-                                  $$cardColor: "transparent",
-                                  padding: "0px",
-                                }}
-                              >
-                                <Card.Body
-                                  css={{
-                                    $$cardColor: "transparent",
-                                    padding: "0px",
-                                  }}
-                                >
-                                  <Badge
-                                    enableShadow
-                                    disableOutline
-                                    color="success"
-                                    content="Online"
-                                    placement="center-left"
-                                  >
-                                    <Text
-                                      h4
-                                      color="white"
+                              <Grid.Container gap={0} justify="center">
+                                <Grid xs={6}>
+                                  <Row>
+                                    <Card
                                       css={{
-                                        marginInline: "100px",
+                                        $$cardColor: "transparent",
                                         padding: "0px",
+                                        w: "100%",
                                       }}
                                     >
-                                      {activeAll[item]?.publicip}
-                                    </Text>
-                                  </Badge>
-                                </Card.Body>
-                              </Card>
-
-                              <Card
-                                css={{
-                                  w: "30vh",
-                                  h: "20%",
-                                  $$cardColor: "transparent",
-                                  padding: "0px",
-                                }}
-                              >
-                                <Card.Body
-                                  css={{
-                                    padding: "0px",
-                                  }}
-                                >
-                                  <Grid
+                                      <Card.Body
+                                        css={{
+                                          $$cardColor: "transparent",
+                                          padding: "5px",
+                                        }}
+                                      >
+                                        <Row>
+                                          <Badge
+                                            enableShadow
+                                            disableOutline
+                                            color="success"
+                                            content="Online"
+                                            placement="center-left"
+                                          >
+                                            <Text
+                                              h4
+                                              color="white"
+                                              css={{
+                                                marginInline: "100px",
+                                                padding: "0px",
+                                              }}
+                                            >
+                                              {activeAll[item]?.publicip}
+                                            </Text>
+                                          </Badge>
+                                        </Row>
+                                        <Row>
+                                          {" "}
+                                          <Card
+                                            css={{
+                                              w: "30vh",
+                                              h: "20%",
+                                              $$cardColor: "transparent",
+                                              padding: "0px",
+                                            }}
+                                          >
+                                            <Card.Body
+                                              css={{
+                                                padding: "0px",
+                                              }}
+                                            >
+                                              <Grid
+                                                css={{
+                                                  padding: "0px",
+                                                }}
+                                              >
+                                                <Text
+                                                  h4
+                                                  color="white"
+                                                  css={{
+                                                    m: 0,
+                                                    textGradient: `45deg, $blue800 0%, $red400 ${
+                                                      100 - activeAll[item]?.cpu
+                                                    }%`,
+                                                  }}
+                                                >
+                                                  CPU: {activeAll[item]?.cpu}%
+                                                </Text>
+                                                <Progress
+                                                  value={activeAll[item]?.cpu}
+                                                  className={styles.thirteen}
+                                                  css={{ display: "block" }}
+                                                  shadow
+                                                ></Progress>
+                                              </Grid>
+                                            </Card.Body>
+                                          </Card>
+                                        </Row>
+                                        <Row>
+                                          <Card
+                                            css={{
+                                              w: "30vh",
+                                              h: "50%",
+                                              $$cardColor: "transparent",
+                                            }}
+                                          >
+                                            <Card.Body
+                                              css={{
+                                                padding: "0px",
+                                              }}
+                                            >
+                                              <Text
+                                                h4
+                                                color="white"
+                                                css={{
+                                                  m: 0,
+                                                  textGradient: `45deg, $blue800 0%, $red400 ${
+                                                    100 -
+                                                    activeAll[item]?.memory
+                                                  }%`,
+                                                }}
+                                              >
+                                                RAM: {activeAll[item]?.memory}%
+                                              </Text>
+                                              <Progress
+                                                className={styles.thirteen}
+                                                css={{ display: "block" }}
+                                                shadow
+                                                value={activeAll[item]?.memory}
+                                              ></Progress>
+                                            </Card.Body>
+                                          </Card>
+                                        </Row>
+                                      </Card.Body>
+                                    </Card>
+                                  </Row>
+                                </Grid>
+                                <Grid xs={6}>
+                                  <Card
                                     css={{
-                                      padding: "0px",
+                                      $$cardColor: "transparent",
                                     }}
                                   >
-                                    <Text
-                                      h4
-                                      color="white"
-                                      css={{
-                                        m: 0,
-                                        textGradient: `45deg, $blue800 0%, $red400 ${
-                                          100 - activeAll[item]?.memory
-                                        }%`,
-                                      }}
-                                    >
-                                      CPU: {activeAll[item]?.cpu}%
-                                    </Text>
-                                    <Progress
-                                      value={activeAll[item]?.cpu}
-                                      className={styles.thirteen}
-                                      css={{ display: "block" }}
-                                      shadow
-                                    ></Progress>
-                                  </Grid>
-                                </Card.Body>
-                              </Card>
+                                    <Card.Body>
+                                      <ResponsiveContainer
+                                        width="100%"
+                                        height="100%"
+                                      >
+                                        <LineChart data={data}>
+                                          <Tooltip />
 
-                              <Card
-                                css={{
-                                  w: "30vh",
-                                  h: "50%",
-                                  $$cardColor: "transparent",
-                                }}
-                              >
-                                <Card.Body
-                                  css={{
-                                    padding: "0px",
-                                  }}
-                                >
-                                  <Text
-                                    h4
-                                    color="white"
-                                    css={{
-                                      m: 0,
-                                      textGradient: `45deg, $blue800 0%, $red400 ${
-                                        100 - activeAll[item]?.memory
-                                      }%`,
-                                    }}
-                                  >
-                                    RAM: {activeAll[item]?.memory}%
-                                  </Text>
-                                  <Progress
-                                    className={styles.thirteen}
-                                    css={{ display: "block" }}
-                                    shadow
-                                    value={activeAll[item]?.memory}
-                                  ></Progress>
-                                </Card.Body>
-                              </Card>
+                                          <Line
+                                            isAnimationActive={false}
+                                            type="monotone"
+                                            dataKey="pv"
+                                            stroke="red"
+                                            dot={false}
+                                            legendType="triangle"
+                                          />
+                                          <Line
+                                            isAnimationActive={false}
+                                            type="monotone"
+                                            dataKey="uv"
+                                            stroke="#8884d8"
+                                            dot={false}
+                                          />
+                                          <XAxis
+                                            dataKey="created"
+                                            tick={false}
+                                          />
+                                          <YAxis
+                                            dataKey="publiclatency"
+                                            domain={[0, 100]}
+                                          />
+                                          <Tooltip />
+                                        </LineChart>
+                                      </ResponsiveContainer>
+                                    </Card.Body>
+                                  </Card>
+                                </Grid>
+                              </Grid.Container>
                             </div>
                           ) : (
                             <div>
