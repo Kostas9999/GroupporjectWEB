@@ -43,6 +43,7 @@ export default function Home({ session }) {
     "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/latency.png",
     "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/ports.png",
     "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/shutdown.png",
+    "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/dashboard.png",
   ];
 
   const [showComponent, setShowComponent] = useState(false);
@@ -146,12 +147,11 @@ export default function Home({ session }) {
               <Card.Body
                 css={{
                   margin: "1px",
-
                   w: "fit-content",
                 }}
               >
                 <Row justify="center" align="center">
-                  <Text h4 color="white" css={{ m: 0 }}>
+                  <Text h4 color="white" css={{ m: 10 }}>
                     Network Latency
                   </Text>
                 </Row>
@@ -178,10 +178,11 @@ export default function Home({ session }) {
               <Card.Body
                 css={{
                   margin: "1px",
+                  w: "fit-content",
                 }}
               >
                 <Row justify="center" align="center">
-                  <Text h4 color="white" css={{ m: 0 }}>
+                  <Text h4 color="white" css={{ m: 10 }}>
                     NetStats
                   </Text>
                 </Row>
@@ -205,10 +206,11 @@ export default function Home({ session }) {
               <Card.Body
                 css={{
                   margin: "1px",
+                  w: "fit-content",
                 }}
               >
                 <Row justify="center" align="center">
-                  <Text h4 color="white" css={{ m: 0 }}>
+                  <Text h4 color="white" css={{ m: 10 }}>
                     NIC
                   </Text>
                 </Row>
@@ -233,10 +235,11 @@ export default function Home({ session }) {
               <Card.Body
                 css={{
                   margin: "1px",
+                  w: "fit-content",
                 }}
               >
                 <Row justify="center" align="center">
-                  <Text h4 color="white" css={{ m: 0 }}>
+                  <Text h4 color="white" css={{ m: 10 }}>
                     OS
                   </Text>
                 </Row>
@@ -274,7 +277,7 @@ export default function Home({ session }) {
                           textGradient: "45deg, $black -20%, $blue600 80%",
                         }}
                       >
-                        we do that and that and more of that
+                        monTool can offer you
                       </Text>
                     </Row>
 
@@ -302,7 +305,7 @@ export default function Home({ session }) {
                           textGradient: "45deg, $black -20%, $blue600 80%",
                         }}
                       >
-                        also some of that
+                        and much more...
                       </Text>
                     </Row>
                   </Card.Body>
@@ -333,17 +336,22 @@ export default function Home({ session }) {
         <Container fluid></Container>
 
         <div>
-          <Fade>
+          <Fade pauseOnHover={false} indicators={true}>
             <div className="each-slide">
               <div>
-                <img src={images[0]} />
-              </div>
-              <p>First Slide</p>
-            </div>
-            <div className="each-slide">
-              <p>Second Slide</p>
-              <div>
-                <img src={images[1]} />
+                <Text
+                  justify="center"
+                  align="center"
+                  size={50}
+                  css={{
+                    textGradient: "45deg, $black -20%, $blue600 80%",
+                  }}
+                >
+                  Access your data over API
+                </Text>
+                <div>
+                  <Image showSkeleton maxDelay={10000} src={images[0]} />
+                </div>
               </div>
             </div>
             <div className="each-slide">
@@ -355,10 +363,116 @@ export default function Home({ session }) {
                   textGradient: "45deg, $black -20%, $blue600 80%",
                 }}
               >
-                Baseline
+                Discover Network Neighbours
               </Text>
               <div>
-                <img src={images[2]} />
+                <Image showSkeleton maxDelay={10000} src={images[1]} />
+              </div>
+            </div>
+
+            <div className="each-slide">
+              <Text
+                justify="center"
+                align="center"
+                size={50}
+                css={{
+                  textGradient: "45deg, $black -20%, $blue600 80%",
+                }}
+              >
+                Build and Export Baseline
+              </Text>
+              <div>
+                <Image showSkeleton maxDelay={10000} src={images[2]} />
+              </div>
+            </div>
+            <div className="each-slide">
+              <Text
+                justify="center"
+                align="center"
+                size={50}
+                css={{
+                  textGradient: "45deg, $black -20%, $blue600 80%",
+                }}
+              >
+                Event History
+              </Text>
+              <div>
+                <Image showSkeleton maxDelay={10000} src={images[3]} />
+              </div>
+            </div>
+            <div className="each-slide">
+              <Text
+                justify="center"
+                align="center"
+                size={50}
+                css={{
+                  textGradient: "45deg, $black -20%, $blue600 80%",
+                }}
+              >
+                Storage
+              </Text>
+              <div>
+                <Image showSkeleton maxDelay={10000} src={images[4]} />
+              </div>
+            </div>
+            <div className="each-slide">
+              <Text
+                justify="center"
+                align="center"
+                size={50}
+                css={{
+                  textGradient: "45deg, $black -20%, $blue600 80%",
+                }}
+              >
+                Latency
+              </Text>
+              <div>
+                <Image showSkeleton maxDelay={10000} src={images[5]} />
+              </div>
+            </div>
+            <div className="each-slide">
+              <Text
+                justify="center"
+                align="center"
+                size={50}
+                css={{
+                  textGradient: "45deg, $black -20%, $blue600 80%",
+                }}
+              >
+                Open Ports
+              </Text>
+              <div>
+                <Image showSkeleton maxDelay={10000} src={images[6]} />
+              </div>
+            </div>
+            <div className="each-slide">
+              <Text
+                justify="center"
+                align="center"
+                size={50}
+                css={{
+                  textGradient: "45deg, $black -20%, $blue600 80%",
+                }}
+              >
+                Remote Shutdown/Restart
+              </Text>
+              <div>
+                <Image showSkeleton maxDelay={10000} src={images[7]} />
+              </div>
+            </div>
+            <div className="each-slide">
+              <Text
+                justify="center"
+                align="center"
+                size={50}
+                css={{
+                  textGradient: "45deg, $black -20%, $blue600 80%",
+                }}
+              >
+                Overview
+              </Text>
+              <div>
+                <Image showSkeleton maxDelay={10000} src={images[8]} />
               </div>
             </div>
           </Fade>
@@ -366,10 +480,13 @@ export default function Home({ session }) {
       </main>
 
       <Footer />
+      {/*}
       <div>
         <button onClick={toggleComponent}></button>
         {showComponent ? <ComponentOne /> : <ComponentTwo />}
+
       </div>
+              {*/}
     </NextUIProvider>
   );
 }

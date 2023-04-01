@@ -7,6 +7,9 @@ import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { SSRProvider } from "@react-aria/ssr";
+import { Icon } from "react-icons-kit";
+import { home } from "react-icons-kit/icomoon/home";
+import { circle_delete } from "react-icons-kit/ikons/circle_delete";
 import {
   LineChart,
   Line,
@@ -320,9 +323,36 @@ export default function Dashboard({ session }) {
                   });
                 }}
               >
+                <Badge
+                  enableShadow
+                  disableOutline
+                  color="transparent"
+                  placement={"top-right"}
+                >
+                  <Dropdown>
+                    <Dropdown.Button
+                      flat
+                      size={"sm"}
+                      css={{ marginLeft: "auto" }}
+                      color="transparent"
+                    >
+                      <Icon size={10} icon={circle_delete} />
+                    </Dropdown.Button>
+                    <Dropdown.Menu
+                      aria-label="Static Actions"
+                      onAction={(actionKey) => {
+                        handleDeleteDev(item);
+                      }}
+                    >
+                      <Dropdown.Item key="delete" color="error">
+                        Remove device
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Badge>
                 <Card.Body css={{ color: text_Color }}>
                   <div id={item}>
-                    <Row justify="center" align="center" width="200px">
+                    <Row width="200px">
                       <Text size={20} aria-label="hostname" color="white">
                         <h3>{session.devices[item].os.hostname}</h3>
 
@@ -518,25 +548,6 @@ export default function Dashboard({ session }) {
                           )}
                         </Text>
                       </div>
-                      <Dropdown>
-                        <Dropdown.Button
-                          flat
-                          size={"sm"}
-                          css={{ marginLeft: "auto" }}
-                        >
-                          Remove
-                        </Dropdown.Button>
-                        <Dropdown.Menu
-                          aria-label="Static Actions"
-                          onAction={(actionKey) => {
-                            handleDeleteDev(item);
-                          }}
-                        >
-                          <Dropdown.Item key="delete" color="error">
-                            Press to remove device
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
                     </Row>
                   </div>
                 </Card.Body>

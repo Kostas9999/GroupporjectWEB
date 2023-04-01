@@ -4,7 +4,7 @@
   background: black;
   background-image: url("../public/img/map-image.png");
   background-repeat: no-repeat;
-  background-position: center; 
+  background-position: top; 
   min-height: 100vh;
   min-width: 100vh;  
   display:flow-root;
@@ -16,6 +16,7 @@
   justify-content: space-between;
  
   padding: 1rem;
+  
 
 }
 
