@@ -7,6 +7,8 @@ import { withIronSessionSsr } from "iron-session/next";
 import styles from "../styles/Home.module.css";
 import { NextUIProvider, Spacer } from "@nextui-org/react";
 
+import { Fade } from "react-slideshow-image";
+import "react-slideshow-image/dist/styles.css";
 import {
   Text,
   Container,
@@ -17,20 +19,13 @@ import {
   Checkbox,
 } from "@nextui-org/react";
 
-
-import {
-  createTheme,
-  Link,
-  styled,
-
-} from "@nextui-org/react";
-
+import { createTheme, Link, styled } from "@nextui-org/react";
 
 const darkTheme = createTheme({
   type: "dark",
   theme: {
-    colors: {}
-  }
+    colors: {},
+  },
 });
 
 import React, { useState } from "react";
@@ -38,6 +33,17 @@ import React, { useState } from "react";
 export default function Home({ session }) {
   session = JSON.parse(session);
   let user = session.user;
+
+  const images = [
+    "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/api.png",
+    "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/arp.png",
+    "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/baseline.png",
+    "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/events.png",
+    "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/hdd.png",
+    "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/latency.png",
+    "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/ports.png",
+    "https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/shutdown.png",
+  ];
 
   const [showComponent, setShowComponent] = useState(false);
 
@@ -65,7 +71,7 @@ export default function Home({ session }) {
   ];
 
   return (
-    <NextUIProvider >
+    <NextUIProvider>
       <main className={styles.main}>
         <Navbar user={{ user }} />
 
@@ -85,11 +91,11 @@ export default function Home({ session }) {
                   align="center"
                   size={50}
                   css={{
-                    textGradient: "45deg, $black -20%, $blue600 80%",
+                    textGradient: "45deg, $black -20%, $blue600 50%",
                     marginTop: "100px",
                   }}
                 >
-                  We do better than others and other bla bla stuff
+                  Simple and easy way to track your network behavior
                 </Text>
               </Row>
               <Row justify="center" align="center">
@@ -98,37 +104,30 @@ export default function Home({ session }) {
                   align="center"
                   size={20}
                   css={{
-                    textGradient: "45deg, $black -20%, $blue600 80%",
+                    textGradient: "45deg, $black -20%, $blue600 30%",
                     marginTop: "50px",
                   }}
                 >
-                  "Small bla bla stuff"
+                  Real time system monitoring tool for windows systems - monTool
                 </Text>
               </Row>
-              <Row justify="center" align="center" 
-              
-            
-              >
+              <Row justify="center" align="center">
                 <Button
                   color="gradient"
-                 
                   auto
                   ghost
                   className={styles.thirteen}
                   css={{
                     marginTop: "100px",
-                  
                   }}
                 >
                   <Text
                     size={20}
-                    
                     css={{
                       textGradient: "45deg, $black -20%, $blue600 80%",
-                     
                     }}
                   >
-                    Download app
+                    Free Download
                   </Text>
                 </Button>
               </Row>
@@ -139,23 +138,21 @@ export default function Home({ session }) {
             <Card
               css={{
                 bottom: "100px",
-                m: "50px",               
-                backgroundColor: "$primary",              
-           
+                m: "50px",
+                backgroundColor: "$primary",
               }}
               className={styles.thirteen}
-            
-             
-             
             >
               <Card.Body
-              css={{ 
-                 margin:"1px",  backgroundColor: "black",
-             }}
-               >
+                css={{
+                  margin: "1px",
+
+                  w: "fit-content",
+                }}
+              >
                 <Row justify="center" align="center">
-                  <Text h6 color="white" css={{ m: 0 }}>
-                    Latency
+                  <Text h4 color="white" css={{ m: 0 }}>
+                    Network Latency
                   </Text>
                 </Row>
                 <Row justify="center" align="center">
@@ -174,17 +171,25 @@ export default function Home({ session }) {
               css={{
                 bottom: "100px",
                 m: "50px",
-                backgroundColor: "$primary",  
+                backgroundColor: "$primary",
               }}
               className={styles.thirteen}
             >
               <Card.Body
-                 css={{ 
-                  margin:"1px",  backgroundColor: "black",
-              }}>
+                css={{
+                  margin: "1px",
+                }}
+              >
                 <Row justify="center" align="center">
-                  <Text h6 size={15} color="white" css={{ m: 0 }}>
+                  <Text h4 color="white" css={{ m: 0 }}>
                     NetStats
+                  </Text>
+                </Row>
+                <Row justify="center" align="center">
+                  <Text h5 size={15} color="white" css={{ m: 0 }}>
+                    rx_total: 708.02 MB <br></br>rx_error: 0 Bytes
+                    <br></br>rx_dropped: 0 Bytes <br></br>tx_total: 56.49 MB{" "}
+                    <br></br>tx_error: 0 Bytes <br></br>tx_dropped: 0 Bytes
                   </Text>
                 </Row>
               </Card.Body>
@@ -193,17 +198,26 @@ export default function Home({ session }) {
               css={{
                 bottom: "100px",
                 m: "50px",
-                backgroundColor: "$primary",  
+                backgroundColor: "$primary",
               }}
               className={styles.thirteen}
             >
               <Card.Body
-                 css={{ 
-                  margin:"1px",  backgroundColor: "black",
-              }}>
+                css={{
+                  margin: "1px",
+                }}
+              >
+                <Row justify="center" align="center">
+                  <Text h4 color="white" css={{ m: 0 }}>
+                    NIC
+                  </Text>
+                </Row>
                 <Row justify="center" align="center">
                   <Text h6 size={15} color="white" css={{ m: 0 }}>
-                    NetStats
+                    Ethernet: 1000(mb/s) <br></br>MAC: 10:7b:44:1b:91:a1{" "}
+                    <br></br>IPv4: 192.168.1.33 <br></br>IPv4Sub: 255.255.255.0{" "}
+                    <br></br>IPv6: fe80::f522:f453:8028:2995 <br></br>IPv6Sub:
+                    ffff:ffff:ffff:ffff::
                   </Text>
                 </Row>
               </Card.Body>
@@ -212,26 +226,24 @@ export default function Home({ session }) {
               css={{
                 bottom: "100px",
                 m: "50px",
-                backgroundColor: "$primary",  
+                backgroundColor: "$primary",
               }}
               className={styles.thirteen}
             >
-              <Card.Body   css={{ 
-                 margin:"1px",  backgroundColor: "black",
-             }}>
+              <Card.Body
+                css={{
+                  margin: "1px",
+                }}
+              >
+                <Row justify="center" align="center">
+                  <Text h4 color="white" css={{ m: 0 }}>
+                    OS
+                  </Text>
+                </Row>
                 <Row justify="center" align="center">
                   <Text h6 color="white" css={{ m: 0 }}>
-                    Latency
-                  </Text>
-                </Row>
-                <Row justify="center" align="center">
-                  <Text h5 color="white" css={{ m: 0 }}>
-                    Public 33ms/s
-                  </Text>
-                </Row>
-                <Row justify="center" align="center">
-                  <Text h5 color="white" css={{ m: 0 }}>
-                    Local 1ms/s
+                    Last Seen: 2023-04-01 09:06:07 <br></br>Asus <br></br>
+                    Microsoft Windows 11 Pro 10.0.22624 (22624)
                   </Text>
                 </Row>
               </Card.Body>
@@ -296,16 +308,9 @@ export default function Home({ session }) {
                   </Card.Body>
                 </Card>
 
-                <Card css={{ background: "transparent", height: "80vh" }}>
-                  <Card.Body>
-                    <Row justify="center" align="center">
-                      <Image
-                        src="https://github.com/nextui-org/nextui/blob/next/apps/docs/public/nextui-banner.jpeg?raw=true"
-                        alt="Default Image"
-                      />
-                    </Row>
-                  </Card.Body>
-                </Card>
+                <Card
+                  css={{ background: "transparent", height: "80vh" }}
+                ></Card>
               </Row>
             </Card.Body>
           </Card>
@@ -317,16 +322,7 @@ export default function Home({ session }) {
           >
             <Card.Body>
               <Row justify="center" align="center">
-                <Text
-                  justify="center"
-                  align="center"
-                  size={70}
-                  css={{
-                    textGradient: "45deg, $black -20%, $blue600 80%",
-                  }}
-                >
-                  Screenshots carusele
-                </Text>
+                {" "}
               </Row>
             </Card.Body>
           </Card>
@@ -334,6 +330,28 @@ export default function Home({ session }) {
         <div>
           <button onClick={toggleComponent}></button>
           {showComponent ? <ComponentOne /> : <ComponentTwo />}
+        </div>
+        <div>
+          <Fade>
+            <div className="each-slide">
+              <div>
+                <img src={images[0]} />
+              </div>
+              <p>First Slide</p>
+            </div>
+            <div className="each-slide">
+              <p>Second Slide</p>
+              <div>
+                <img src={images[1]} />
+              </div>
+            </div>
+            <div className="each-slide">
+              <div>
+                <img src={images[2]} />
+              </div>
+              <p>Third Slide</p>
+            </div>
+          </Fade>
         </div>
       </main>
 

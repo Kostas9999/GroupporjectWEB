@@ -873,7 +873,6 @@ export default function Home({ all, currDev, hw }) {
                   dataKey="locallatency"
                   stroke="red"
                   dot={false}
-                  legendType="triangle"
                 />
                 <Line
                   isAnimationActive={false}
