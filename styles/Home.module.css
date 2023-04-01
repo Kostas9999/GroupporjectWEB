@@ -151,7 +151,7 @@
   animation: 6s rotate linear infinite;
   width: 150%;
   height: 150%;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* Inner Square */

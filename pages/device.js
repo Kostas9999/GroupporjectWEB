@@ -62,14 +62,19 @@ export default function Home({ all, currDev, hw }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ currDev }),
     };
+    try {
+      const response = await fetch(endpoint, options);
+      const result = await response.json();
+      if (result.event.event_id !== lastKnownEvent) {
+        notification(
+          `Event: ${result.event.type} Value:${result.event.value} `
+        );
 
-    const response = await fetch(endpoint, options);
-    const result = await response.json();
-
-    if (result.event.event_id !== lastKnownEvent) {
-      notification(`Event: ${result.event.type} Value:${result.event.value} `);
-
-      lastKnownEvent = result.event.event_id;
+        lastKnownEvent = result.event.event_id;
+        refresh();
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 

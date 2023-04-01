@@ -197,6 +197,8 @@ export default function Dashboard({ session }) {
     }
   }
 
+  let [activeDataArr, setActiveDataArr] = useState({});
+
   const [activeAll, setActiveAll] = useState({});
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -466,13 +468,13 @@ export default function Dashboard({ session }) {
                                         width="100%"
                                         height="100%"
                                       >
-                                        <LineChart data={data}>
+                                        <LineChart data={activeDataArr[item]}>
                                           <Tooltip />
 
                                           <Line
                                             isAnimationActive={false}
                                             type="monotone"
-                                            dataKey="pv"
+                                            dataKey="locallatency"
                                             stroke="red"
                                             dot={false}
                                             legendType="triangle"
@@ -480,7 +482,7 @@ export default function Dashboard({ session }) {
                                           <Line
                                             isAnimationActive={false}
                                             type="monotone"
-                                            dataKey="uv"
+                                            dataKey="cpu"
                                             stroke="#8884d8"
                                             dot={false}
                                           />
