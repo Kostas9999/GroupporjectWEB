@@ -19,7 +19,9 @@
 
 }
 
-
+.html {
+  scroll-behavior: smooth;
+}
 
 .description {
   display: inherit;

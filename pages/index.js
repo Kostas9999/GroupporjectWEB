@@ -309,28 +309,29 @@ export default function Home({ session }) {
                 </Card>
 
                 <Card
-                  css={{ background: "transparent", height: "80vh" }}
-                ></Card>
+                  css={{
+                    $$cardColor: "transparent",
+                    backdropFilter: "blur(5px)",
+                  }}
+                >
+                  <Card.Body>
+                    <Row justify="center" align="center">
+                      <Image
+                        showSkeleton
+                        maxDelay={10000}
+                        src="https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monTool/latency.png"
+                        alt="Default Image"
+                      />
+                    </Row>
+                  </Card.Body>
+                </Card>
               </Row>
             </Card.Body>
           </Card>
         </Container>
         <Spacer y={1} />
-        <Container fluid>
-          <Card
-            css={{ $$cardColor: "transparent", backdropFilter: "blur(5px)" }}
-          >
-            <Card.Body>
-              <Row justify="center" align="center">
-                {" "}
-              </Row>
-            </Card.Body>
-          </Card>
-        </Container>
-        <div>
-          <button onClick={toggleComponent}></button>
-          {showComponent ? <ComponentOne /> : <ComponentTwo />}
-        </div>
+        <Container fluid></Container>
+
         <div>
           <Fade>
             <div className="each-slide">
@@ -346,16 +347,29 @@ export default function Home({ session }) {
               </div>
             </div>
             <div className="each-slide">
+              <Text
+                justify="center"
+                align="center"
+                size={50}
+                css={{
+                  textGradient: "45deg, $black -20%, $blue600 80%",
+                }}
+              >
+                Baseline
+              </Text>
               <div>
                 <img src={images[2]} />
               </div>
-              <p>Third Slide</p>
             </div>
           </Fade>
         </div>
       </main>
 
       <Footer />
+      <div>
+        <button onClick={toggleComponent}></button>
+        {showComponent ? <ComponentOne /> : <ComponentTwo />}
+      </div>
     </NextUIProvider>
   );
 }
