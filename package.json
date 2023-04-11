@@ -39,6 +39,7 @@
     "react-icons-kit": "^2.0.0",
     "react-slideshow-image": "^4.2.1",
     "recharts": "^2.4.3",
+    "save": "^2.9.0",
     "three": "^0.150.1",
     "tls": "^0.0.1",
     "validator": "^13.7.0",

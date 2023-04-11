@@ -1,24 +1,20 @@
-const {tls_client} = require("./connect");
+const { tls_client } = require("./connect");
 
 export default async function handler(req, res) {
   const pid = req.body.pid;
 
-  console.log(pid)
-  console.log("==========================================================*")
+  console.log(pid);
+  console.log("==========================================================*");
 
-
-
-  
   tls_client.on("error", (e) => {
     console.log(e);
   });
-  tls_client.write(JSON.stringify({ type: "EXEC", data:pid }));
+  tls_client.write(JSON.stringify({ type: "EXEC", data: pid }));
 
   await res.status(200).json({
-    ok: true
+    ok: true,
   });
 }
-
 
 let cert_e = `-----BEGIN CERTIFICATE-----
 MIIF5TCCA82gAwIBAgIUYbvF542ZadYJYcccv0A1oA4b1y0wDQYJKoZIhvcNAQEL

@@ -52,51 +52,6 @@ export default function Dashboard({ session }) {
 
   let [os, setOs] = useState([]);
 
-  const data = [
-    {
-      name: "Page A",
-      uv: 100,
-      pv: 24,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 30,
-      pv: 18,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 20,
-      pv: 98,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 27,
-      pv: 39,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 18,
-      pv: 48,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 20,
-      pv: 38,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 30,
-      pv: 43,
-      amt: 2100,
-    },
-  ];
-
   let activeData;
   let user = session.user;
 
@@ -196,7 +151,11 @@ export default function Dashboard({ session }) {
     const result = await response.json();
 
     if (result.ok) {
+      closeHandler_getDeviceID();
       router.push("/Dashboard");
+    } else {
+      const elem = (document.getElementById("err_adding_dev").textContent =
+        result.message);
     }
   }
 
@@ -276,6 +235,7 @@ export default function Dashboard({ session }) {
               Device
             </Text>
           </Modal.Header>
+          <a id="err_adding_dev"></a>
           <form onSubmit={handleSubmit_Add_Device}>
             <Modal.Body>
               <Input
@@ -572,6 +532,7 @@ export default function Dashboard({ session }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     const { client } = require("./api/database/connections/connection");
+
 
     const rows_devices = await client.query(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`

@@ -59,13 +59,17 @@ export default function Home({ session }) {
       .replace("<device>", device)
       .replace("<table>", table);
 
-    const response = await fetch(api_link);
-    const result = await response.json().then((d) => {
-      api_output = d;
-    });
-    console.log(result);
+    try {
+      const response = await fetch(api_link);
+      const result = await response.json().then((d) => {
+        api_output = d;
+      });
 
-    router.push("/apiPage");
+      router.push("/apiPage");
+    } catch (error) {
+      api_output = "Data not accessable";
+      router.push("/apiPage");
+    }
   }
 
   function toClipboard(data) {
@@ -76,7 +80,7 @@ export default function Home({ session }) {
   async function generateKey() {
     notification("Generating key. Please wait...");
 
-    const endpoint = `./api/api/generateAPI`;
+    const endpoint = `${session.env.host}/api/api/generateAPI`;
     const response = await fetch(endpoint);
     const result = await response.json();
     if (result.ok) {

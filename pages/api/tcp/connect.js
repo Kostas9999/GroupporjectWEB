@@ -1,13 +1,14 @@
 const tls = require("tls");
+var validator = require("validator");
 import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "../session/session_Config";
 export default withIronSessionApiRoute(handler, ironOptions);
 
 async function handler(req, res) {
-  const cmd = req.body.cmd;
-  const param = req.body.param;
-  const device = req.body.currDev;
-  const user = req.session.user.user_id;
+  const cmd = validator.escape(req.body.cmd);
+  const param = validator.escape(req.body.param);
+  const device = validator.escape(req.body.currDev);
+  const user = validator.escape(req.session.user.user_id);
   const server = req.session.devices[device].server[0];
 
   let data = {
@@ -18,8 +19,8 @@ async function handler(req, res) {
   };
 
   const options = {
-    host: server.ip,
-    port: server.port,
+    host: validator.isIP(server.ip) ? server.ip : "127.0.0.1",
+    port: validator.isPort(server.port) ? server.port : "443",
     key: key_e,
     cert: cert_e,
     passphrase: "MGproject",
@@ -136,22 +137,3 @@ sLtTB86doxZRi/LljwWDxHv+dWUZ5x83H0/AIUUb3EdLd3uD4aHPehgpVHjnxcFA
 +vJZ/ohoPRehOX56SJPO62w/Ze1+aZDfuIqN3ws5xSVs
 -----END ENCRYPTED PRIVATE KEY-----
 `;
-/*
-const options = {
-  host: "185.38.61.93",
-  port: 57070,
-  key: key_e,
-  cert: cert_e,
-  passphrase: "MGproject",
-  rejectUnauthorized: false,
-};
-
-const tls_client = tls.connect(options, async () => {});
-
-tls_client.on("error", (e) => {
-  console.log(e);
-});
-
-
-//client.write(JSON.stringify({ type: "MSG", data: "stdout" }));
-*/

@@ -67,7 +67,7 @@ export default function App({ user }) {
       router.push("/Dashboard");
     } else {
       const elem = (document.getElementById("message").textContent =
-        "Username or Email is already in use");
+        result.message);
     }
   }
 
@@ -99,7 +99,7 @@ export default function App({ user }) {
       router.push("/Dashboard");
     } else {
       const elem = (document.getElementById("login_Err_message").textContent =
-        "Username or Password is incorrect");
+        result.message);
     }
   }
 
@@ -223,7 +223,7 @@ export default function App({ user }) {
                   </Text>
                 </Text>
               </Modal.Header>
-              <a id="login_Err_message"></a>
+              <a id="login_Err_message" color="red"></a>
               <form onSubmit={handleSubmit_Login}>
                 <Modal.Body>
                   <Input
@@ -339,7 +339,6 @@ export default function App({ user }) {
                     minLength={6}
                     maxLength={30}
                     type="email"
-                    pattern="[a-z0-9\@{1,20}]"
                   />
 
                   <Input
