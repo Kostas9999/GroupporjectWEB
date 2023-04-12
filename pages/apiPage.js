@@ -1,4 +1,5 @@
 import Navbar from "./templates/navbar/navbar";
+import Footer from "./templates/footer";
 import { useRouter } from "next/router";
 import { Snackbar, Slide } from "@mui/material";
 import { useState } from "react";

@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Footer from "./templates/footer";
 import { ironOptions } from "./api/session/session_Config";
 import { withIronSessionSsr } from "iron-session/next";
 
@@ -1268,6 +1269,7 @@ export default function Home({ all, currDev, hw }) {
             </Alert>
           </Snackbar>
         </Grid.Container>
+        <Footer />
       </main>
     </>
   );

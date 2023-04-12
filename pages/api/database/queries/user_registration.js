@@ -7,13 +7,15 @@ const { pool, client } = require("../connections/connection");
 export default withIronSessionApiRoute(loginRoute, ironOptions);
 
 async function loginRoute(req, res) {
+
+  let rows_user = null;
+  let msg = "";
+
   let username = validator.escape(req.body.username_Reg);
   let email = validator.escape(req.body.email_Reg);
   let pass = validator.escape(req.body.password_Reg);
 
   const hash = bcrypt.hashSync(pass, 5);
-  let rows_user = null;
-  let msg = "";
 
   const chars_blacklist = "{ ;#%/=?`:|&$}+-";
 
@@ -21,18 +23,12 @@ async function loginRoute(req, res) {
   pass = validator.blacklist(pass, chars_blacklist);
   email = validator.blacklist(email, chars_blacklist);
 
-  if (username.length < 6) {
-    msg = `Username is to short: ${username.length} characters only`;
-  } else if (pass.length < 6) {
-    msg = `Password is to short: ${pass.length} characters only`;
-  } else if (email.length < 5) {
-    msg = `Email is to short: ${email.length} characters only`;
-  } else if (username.length > 20) {
-    msg = `Username is to long: ${pass.length} characters`;
-  } else if (pass.length > 20) {
-    msg = `Password is to long: ${pass.length} characters`;
-  } else if (email.length > 30) {
-    msg = `Email is to long: ${email.length} characters`;
+  if (validator.isLength(username, { min: 6, max: 20 })) {
+    msg = `Username lentght must be between 6 and 20 characters`;
+  } else if (validator.isLength(pass, { min: 6, max: 20 })) {
+    msg = `Password lentght must be between 6 and 20 characters`;
+  } else if (validator.isLength(username, { min: 5, max: 30 })) {
+    msg = `Email lentght must be between 5 and 20 characters`;
   } else if (!validator.isEmail(email)) {
     msg = `Email is invalid`;
   } else if (
@@ -62,8 +58,9 @@ async function loginRoute(req, res) {
       await res.status(200).json({ ok: true, user: req.session.user });
       return;
     } catch (error) {
-      // error 23505 indicated dublicate primary key which in this case is username
+      // error 23505 indicated dublicate primary key which in this case is username or email
       if (error.code == 23505) {
+        console.log(error);
         msg = `Username in use`;
       }
 

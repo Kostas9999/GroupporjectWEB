@@ -16,14 +16,10 @@ async function loginRoute(req, res) {
   username = validator.blacklist(username, chars_blacklist);
   pass = validator.blacklist(pass, chars_blacklist);
 
-  if (username.length < 6) {
-    msg = `Username is to short: ${username.length} characters only`;
-  } else if (pass.length < 6) {
-    msg = `Password is to short: ${pass.length} characters only`;
-  } else if (username.length > 20) {
-    msg = `Username is to long: ${pass.length} characters`;
-  } else if (pass.length > 20) {
-    msg = `Password is to long: ${pass.length} characters`;
+  if (validator.isLength(username, { min: 6, max: 20 })) {
+    msg = `Username lentght must be between 6 and 20 characters`;
+  } else if (validator.isLength(pass, { min: 6, max: 20 })) {
+    msg = `Password lentght must be between 6 and 20 characters`;
   } else if (!validator.isAscii(username) || !validator.isAscii(pass)) {
     msg = `Your username or password contains unsuported characters`;
   } else {
@@ -50,7 +46,9 @@ async function loginRoute(req, res) {
 
         await res.send({ ok: true, user: req.session.user });
       } else {
-        await res.status(200).json({ ok: false });
+        await res
+          .status(200)
+          .json({ ok: false, message: "Username or Password is incorrect" });
       }
     } catch (error) {
       await res

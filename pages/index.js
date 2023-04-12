@@ -477,9 +477,9 @@ export default function Home({ session }) {
             </div>
           </Fade>
         </div>
+        <Footer />
       </main>
 
-      <Footer />
       {/*}
       <div>
         <button onClick={toggleComponent}></button>

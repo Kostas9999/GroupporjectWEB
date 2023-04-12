@@ -1,5 +1,6 @@
 import { withIronSessionSsr } from "iron-session/next";
 import Navbar from "./templates/navbar/navbar";
+import Footer from "./templates/footer";
 import Header from "./templates/header";
 import { ironOptions } from "./api/session/session_Config";
 import { Container, NextUIProvider, Row, Badge } from "@nextui-org/react";
@@ -524,6 +525,7 @@ export default function Dashboard({ session }) {
             color="warning"
           ></Snackbar>
         </Grid.Container>
+        <Footer />
       </main>
     </NextUIProvider>
   );
@@ -532,7 +534,6 @@ export default function Dashboard({ session }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     const { client } = require("./api/database/connections/connection");
-
 
     const rows_devices = await client.query(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`

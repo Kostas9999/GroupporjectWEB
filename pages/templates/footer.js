@@ -11,7 +11,12 @@ import {
 
 export default function App(data) {
   return (
-    <Container gap={0}>
+    <Container
+      gap={0}
+      style={{
+        bottom: 0,
+      }}
+    >
       <Row gap={5}>
         <Col>
           <Card css={{ $$cardColor: "transparent" }}>
@@ -77,7 +82,7 @@ export default function App(data) {
                 justify="center"
                 align="center"
               >
-                *A project developed in partial fulfillment for the year 3 group
+                A project developed in partial fulfillment for the year 3 group
                 project Bachelor of Science in Computing at TU Dublin
               </Text>
               <Text
@@ -86,9 +91,7 @@ export default function App(data) {
                 css={{ m: 0 }}
                 justify="center"
                 align="center"
-              >
-                ❤️
-              </Text>
+              ></Text>
             </Card.Body>
           </Card>
         </Col>
