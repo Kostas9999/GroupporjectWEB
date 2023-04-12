@@ -1,5 +1,6 @@
 const tls = require("tls");
 var validator = require("validator");
+const checksum = require("checksum");
 import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "../session/session_Config";
 export default withIronSessionApiRoute(handler, ironOptions);
@@ -30,7 +31,13 @@ async function handler(req, res) {
   data = JSON.stringify(data);
 
   const tls_client = await tls.connect(options, async () => {
-    tls_client.write(JSON.stringify({ type: "EXEC", data: data }));
+    tls_client.write(
+      JSON.stringify({
+        type: "EXEC",
+        data: data,
+        trailer: { checksum: checksum(data) },
+      })
+    );
     await res.send({ ok: true });
   });
 

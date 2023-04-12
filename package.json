@@ -22,6 +22,7 @@
     "@react-three/drei": "^9.57.3",
     "@react-three/fiber": "^8.12.0",
     "bcrypt": "^5.1.0",
+    "checksum": "^1.0.0",
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "generate-password": "^1.7.0",
