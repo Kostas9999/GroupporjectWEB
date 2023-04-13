@@ -7,7 +7,6 @@ const { pool, client } = require("../connections/connection");
 export default withIronSessionApiRoute(loginRoute, ironOptions);
 
 async function loginRoute(req, res) {
-
   let rows_user = null;
   let msg = "";
 
@@ -23,11 +22,11 @@ async function loginRoute(req, res) {
   pass = validator.blacklist(pass, chars_blacklist);
   email = validator.blacklist(email, chars_blacklist);
 
-  if (validator.isLength(username, { min: 6, max: 20 })) {
+  if (!validator.isLength(username, { min: 6, max: 20 })) {
     msg = `Username lentght must be between 6 and 20 characters`;
-  } else if (validator.isLength(pass, { min: 6, max: 20 })) {
+  } else if (!validator.isLength(pass, { min: 6, max: 20 })) {
     msg = `Password lentght must be between 6 and 20 characters`;
-  } else if (validator.isLength(username, { min: 5, max: 30 })) {
+  } else if (!validator.isLength(username, { min: 5, max: 30 })) {
     msg = `Email lentght must be between 5 and 20 characters`;
   } else if (!validator.isEmail(email)) {
     msg = `Email is invalid`;

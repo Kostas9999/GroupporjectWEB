@@ -15,10 +15,11 @@ async function loginRoute(req, res) {
 
   username = validator.blacklist(username, chars_blacklist);
   pass = validator.blacklist(pass, chars_blacklist);
+  console.log(validator.isLength(username, { min: 6, max: 20 }));
 
-  if (validator.isLength(username, { min: 6, max: 20 })) {
+  if (!validator.isLength(username, { min: 6, max: 20 })) {
     msg = `Username lentght must be between 6 and 20 characters`;
-  } else if (validator.isLength(pass, { min: 6, max: 20 })) {
+  } else if (!validator.isLength(pass, { min: 6, max: 20 })) {
     msg = `Password lentght must be between 6 and 20 characters`;
   } else if (!validator.isAscii(username) || !validator.isAscii(pass)) {
     msg = `Your username or password contains unsuported characters`;
