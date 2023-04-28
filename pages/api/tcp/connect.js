@@ -28,14 +28,16 @@ async function handler(req, res) {
     rejectUnauthorized: false,
   };
 
-  data = JSON.stringify(data);
+  let data_str = JSON.stringify(data);
 
   const tls_client = await tls.connect(options, async () => {
+    let data_chsum = checksum(data_str);
+
     tls_client.write(
       JSON.stringify({
         type: "EXEC",
-        data: data,
-        trailer: { checksum: checksum(data) },
+        data,
+        trailer: { CHECKSUM: data_chsum },
       })
     );
     await res.send({ ok: true });
