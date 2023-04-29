@@ -229,6 +229,12 @@ export default function Home({ session }) {
 
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
+    if (req?.session?.user?.user_id === undefined) {
+      return {
+        notFound: true,
+      };
+    }
+
     let api_key = req.session.user.user_api_key;
     if (api_key == null) {
       req.session.user.user_api_key = "N/A";

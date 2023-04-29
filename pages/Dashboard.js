@@ -91,9 +91,18 @@ export default function Dashboard({ session }) {
       return "";
     }
   }
+
+  function adoptHours(oldDataTime) {
+    let offsetHours = 1;
+    let mls = new Date(oldDataTime);
+    return mls.setHours(mls.getHours() + offsetHours);
+  }
+
   function isOnline(strDate) {
+    console.log(adoptHours(strDate) - Date.now());
+
     let timeOfset = 7200000;
-    const dt = Date.parse(strDate) + timeOfset;
+    let dt = Date.parse(strDate) + timeOfset;
 
     if (Date.now() - dt > 2000) {
       return 0;
@@ -534,6 +543,12 @@ export default function Dashboard({ session }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     const { client } = require("./api/database/connections/connection");
+
+    if (req?.session?.user?.user_id === undefined) {
+      return {
+        notFound: true,
+      };
+    }
 
     const rows_devices = await client.query(
       `SELECT * FROM "groupproject"."device" where "user" = '${req.session.user.user_id}' ;`

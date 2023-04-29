@@ -1277,6 +1277,15 @@ export default function Home({ all, currDev, hw }) {
 
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps(req) {
+    if (
+      req?.req?.session?.user?.user_id === undefined ||
+      !Object.keys(req.req.session.devices).includes(req.query.devID)
+    ) {
+      return {
+        notFound: true,
+      };
+    }
+
     const { client, pool } = require("./api/database/connections/connection");
 
     const id = req.query.devID;
