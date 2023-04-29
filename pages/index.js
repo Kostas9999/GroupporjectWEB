@@ -113,24 +113,26 @@ export default function Home({ session }) {
                 </Text>
               </Row>
               <Row justify="center" align="center">
-                <Button
-                  color="gradient"
-                  auto
-                  ghost
-                  className={styles.thirteen}
-                  css={{
-                    marginTop: "100px",
-                  }}
-                >
-                  <Text
-                    size={20}
+                <a href="https://filedn.eu/laylI9rT8UjYMnCgviybMrh/web_images/monToolSetup.exe">
+                  <Button
+                    color="gradient"
+                    auto
+                    ghost
+                    className={styles.thirteen}
                     css={{
-                      textGradient: "45deg, $black -20%, $blue600 80%",
+                      marginTop: "100px",
                     }}
                   >
-                    Free Download
-                  </Text>
-                </Button>
+                    <Text
+                      size={20}
+                      css={{
+                        textGradient: "45deg, $black -20%, $blue600 80%",
+                      }}
+                    >
+                      Free Download
+                    </Text>
+                  </Button>
+                </a>
               </Row>
             </Card.Body>
           </Card>
