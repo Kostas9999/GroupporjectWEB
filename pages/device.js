@@ -27,7 +27,7 @@ import styles from "../styles/Home.module.css";
 const json2csv = require("json2csv");
 
 import {
-  Collapse,
+  Badge,
   Input,
   Modal,
   Dropdown,
@@ -77,6 +77,22 @@ export default function Home({ all, currDev, hw }) {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function adoptHours(oldDataTime, offsetHours) {
+    let mls = new Date(oldDataTime);
+    return mls.setHours(mls.getHours() + offsetHours);
+  }
+
+  function isOnline(strDate) {
+    return Date.now() - adoptHours(strDate, 1) > 30000;
+  }
+
+  function dateTimeFormater(datetime) {
+    if (datetime === undefined) {
+      return "";
+    }
+    return datetime.replaceAll("T", " ").substring(1, 20);
   }
 
   async function getActiveData() {
@@ -154,13 +170,6 @@ export default function Home({ all, currDev, hw }) {
     return `${parseFloat((a / Math.pow(1024, d)).toFixed(c))} ${
       ["Bytes", "KB", "MB", "GB", "TB"][d]
     }`;
-  }
-
-  function dateTimeFormater(datetime) {
-    if (datetime === undefined) {
-      return "";
-    }
-    return datetime.replaceAll("T", " ").substring(0, 19);
   }
 
   let keys_port = Object.keys(ports[0]);
@@ -457,8 +466,36 @@ export default function Home({ all, currDev, hw }) {
               <Card css={{ $$cardColor: btn_back }} className={styles.thirteen}>
                 <Card.Body>
                   <Row justify="center" align="right">
+                    {!isOnline(data.slice(-1)[0].created) ? (
+                      <Badge
+                        style={{ marginRight: "10px" }}
+                        enableShadow
+                        disableOutline
+                        color="success"
+                        content="Online"
+                        placement="center-left"
+                      ></Badge>
+                    ) : (
+                      <Badge
+                        style={{ marginRight: "10px" }}
+                        enableShadow
+                        disableOutline
+                        color="error"
+                        content="Online"
+                        placement="center-left"
+                      ></Badge>
+                    )}
                     <Text h6 size={15} color="white" css={{ m: 0 }}>
-                      Last Seen: {dateTimeFormater(data.slice(-1)[0].created)}
+                      Last Seen:{" "}
+                      {
+                        dateTimeFormater(
+                          JSON.stringify(
+                            new Date(adoptHours(data.slice(-1)[0].created, 2))
+                          )
+                        )
+
+                        // dateTimeFormater(data.slice(-1)[0].created)
+                      }
                       <Spacer y={0}></Spacer>
                       {data.created}
                       <Spacer y={0}></Spacer>

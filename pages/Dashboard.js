@@ -86,31 +86,19 @@ export default function Dashboard({ session }) {
 
   function dateTimeFormater(datetime) {
     try {
-      return datetime.replaceAll("T", " ").substring(0, 19);
+      return datetime.replaceAll("T", " ").substring(1, 20);
     } catch (error) {
       return "";
     }
   }
 
-  function adoptHours(oldDataTime) {
-    let offsetHours = 1;
+  function adoptHours(oldDataTime, offsetHours) {
     let mls = new Date(oldDataTime);
     return mls.setHours(mls.getHours() + offsetHours);
   }
 
   function isOnline(strDate) {
-    console.log(adoptHours(strDate) - Date.now());
-
-    let timeOfset = 7200000;
-    let dt = Date.parse(strDate) + timeOfset;
-
-    if (Date.now() - dt > 2000) {
-      return 0;
-    } else {
-      return 1;
-    }
-
-    // return Date.now() - dt > 2000;
+    return Date.now() - adoptHours(strDate, 1) > 30000;
   }
 
   async function handleDeleteDev(id) {
@@ -338,10 +326,10 @@ export default function Dashboard({ session }) {
                         }}
                       >
                         <Text style={{ marginLeft: "20px" }}>
-                          {isOnline(activeAll[item]?.created) == 1 ? (
+                          {isOnline(activeAll[item]?.created) == 0 ? (
                             <div aria-label="online">
                               <Grid.Container gap={0} justify="center">
-                                <Grid xs={6}>
+                                <Grid xs={12}>
                                   <Row>
                                     <Card
                                       css={{
@@ -457,49 +445,7 @@ export default function Dashboard({ session }) {
                                     </Card>
                                   </Row>
                                 </Grid>
-                                <Grid xs={6}>
-                                  <Card
-                                    css={{
-                                      $$cardColor: "transparent",
-                                    }}
-                                  >
-                                    <Card.Body>
-                                      <ResponsiveContainer
-                                        width="100%"
-                                        height="100%"
-                                      >
-                                        <LineChart data={activeDataArr[item]}>
-                                          <Tooltip />
-
-                                          <Line
-                                            isAnimationActive={false}
-                                            type="monotone"
-                                            dataKey="locallatency"
-                                            stroke="red"
-                                            dot={false}
-                                            legendType="triangle"
-                                          />
-                                          <Line
-                                            isAnimationActive={false}
-                                            type="monotone"
-                                            dataKey="cpu"
-                                            stroke="#8884d8"
-                                            dot={false}
-                                          />
-                                          <XAxis
-                                            dataKey="created"
-                                            tick={false}
-                                          />
-                                          <YAxis
-                                            dataKey="publiclatency"
-                                            domain={[0, 100]}
-                                          />
-                                          <Tooltip />
-                                        </LineChart>
-                                      </ResponsiveContainer>
-                                    </Card.Body>
-                                  </Card>
-                                </Grid>
+                                <Grid xs={6}></Grid>
                               </Grid.Container>
                             </div>
                           ) : (
@@ -512,7 +458,13 @@ export default function Dashboard({ session }) {
                                 color="warning"
                               >
                                 Last Seen:{" "}
-                                {dateTimeFormater(activeAll[item]?.created)}
+                                {dateTimeFormater(
+                                  JSON.stringify(
+                                    new Date(
+                                      adoptHours(activeAll[item]?.created, 2)
+                                    )
+                                  )
+                                )}
                               </Text>
                             </div>
                           )}
