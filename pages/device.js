@@ -406,7 +406,7 @@ export default function Home({ all, currDev, hw }) {
         all.devices[`${currDev}`].networkStats
       )}`
     );
-    element.setAttribute("download", `HDD_${currDev}`);
+    element.setAttribute("download", `NetStats_${currDev}`);
     element.style.display = "none";
 
     document.body.appendChild(element);
