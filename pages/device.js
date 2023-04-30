@@ -291,19 +291,14 @@ export default function Home({ all, currDev, hw }) {
   );
 
   function getEventData(item) {
-    let plusSecods = new Date(item.created).getTime() - 5000;
+    let mls = new Date(item.created);
+    let offset9Sec = mls.setSeconds(mls.getSeconds() + 9);
 
     var result = all.devices[currDev].networkStats.filter((obj) => {
-      if (obj.created < item.created) {
-        //
-        //  //  let netStatDate = new Date(obj.created).getTime();
-        //   if (netStatDate > plusSecods) {
+      if (new Date(obj.created) <= offset9Sec) {
         return obj;
-        // }
       }
     });
-
-    console.log(result[result.length - 1]);
 
     let singleRes = result[result.length - 1];
 
@@ -435,7 +430,11 @@ export default function Home({ all, currDev, hw }) {
                   {" | "}
                   <br></br>
                   Date:
-                  {dateTimeFormater(event_data2?.item?.created)}
+                  {dateTimeFormater(
+                    JSON.stringify(
+                      new Date(adoptHours(event_data2?.item?.created, 1))
+                    )
+                  )}
                 </Text>
               </Modal.Header>
               <Modal.Body>
