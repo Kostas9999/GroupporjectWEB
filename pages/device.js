@@ -182,6 +182,16 @@ export default function Home({ all, currDev, hw }) {
       label: item,
     })
   );
+  /*
+  dateTimeFormater(
+    JSON.stringify(
+      new Date(adoptHours(
+        item.created
+        
+        , 1))
+    )
+  )
+*/
 
   const rows_port = [];
   ports.map((item, index) =>
@@ -191,7 +201,9 @@ export default function Home({ all, currDev, hw }) {
       processname: item.processname,
       pid: item.pid,
       processpath: item.processpath,
-      created: dateTimeFormater(item.created),
+      created: dateTimeFormater(
+        JSON.stringify(new Date(adoptHours(item.created, 1)))
+      ),
       action: (
         <Button
           onPress={(e) => closeApp("PRT_CLOSE", item.pid)}
