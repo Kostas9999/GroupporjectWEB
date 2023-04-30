@@ -201,7 +201,6 @@ export default function Home({ all, currDev, hw }) {
       processname: item.processname,
       pid: item.pid,
       processpath: item.processpath,
-      online: isOnline(item.created),
       created: dateTimeFormater(
         JSON.stringify(new Date(adoptHours(item.created, 1)))
       ),
@@ -284,7 +283,6 @@ export default function Home({ all, currDev, hw }) {
           ghost
           color="error"
           bordered
-          disabled
         >
           Details
         </Button>
@@ -293,19 +291,21 @@ export default function Home({ all, currDev, hw }) {
   );
 
   function getEventData(item) {
-    let timeOfset = 7200000;
     let plusSecods = new Date(item.created).getTime() - 5000;
 
     var result = all.devices[currDev].networkStats.filter((obj) => {
       if (obj.created < item.created) {
-        let netStatDate = new Date(obj.created).getTime();
-        if (netStatDate > plusSecods) {
-          return obj;
-        }
+        //
+        //  //  let netStatDate = new Date(obj.created).getTime();
+        //   if (netStatDate > plusSecods) {
+        return obj;
+        // }
       }
     });
 
-    let singleRes = result[0];
+    console.log(result[result.length - 1]);
+
+    let singleRes = result[result.length - 1];
 
     setEvent_data2({ singleRes, item });
 
@@ -1122,32 +1122,20 @@ export default function Home({ all, currDev, hw }) {
                           {(columnKey) => (
                             <Table.Cell>
                               <Text color={text_Color}>
-                                {typeof item[columnKey] === "object" ? (
-                                  item.online ? (
-                                    item[columnKey]
-                                  ) : (
-                                    "Offline"
-                                  )
+                                {" "}
+                                {item[columnKey].length > 80 ? (
+                                  <Popover>
+                                    <Popover.Trigger>
+                                      <Button auto ghost size="xs">
+                                        view path
+                                      </Button>
+                                    </Popover.Trigger>
+                                    <Popover.Content>
+                                      <Text size={20}>{item[columnKey]}</Text>
+                                    </Popover.Content>
+                                  </Popover>
                                 ) : (
-                                  <Text color={text_Color}>
-                                    {" "}
-                                    {item[columnKey].length > 80 ? (
-                                      <Popover>
-                                        <Popover.Trigger>
-                                          <Button auto ghost size="xs">
-                                            view path
-                                          </Button>
-                                        </Popover.Trigger>
-                                        <Popover.Content>
-                                          <Text size={20}>
-                                            {item[columnKey]}
-                                          </Text>
-                                        </Popover.Content>
-                                      </Popover>
-                                    ) : (
-                                      item[columnKey]
-                                    )}
-                                  </Text>
+                                  item[columnKey]
                                 )}
                               </Text>
                             </Table.Cell>
