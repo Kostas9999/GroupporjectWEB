@@ -296,6 +296,7 @@ export default function Home({ all, currDev, hw }) {
 
     var result = all.devices[currDev].networkStats.filter((obj) => {
       if (new Date(obj.created) <= offset9Sec) {
+        // TODO: if not on list request from database
         return obj;
       }
     });
@@ -384,10 +385,27 @@ export default function Home({ all, currDev, hw }) {
     element.setAttribute(
       "href",
       `data:text/csv;charset=utf-8,${json2csv.parse(
-        all.devices[`${currDev}`].baseline[0]
+        all.devices[`${currDev}`].baseline
       )}`
     );
-    element.setAttribute("download", "filename");
+    element.setAttribute("download", `Baseline_${currDev}`);
+    element.style.display = "none";
+
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  function exportEvents() {
+    const element = document.createElement("a");
+
+    element.setAttribute(
+      "href",
+      `data:text/csv;charset=utf-8,${json2csv.parse(
+        all.devices[`${currDev}`].events
+      )}`
+    );
+    element.setAttribute("download", `Events ${currDev}`);
     element.style.display = "none";
 
     document.body.appendChild(element);
@@ -473,9 +491,6 @@ export default function Home({ all, currDev, hw }) {
                   onPress={() => setVisible(false)}
                 >
                   Close
-                </Button>
-                <Button auto onPress={() => setVisible(false)}>
-                  Agree
                 </Button>
               </Modal.Footer>
             </Modal>
@@ -1050,6 +1065,18 @@ export default function Home({ all, currDev, hw }) {
                       rowsPerPage={10}
                     />
                   </Table>
+                  <Button
+                    onClick={exportEvents}
+                    size="sm"
+                    auto
+                    shadow
+                    css={{ background: "yellow", width: "50vh" }}
+                    className={styles.thirteen}
+                    justify="right"
+                    align="right"
+                  >
+                    Export CSV
+                  </Button>
                 </Card.Body>
               </Card>
             </Grid>
@@ -1350,7 +1377,7 @@ export const getServerSideProps = withIronSessionSsr(
       `select * from "${id}"."ports" ORDER BY created DESC; `
     );
     let events = await client.query(
-      `select * from "${id}"."events" ORDER BY created DESC LIMIT 100;  `
+      `select * from "${id}"."events" ORDER BY created DESC LIMIT 1000;  `
     );
 
     let networkstats = await pool.query(
