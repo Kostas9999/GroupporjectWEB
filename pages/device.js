@@ -115,7 +115,9 @@ export default function Home({ all, currDev, hw }) {
     const intervalId = setInterval(async () => {
       await getActiveData();
 
-      if (isOnline(adoptHours(newActiveData.created, 1))) {
+      if (isOnline(data.created)) {
+        data.shift();
+
         setData([...data, newActiveData]);
       }
     }, 5000);
