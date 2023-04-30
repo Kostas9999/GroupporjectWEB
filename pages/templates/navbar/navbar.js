@@ -15,7 +15,7 @@ import { SSRProvider } from "react-aria";
 import styles from "../../../styles/Home.module.css";
 
 var xss = require("xss");
-
+import { useState, useEffect } from "react";
 import {
   Image,
   Navbar,
@@ -24,6 +24,7 @@ import {
   Modal,
   Input,
   Link,
+  Switch,
   User,
   Spacer,
 } from "@nextui-org/react";
@@ -33,8 +34,13 @@ export default function App({ user }) {
   const handleSelect = (e) => {
     if (e == "logout") {
       logout();
-    }
+    } else if (e == "Notifications") {
+      setVisible_Notifications(true);
+      console.log(e);
+    } else console.log(e);
   };
+
+  let notifications = ["Latency", "Hardware"];
 
   const router = useRouter();
 
@@ -70,6 +76,15 @@ export default function App({ user }) {
         result.message);
     }
   }
+
+  async function handleSubmit_Notifications(event) {
+    console.log(event);
+  }
+  const [checked, setChecked] = useState(false);
+  const switchHandler = (event) => {
+    console.log(event);
+    setChecked(event.target.checked);
+  };
 
   async function handleSubmit_Login(event) {
     event.preventDefault();
@@ -114,16 +129,22 @@ export default function App({ user }) {
   }
 
   const [visible_Login, setVisible_Login] = React.useState(false);
-  const [visible_Reg, setVisible_Reg] = React.useState(false);
-
   const handler_Login = () => setVisible_Login(true);
-  const handler_Reg = () => setVisible_Reg(true);
-
   const closeHandler_Login = () => {
     setVisible_Login(false);
   };
+
+  const [visible_Reg, setVisible_Reg] = React.useState(false);
+  const handler_Reg = () => setVisible_Reg(true);
   const closeHandler_Reg = () => {
     setVisible_Reg(false);
+  };
+
+  const [visible_Notifications, setVisible_Notifications] =
+    React.useState(false);
+  const handler_Notifications = () => setVisible_Notifications(true);
+  const closeHandler_Notifications = () => {
+    setVisible_Notifications(false);
   };
 
   const collapseItems = ["Dashboard"];
@@ -370,6 +391,47 @@ export default function App({ user }) {
               </form>
             </Modal>
 
+            <Modal
+              closeButton
+              blur
+              aria-labelledby="modal-title"
+              open={visible_Notifications}
+              onClose={closeHandler_Notifications}
+            >
+              <Modal.Header>
+                <Text>Notifications</Text>
+              </Modal.Header>
+
+              <Modal.Body>
+                {notifications.map((e) => (
+                  <Text>
+                    <Switch
+                      shadow
+                      color="primary"
+                      checked={true}
+                      onClick={() => {
+                        handleSelect(e);
+                      }}
+                    />
+                    {e}
+                  </Text>
+                ))}
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  auto
+                  flat
+                  color="error"
+                  onClick={closeHandler_Notifications}
+                >
+                  Cancel
+                </Button>
+
+                <Button type="submit_Notifications" auto>
+                  Submit
+                </Button>
+              </Modal.Footer>
+            </Modal>
             <Navbar.Item
               css={{
                 display: user?.user !== undefined ? "block" : "none",
@@ -387,7 +449,7 @@ export default function App({ user }) {
                 </Dropdown.Trigger>
 
                 <Dropdown.Menu
-                  disabledKeys={["settings", "system", "configurations"]}
+                  disabledKeys={["system", "configurations"]}
                   aria-label="User menu actions"
                   color="warning"
                   onAction={(actionKey) => {
@@ -402,8 +464,9 @@ export default function App({ user }) {
                       {user?.user?.user_email}
                     </Text>
                   </Dropdown.Item>
-                  <Dropdown.Item key="settings" withDivider>
-                    My Settings
+
+                  <Dropdown.Item key="Notifications" withDivider>
+                    Notifications
                   </Dropdown.Item>
 
                   <Dropdown.Item key="system">System</Dropdown.Item>
