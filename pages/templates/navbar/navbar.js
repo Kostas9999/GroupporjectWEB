@@ -30,17 +30,56 @@ import {
 } from "@nextui-org/react";
 
 export default function App({ user }) {
-  let value = "";
-  const handleSelect = (e) => {
+  let emailpref = "";
+
+  const handleEmailSelect = async (e, pos) => {
+    if (pos.checked) {
+      setEmailPref(emailPrefer + `, "${e}"`);
+    } else {
+      setEmailPref(emailPrefer.replace(e, ""));
+    }
+  };
+
+  const handleSelect = async (e) => {
     if (e == "logout") {
       logout();
     } else if (e == "Notifications") {
       setVisible_Notifications(true);
-      console.log(e);
+      getEmailPref();
     } else console.log(e);
   };
 
-  let notifications = ["Latency", "Hardware"];
+  async function getEmailPref() {
+    const endpoint = `/api/database/queries/getNotification`;
+
+    let user_id = user.user.user_id;
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user_id),
+    };
+
+    const response = await fetch(endpoint, options);
+    const result = await response.json();
+    emailpref = result.data.emailpref;
+    setEmailPref(emailpref);
+    return emailpref;
+  }
+
+  let notifications = [
+    "DSC_FULL",
+    "MEM_USE",
+    "LAT_LOC",
+    "LAT_PUB",
+    "GTW_ADR",
+    "NGH_NEW",
+    "PRT_NEW",
+    "RX_DRP",
+    "RX_ERR",
+    "TX_DRP",
+    "TX_ERR",
+  ];
 
   const router = useRouter();
 
@@ -77,10 +116,14 @@ export default function App({ user }) {
     }
   }
 
-  async function handleSubmit_Notifications(event) {
-    console.log(event);
+  async function handleSubmit_Notifications() {
+    let pref = emailPrefer;
+    pref = pref.replaceAll('"", ', "").replaceAll(', ""', "");
+
+    console.log(pref);
   }
   const [checked, setChecked] = useState(false);
+
   const switchHandler = (event) => {
     console.log(event);
     setChecked(event.target.checked);
@@ -123,7 +166,6 @@ export default function App({ user }) {
     const result = await response.json();
 
     if (result.ok) {
-      console.log((user = {}));
       router.push("/");
     }
   }
@@ -142,10 +184,13 @@ export default function App({ user }) {
 
   const [visible_Notifications, setVisible_Notifications] =
     React.useState(false);
+
   const handler_Notifications = () => setVisible_Notifications(true);
   const closeHandler_Notifications = () => {
     setVisible_Notifications(false);
   };
+
+  const [emailPrefer, setEmailPref] = React.useState(emailpref);
 
   const collapseItems = ["Dashboard"];
 
@@ -408,9 +453,9 @@ export default function App({ user }) {
                     <Switch
                       shadow
                       color="primary"
-                      checked={true}
-                      onClick={() => {
-                        handleSelect(e);
+                      checked={emailPrefer.includes(e)}
+                      onChange={(pos) => {
+                        handleEmailSelect(e, pos.target);
                       }}
                     />
                     {e}
@@ -427,7 +472,11 @@ export default function App({ user }) {
                   Cancel
                 </Button>
 
-                <Button type="submit_Notifications" auto>
+                <Button
+                  type="submit_Notifications"
+                  auto
+                  onClick={handleSubmit_Notifications}
+                >
                   Submit
                 </Button>
               </Modal.Footer>
