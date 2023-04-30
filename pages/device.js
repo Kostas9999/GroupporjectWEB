@@ -114,7 +114,10 @@ export default function Home({ all, currDev, hw }) {
   useEffect(() => {
     const intervalId = setInterval(async () => {
       await getActiveData();
-      setData([...data, newActiveData]);
+      console.log(isOnline(newActiveData.created));
+      if (isOnline(newActiveData.created)) {
+        setData([...data, newActiveData]);
+      }
     }, 5000);
 
     return () => clearInterval(intervalId);
