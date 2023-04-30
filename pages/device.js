@@ -490,7 +490,7 @@ export default function Home({ all, currDev, hw }) {
                       {
                         dateTimeFormater(
                           JSON.stringify(
-                            new Date(adoptHours(data.slice(-1)[0].created, 0))
+                            new Date(adoptHours(data.slice(-1)[0].created, 1))
                           )
                         )
 
