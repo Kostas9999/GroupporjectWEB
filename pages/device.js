@@ -85,7 +85,7 @@ export default function Home({ all, currDev, hw }) {
   }
 
   function isOnline(strDate) {
-    return Date.now() - adoptHours(strDate, 1) > 30000;
+    return Date.now() - adoptHours(strDate, 0) > 30000;
   }
 
   function dateTimeFormater(datetime) {
@@ -490,7 +490,7 @@ export default function Home({ all, currDev, hw }) {
                       {
                         dateTimeFormater(
                           JSON.stringify(
-                            new Date(adoptHours(data.slice(-1)[0].created, 2))
+                            new Date(adoptHours(data.slice(-1)[0].created, 0))
                           )
                         )
 
