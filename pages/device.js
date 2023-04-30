@@ -201,6 +201,7 @@ export default function Home({ all, currDev, hw }) {
       processname: item.processname,
       pid: item.pid,
       processpath: item.processpath,
+      online: isOnline(item.created),
       created: dateTimeFormater(
         JSON.stringify(new Date(adoptHours(item.created, 1)))
       ),
@@ -211,7 +212,7 @@ export default function Home({ all, currDev, hw }) {
           ghost
           color="error"
           bordered
-          disabled={isOnline(item.created)}
+          //   disabled={isOnline(item.created)}
         >
           Close
         </Button>
@@ -1119,22 +1120,34 @@ export default function Home({ all, currDev, hw }) {
                       {(item) => (
                         <Table.Row key={item.key}>
                           {(columnKey) => (
-                            <Table.Cell backgroundColor="red">
+                            <Table.Cell>
                               <Text color={text_Color}>
-                                {" "}
-                                {item[columnKey].length > 80 ? (
-                                  <Popover>
-                                    <Popover.Trigger>
-                                      <Button auto ghost size="xs">
-                                        view path
-                                      </Button>
-                                    </Popover.Trigger>
-                                    <Popover.Content>
-                                      <Text size={20}>{item[columnKey]}</Text>
-                                    </Popover.Content>
-                                  </Popover>
+                                {typeof item[columnKey] === "object" ? (
+                                  item.online ? (
+                                    item[columnKey]
+                                  ) : (
+                                    "Offline"
+                                  )
                                 ) : (
-                                  item[columnKey]
+                                  <Text color={text_Color}>
+                                    {" "}
+                                    {item[columnKey].length > 80 ? (
+                                      <Popover>
+                                        <Popover.Trigger>
+                                          <Button auto ghost size="xs">
+                                            view path
+                                          </Button>
+                                        </Popover.Trigger>
+                                        <Popover.Content>
+                                          <Text size={20}>
+                                            {item[columnKey]}
+                                          </Text>
+                                        </Popover.Content>
+                                      </Popover>
+                                    ) : (
+                                      item[columnKey]
+                                    )}
+                                  </Text>
                                 )}
                               </Text>
                             </Table.Cell>
