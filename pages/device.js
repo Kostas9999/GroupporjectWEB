@@ -236,7 +236,9 @@ export default function Home({ all, currDev, hw }) {
       ip: item.ip,
       mac: item.mac,
       type: item.type,
-      created: dateTimeFormater(item.created),
+      created: dateTimeFormater(
+        JSON.stringify(new Date(adoptHours(item.created, 1)))
+      ),
     })
   );
 
@@ -266,7 +268,10 @@ export default function Home({ all, currDev, hw }) {
       type: item.type,
       value: item.value,
       baseline: item.baseline,
-      created: dateTimeFormater(item.created),
+
+      created: dateTimeFormater(
+        JSON.stringify(new Date(adoptHours(item.created, 1)))
+      ),
       action: (
         <Button
           onPress={(e) => {
