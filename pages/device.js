@@ -395,6 +395,39 @@ export default function Home({ all, currDev, hw }) {
     element.click();
     document.body.removeChild(element);
   }
+  function exportNetStats() {
+    const element = document.createElement("a");
+
+    element.setAttribute(
+      "href",
+      `data:text/csv;charset=utf-8,${json2csv.parse(
+        all.devices[`${currDev}`].networkStats
+      )}`
+    );
+    element.setAttribute("download", `HDD_${currDev}`);
+    element.style.display = "none";
+
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  function exportHdd() {
+    const element = document.createElement("a");
+
+    element.setAttribute(
+      "href",
+      `data:text/csv;charset=utf-8,${json2csv.parse(
+        all.devices[`${currDev}`].disc
+      )}`
+    );
+    element.setAttribute("download", `HDD_${currDev}`);
+    element.style.display = "none";
+
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
 
   function exportEvents() {
     const element = document.createElement("a");
@@ -412,6 +445,41 @@ export default function Home({ all, currDev, hw }) {
     element.click();
     document.body.removeChild(element);
   }
+
+  function exportPorts() {
+    const element = document.createElement("a");
+
+    element.setAttribute(
+      "href",
+      `data:text/csv;charset=utf-8,${json2csv.parse(
+        all.devices[`${currDev}`].ports
+      )}`
+    );
+    element.setAttribute("download", `Ports_${currDev}`);
+    element.style.display = "none";
+
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  function exportArp() {
+    const element = document.createElement("a");
+
+    element.setAttribute(
+      "href",
+      `data:text/csv;charset=utf-8,${json2csv.parse(
+        all.devices[`${currDev}`].arp
+      )}`
+    );
+    element.setAttribute("download", `ARP_${currDev}`);
+    element.style.display = "none";
+
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
   //console.log(window.document.getElementById("charts"));
   return (
     <>
@@ -997,6 +1065,18 @@ export default function Home({ all, currDev, hw }) {
                 />
               </LineChart>
             </ResponsiveContainer>
+            <Button
+              onClick={exportNetStats}
+              size="sm"
+              auto
+              shadow
+              css={{ background: "yellow", width: "50vh" }}
+              className={styles.thirteen}
+              justify="right"
+              align="right"
+            >
+              Export CSV
+            </Button>
           </div>
 
           {/* ========================================================= End chart row
@@ -1021,6 +1101,18 @@ export default function Home({ all, currDev, hw }) {
                     </Text>
                   ))}
                 </Card.Body>
+                <Button
+                  onClick={exportHdd}
+                  size="sm"
+                  auto
+                  shadow
+                  css={{ background: "yellow", width: "50vh" }}
+                  className={styles.thirteen}
+                  justify="right"
+                  align="right"
+                >
+                  Export CSV
+                </Button>
               </Card>
             </Grid>
           </div>
@@ -1119,6 +1211,18 @@ export default function Home({ all, currDev, hw }) {
                       onPageChange={(page) => console.log({ page })}
                     />
                   </Table>
+                  <Button
+                    onClick={exportArp}
+                    size="sm"
+                    auto
+                    shadow
+                    css={{ background: "yellow", width: "50vh" }}
+                    className={styles.thirteen}
+                    justify="right"
+                    align="right"
+                  >
+                    Export CSV
+                  </Button>
                 </Card.Body>
               </Card>
             </Grid>
@@ -1178,6 +1282,18 @@ export default function Home({ all, currDev, hw }) {
                     />
                   </Table>
                 </Card.Body>
+                <Button
+                  onClick={exportPorts}
+                  size="sm"
+                  auto
+                  shadow
+                  css={{ background: "yellow", width: "50vh" }}
+                  className={styles.thirteen}
+                  justify="right"
+                  align="right"
+                >
+                  Export CSV
+                </Button>
               </Card>
             </Grid>
           </div>
