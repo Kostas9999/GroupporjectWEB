@@ -115,8 +115,8 @@ export default function Home({ all, currDev, hw }) {
     const intervalId = setInterval(async () => {
       await getActiveData();
 
-      console.log(isOnline(adoptHours(data[data.length - 1].created, 1)));
-      if (isOnline(adoptHours(data[data.length - 1].created, 1))) {
+      console.log(isOnline(adoptHours(data[data.length - 1].created, 0)));
+      if (isOnline(adoptHours(data[data.length - 1].created, 0))) {
         data.shift();
 
         setData([...data, newActiveData]);
