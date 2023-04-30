@@ -114,28 +114,9 @@ export default function Home({ all, currDev, hw }) {
   useEffect(() => {
     const intervalId = setInterval(async () => {
       await getActiveData();
+      data.shift();
 
-      console.log(
-        isOnline(
-          adoptHours(
-            all.devices[currDev].networkStats[
-              all.devices[currDev].networkStats.length - 1
-            ].created
-          ),
-          1
-        )
-      );
-      if (
-        isOnline(
-          all.devices[currDev].networkStats[
-            all.devices[currDev].networkStats.length - 1
-          ].created
-        )
-      ) {
-        data.shift();
-
-        setData([...data, newActiveData]);
-      }
+      setData([...data, newActiveData]);
     }, 5000);
 
     return () => clearInterval(intervalId);
