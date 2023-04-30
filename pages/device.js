@@ -211,6 +211,7 @@ export default function Home({ all, currDev, hw }) {
           ghost
           color="error"
           bordered
+          disabled={isOnline(item.created)}
         >
           Close
         </Button>
@@ -282,8 +283,9 @@ export default function Home({ all, currDev, hw }) {
           ghost
           color="error"
           bordered
+          disabled
         >
-          *Details
+          Details
         </Button>
       ),
     })
@@ -1117,7 +1119,7 @@ export default function Home({ all, currDev, hw }) {
                       {(item) => (
                         <Table.Row key={item.key}>
                           {(columnKey) => (
-                            <Table.Cell>
+                            <Table.Cell backgroundColor="red">
                               <Text color={text_Color}>
                                 {" "}
                                 {item[columnKey].length > 80 ? (
