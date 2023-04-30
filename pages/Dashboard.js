@@ -98,7 +98,7 @@ export default function Dashboard({ session }) {
   }
 
   function isOnline(strDate) {
-    return Date.now() - adoptHours(strDate, 1) > 30000;
+    return Date.now() - adoptHours(strDate, 0) > 30000;
   }
 
   async function handleDeleteDev(id) {
