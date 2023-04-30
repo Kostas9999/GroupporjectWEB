@@ -127,12 +127,9 @@ export default function Home({ all, currDev, hw }) {
       );
       if (
         isOnline(
-          adoptHours(
-            all.devices[currDev].networkStats[
-              all.devices[currDev].networkStats.length - 1
-            ].created
-          ),
-          1
+          all.devices[currDev].networkStats[
+            all.devices[currDev].networkStats.length - 1
+          ].created
         )
       ) {
         data.shift();
