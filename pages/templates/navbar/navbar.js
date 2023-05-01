@@ -28,6 +28,7 @@ import {
   User,
   Spacer,
 } from "@nextui-org/react";
+import { Snackbar } from "@mui/material";
 
 export default function App({ user }) {
   let emailpref = "";
@@ -120,7 +121,22 @@ export default function App({ user }) {
     let pref = emailPrefer;
     pref = pref.replaceAll('"", ', "").replaceAll(', ""', "");
 
-    console.log(pref);
+    const endpoint = `/api/database/queries/setNotifications`;
+
+    let user_id = user.user.user_id;
+
+    let data = JSON.stringify({ pref: emailPrefer, user_id });
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: data,
+    };
+
+    const response = await fetch(endpoint, options);
+    const result = await response.json();
+
+    setVisible_Notifications(false);
   }
   const [checked, setChecked] = useState(false);
 
