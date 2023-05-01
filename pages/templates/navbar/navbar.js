@@ -460,7 +460,7 @@ export default function App({ user }) {
               onClose={closeHandler_Notifications}
             >
               <Modal.Header>
-                <Text>Notifications</Text>
+                <Text size={20}> Email Notifications</Text>
               </Modal.Header>
 
               <Modal.Body>
